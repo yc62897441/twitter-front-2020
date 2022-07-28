@@ -26,17 +26,21 @@
       <h1>Tweets</h1>
     </div>
 
-    <div class="right-container">右邊 追蹤推薦</div>
+    <div class="right-container">
+      <FollowingsBar class="FollowingsBar" />
+    </div>
 
   </div>
 </template>
 
 <script>
 import Navbar from '../components/Navbar.vue'
+import FollowingsBar from '../components/FollowingsBar.vue'
 
 export default {
   components: {
     Navbar,
+    FollowingsBar,
   }
 }
 
