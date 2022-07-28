@@ -62,10 +62,14 @@ export default {
         // 登入驗證成功
         // 儲存 token 到瀏覽器內 
         localStorage.setItem('token', data.token)
+
+        // 先將 user data 存到 localstorage，之後再修改儲存到 Vuex
+        localStorage.setItem('user', data.user)
         // 將資料傳到 Vuex 中
-        this.$store.commit('setCurrentUser', data.user)
+        // this.$store.commit('setCurrentUser', data.user)
+
         // 跳轉頁面，導入首頁
-        this.$router.push('/')
+        this.$router.push('/tweets')
       } catch (error) {
         this.isProcessing = false
         this.password = ''
