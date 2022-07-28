@@ -1,6 +1,11 @@
+html {
+  --orange: #FF6600;
+  --white: #ffffff;
+}
+
 .btn-orange {
-  background-color: #FF6600;
-  color: #FFFFFF;
+  background-color: var(--orange);
+  color: var(--white);
   border-radius: 10px;
   width: 100%;
 }
