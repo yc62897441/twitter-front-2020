@@ -11,5 +11,11 @@ export default {
     return apiHelper.post('/users', {
       account, name, email, password, checkPassword
     })
-  }
+  },
+  signInAdmin({ email, password }) {
+    return apiHelper.post('/admin/users/signin', {
+      email,
+      password
+    })
+  },
 }
