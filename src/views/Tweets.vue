@@ -36,18 +36,36 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
+import tweetsAPI from '../api/tweets'
 
 export default {
   components: {
     Navbar,
     FollowingsBar,
+  },
+  data() {
+    return {
+      tweets: []
+    }
+  },
+  methods: {
+    async fetchTweets() {
+      try {
+        const response = await tweetsAPI.getTweets()
+        const data = response.data
+        this.tweets = data
+      } catch (error) {
+        console.warn(error)
+      }
+    }
+  },
+  created() {
+    this.fetchTweets()
   }
 }
-
 </script>
 
 <style>
-
 .container {
   display: flex;
   flex-direction: row;
