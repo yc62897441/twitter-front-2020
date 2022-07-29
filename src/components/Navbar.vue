@@ -18,7 +18,7 @@
         <img src="../assets/setting.png" alt="">
         <span>設定</span>
       </div>
-      <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">推文</button>
+      <button type="submit" class="btn btn-orange">推文</button>
     </div>
 
     <div class="navbar-bottom">

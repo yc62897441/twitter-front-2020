@@ -5,6 +5,8 @@
     </div>
 
     <div class="middle-container">
+      <h1>首頁</h1>
+      <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:isProcessing="isProcessing" />
       <TweetsSection v-bind:tweets="tweets" />
     </div>
 
@@ -19,17 +21,20 @@
 import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
 import TweetsSection from '../components/TweetsSection.vue'
+import NewTweet from '../components/NewTweet.vue'
 import tweetsAPI from '../api/tweets'
 
 export default {
   components: {
     Navbar,
     FollowingsBar,
-    TweetsSection
+    TweetsSection,
+    NewTweet,
   },
   data() {
     return {
-      tweets: []
+      tweets: [],
+      isProcessing: false
     }
   },
   methods: {
@@ -41,6 +46,30 @@ export default {
       } catch (error) {
         console.warn(error)
       }
+    },
+    async afterCreateTweet(payload) {
+      try {
+        this.isProcessing = true
+        const { UserId, description } = payload
+        const formData = {
+          UserId: UserId,
+          description: description,
+        }
+        const { data } = await tweetsAPI.postTweet({ formData })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.tweets.push({
+          id: '',
+          UserId: UserId,
+          description: newTweetDescription,
+          createdAt: new Date(),
+        }) 
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
     }
   },
   created() {
@@ -50,9 +79,6 @@ export default {
 </script>
 
 <style>
-
-
-
 .container {
   display: flex;
   flex-direction: row;

@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="follow-btn-wrapper">
-        <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">跟隨</button>
+        <button type="submit" class="btn btn-orange">跟隨</button>
       </div>
     </div>
 
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="follow-btn-wrapper">
-        <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">跟隨</button>
+        <button type="submit" class="btn btn-orange">跟隨</button>
       </div>
     </div>
 
