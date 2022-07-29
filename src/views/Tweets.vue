@@ -3,27 +3,9 @@
     <div class="left-container">
       <Navbar class="Navbar" />
     </div>
+
     <div class="middle-container">
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
-      <h1>Tweets</h1>
+      <TweetsSection v-bind:tweets="tweets" />
     </div>
 
     <div class="right-container">
@@ -36,12 +18,14 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
+import TweetsSection from '../components/TweetsSection.vue'
 import tweetsAPI from '../api/tweets'
 
 export default {
   components: {
     Navbar,
     FollowingsBar,
+    TweetsSection
   },
   data() {
     return {
@@ -66,17 +50,22 @@ export default {
 </script>
 
 <style>
+
+
+
 .container {
   display: flex;
   flex-direction: row;
-  border: 2px solid red;
   padding: 0px;
   align-items: flex-start;
 }
 
 .middle-container {
-  margin-left: 240px;
   width: 600px;
+  margin-left: 240px;
+  margin-right: 30px;
+  border-left: 1px solid #E6ECF0;
+  border-right: 1px solid #E6ECF0;
 }
 
 /* .left-container {
