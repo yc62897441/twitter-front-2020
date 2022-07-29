@@ -23,6 +23,7 @@ import FollowingsBar from '../components/FollowingsBar.vue'
 import TweetsSection from '../components/TweetsSection.vue'
 import NewTweet from '../components/NewTweet.vue'
 import tweetsAPI from '../api/tweets'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: {
@@ -60,7 +61,7 @@ export default {
           throw new Error(data.message)
         }
         this.tweets.push({
-          id: '',
+          id: uuidv4(),
           UserId: UserId,
           description: description,
           createdAt: new Date(),

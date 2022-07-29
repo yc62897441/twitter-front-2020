@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import tweetAPI from '../api/tweets'
-
 export default {
   props: {
     isProcessing: {
