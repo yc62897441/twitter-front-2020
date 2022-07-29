@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" />
+      <Navbar class="Navbar" v-bind:isProcessing="isProcessing" />
     </div>
 
     <div class="middle-container">
@@ -11,7 +11,7 @@
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar" />
+      <FollowingsBar class="FollowingsBar" v-bind:isProcessing="isProcessing" />
     </div>
 
   </div>
@@ -62,7 +62,7 @@ export default {
         this.tweets.push({
           id: '',
           UserId: UserId,
-          description: newTweetDescription,
+          description: description,
           createdAt: new Date(),
         }) 
         this.isProcessing = false

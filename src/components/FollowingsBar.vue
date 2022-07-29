@@ -1,7 +1,7 @@
 <template>
   <div class="followingsBar-wrapper">
     <div class="followingsBar-title">Popular</div>
-    
+
     <div class="recommended-following-wrapper">
       <div class="following-info-wrapper">
         <div class="avatar-wrapper">
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="follow-btn-wrapper">
-        <button type="submit" class="btn btn-orange">跟隨</button>
+        <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">跟隨</button>
       </div>
     </div>
 
@@ -34,6 +34,17 @@
 
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    isProcessing: {
+      type: Boolean,
+      required: true
+    }
+  }
+}
+</script>
 
 <style>
 .followingsBar-wrapper {

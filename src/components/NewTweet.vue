@@ -6,7 +6,7 @@
     <form @submit.prevent.stop="handleSubmit" class="new-tweet-wrapper-right">
       <input v-model="newTweetDescription" type="text" class="form-control" aria-describedby="emailHelp"
         placeholder="有什麼新鮮事？" name="newTweetDescription" required>
-      <button type="submit" class="btn btn-orange btn-new-tweet">推文</button>
+      <button type="submit" class="btn btn-orange btn-new-tweet" v-bind:disabled="isProcessing">推文</button>
     </form>
   </div>
 </template>

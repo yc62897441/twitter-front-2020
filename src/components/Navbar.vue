@@ -18,7 +18,7 @@
         <img src="../assets/setting.png" alt="">
         <span>設定</span>
       </div>
-      <button type="submit" class="btn btn-orange">推文</button>
+      <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">推文</button>
     </div>
 
     <div class="navbar-bottom">
@@ -29,6 +29,17 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    isProcessing: {
+      type: Boolean,
+      required: true
+    }
+  }
+}
+</script>
 
 <style>
 .navbar-wrapper {
@@ -41,8 +52,8 @@
   padding: 17px 0px;
 }
 
-.logo-wrapper, 
-.icon-wrapper { 
+.logo-wrapper,
+.icon-wrapper {
   padding: 5px 10px;
 }
 
