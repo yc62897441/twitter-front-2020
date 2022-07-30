@@ -1,44 +1,42 @@
 <template>
   <div>
-    <div class="reply-wrapper">
+    <div v-for="reply in replies" class="reply-wrapper">
       <div class="reply-wrapper-left">
-        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="">
+        <img src="reply.User.avatar" alt="">
       </div>
       <div class="reply-wrapper-right">
         <div class="reply-info">
-          <div class="reply-info-name"> reply.User.name </div>
-          <div class="reply-info-account"> @reply.User.account </div>
-          <div class="reply-info-data">・ reply.createdAt | fromNow </div>
+          <div class="reply-info-name"> {{ reply.User.name }} </div>
+          <div class="reply-info-account"> @{{ reply.User.account }} </div>
+          <div class="reply-info-data">・ {{ reply.createdAt | fromNow }}</div>
         </div>
         <div class="reply-to">
-          回覆給<p>@reply.User.account</p>
+            回覆給<p>@{{ tweetUser.account }}</p>
         </div>
         <div class="reply-description">
-          reply.description
-        </div>
-      </div>
-    </div>
-
-    <div class="reply-wrapper">
-      <div class="reply-wrapper-left">
-        <img src="https://www.w3schools.com/howto/img_avatar2.png" alt="">
-      </div>
-      <div class="reply-wrapper-right">
-        <div class="reply-info">
-          <div class="reply-info-name"> reply.User.name </div>
-          <div class="reply-info-account"> @reply.User.account </div>
-          <div class="reply-info-data">・ reply.createdAt | fromNow </div>
-        </div>
-        <div class="reply-to">
-          回覆給<p>@reply.User.account</p>
-        </div>
-        <div class="reply-description">
-          reply.description
+          {{ reply.comment }}
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import { fromNowFilter } from '../utils/mixins'
+
+export default {
+  props: {
+    replies: {
+      type: Array,
+    },
+    tweetUser: {
+      type: Object,
+    }
+  },
+  mixins: [fromNowFilter]
+}
+
+</script>
 
 <style>
 .reply-wrapper {

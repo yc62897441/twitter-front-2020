@@ -7,7 +7,7 @@
     <div class="middle-container">
       <h1><img src="../assets/arrow-left.png" alt=""> 推文</h1>
       <TweetSection />
-      <RepliesSection />
+      <RepliesSection v-bind:replies="tweet.Replies" v-bind:tweetUser="tweet.User" />
     </div>
 
     <div class="right-container">
@@ -34,47 +34,50 @@ export default {
   },
   data() {
     return {
-      tweets: [],
-      isProcessing: false
+      tweet: {},
+      isProcessing: false,
     }
   },
   methods: {
-    async fetchTweets() {
+    async fetchTweet() {
       try {
-        const response = await tweetsAPI.getTweets()
+        const id = Number(this.$route.params.id)
+        console.log('id', id, typeof id)
+        const response = await tweetsAPI.getTweet({id})
+        console.log('response', response)
         const data = response.data
-        this.tweets = data
+        this.tweet = data
       } catch (error) {
         console.warn(error)
       }
     },
-    async afterCreateTweet(payload) {
-      try {
-        this.isProcessing = true
-        const { UserId, description } = payload
-        const formData = {
-          UserId: UserId,
-          description: description,
-        }
-        const { data } = await tweetsAPI.postTweet({ formData })
-        if (data.status !== 'success') {
-          throw new Error(data.message)
-        }
-        this.tweets.push({
-          id: uuidv4(),
-          UserId: UserId,
-          description: description,
-          createdAt: new Date(),
-        })
-        this.isProcessing = false
-      } catch (error) {
-        this.isProcessing = false
-        console.warn(error)
-      }
-    }
+    // async afterCreateTweet(payload) {
+    //   try {
+    //     this.isProcessing = true
+    //     const { UserId, description } = payload
+    //     const formData = {
+    //       UserId: UserId,
+    //       description: description,
+    //     }
+    //     const { data } = await tweetsAPI.postTweet({ formData })
+    //     if (data.status !== 'success') {
+    //       throw new Error(data.message)
+    //     }
+    //     this.tweets.push({
+    //       id: uuidv4(),
+    //       UserId: UserId,
+    //       description: description,
+    //       createdAt: new Date(),
+    //     })
+    //     this.isProcessing = false
+    //   } catch (error) {
+    //     this.isProcessing = false
+    //     console.warn(error)
+    //   }
+    // }
   },
   created() {
-    this.fetchTweets()
+    this.fetchTweet()
   }
 }
 </script>
