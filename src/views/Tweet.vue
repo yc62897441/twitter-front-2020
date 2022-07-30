@@ -76,6 +76,10 @@ export default {
   },
   created() {
     this.fetchTweet()
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.fetchTweet()
+    next()
   }
 }
 </script>
