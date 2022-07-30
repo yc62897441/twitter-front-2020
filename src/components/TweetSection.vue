@@ -2,7 +2,7 @@
   <div id="tweet-wrapper">
     <div class="tweet-user-info-layer">
       <div>
-        <img src="tweet.User.avatar" alt="">
+        <img v-bind:src="tweet.User.avatar" alt="">
       </div>
       <div class="user-info-wrapper">
         <div class="user-info-name">{{tweet.User.name}}</div>
@@ -63,6 +63,7 @@ export default {
 .tweet-user-info-layer img {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
 }
 
 .user-info-wrapper {

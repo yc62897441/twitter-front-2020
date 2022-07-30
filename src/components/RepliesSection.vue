@@ -2,7 +2,7 @@
   <div>
     <div v-for="reply in replies" class="reply-wrapper">
       <div class="reply-wrapper-left">
-        <img src="reply.User.avatar" alt="">
+        <img v-bind:src="reply.User.avatar" alt="">
       </div>
       <div class="reply-wrapper-right">
         <div class="reply-info">

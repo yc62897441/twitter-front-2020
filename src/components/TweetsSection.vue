@@ -2,11 +2,11 @@
   <div>
     <div v-for="tweet in tweets" :key="tweet.id" class="tweet-wrapper">
       <div class="tweet-wrapper-left">
-        <img src="tweet.User.avatar" alt="">
+        <img v-bind:src="tweet.User.avatar" alt="">
       </div>
       <div class="tweet-wrapper-right">
         <div class="tweet-info">
-          <div class="tweet-info-name">{{ tweet.User.name }} </div>
+          <div class="tweet-info-name">{{ tweet.User.name }}</div>
           <div class="tweet-info-account"> @{{ tweet.User.account }}</div>
           <div class="tweet-info-data">・{{ tweet.createdAt | fromNow }}</div>
         </div>
@@ -51,6 +51,7 @@ export default {
 .tweet-wrapper-left img {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
 }
 
 .tweet-wrapper-right {
