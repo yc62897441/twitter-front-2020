@@ -2,27 +2,26 @@
   <div id="tweet-wrapper">
     <div class="tweet-user-info-layer">
       <div>
-        <img src="../assets/avatar-photo.png" alt="">
+        <img src="tweet.User.avatar" alt="">
       </div>
       <div class="user-info-wrapper">
-        <div class="user-info-name">name</div>
-        <div class="user-info-account">@account</div>
+        <div class="user-info-name">{{tweet.User.name}}</div>
+        <div class="user-info-account">@{{tweet.User.account}}</div>
       </div>
     </div>
 
     <div class="tweet-description-layer">
-      Nulla Lorem mollit cupidatat irure. Laborum magna nulla duis ullamco cillum dolor. Voluptate exercitation
-      incididunt aliquip deserunt reprehenderit elit laborum.
+      {{tweet.description}}
     </div>
 
     <div class="tweet-date-layer">
-      上午 10:05・2020年6月10日
+      {{ tweet.createdAt | formatTime }}
     </div>
 
     <div class="tweet-interaction-layer">
-      <div>456<p>回覆</p>
+      <div>{{tweet.Replies.length}}<p>回覆</p>
       </div>
-      <div>456<p>喜歡次數</p>
+      <div>{{ tweet.Likes.length }}<p>喜歡次數</p>
       </div>
     </div>
 
@@ -33,12 +32,21 @@
   </div>
 </template>
 
+<script>
+import { fromNowFilter } from '../utils/mixins'
+
+export default {
+  props: {
+    tweet: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [fromNowFilter]
+}
+</script>
+
 <style>
-
-
-
-
-
 #tweet-wrapper {
   display: flex;
   flex-direction: column;

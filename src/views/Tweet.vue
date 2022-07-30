@@ -6,7 +6,7 @@
 
     <div class="middle-container">
       <h1><img src="../assets/arrow-left.png" alt=""> 推文</h1>
-      <TweetSection />
+      <TweetSection v-bind:tweet="tweet" />
       <RepliesSection v-bind:replies="tweet.Replies" v-bind:tweetUser="tweet.User" />
     </div>
 
@@ -42,9 +42,7 @@ export default {
     async fetchTweet() {
       try {
         const id = Number(this.$route.params.id)
-        console.log('id', id, typeof id)
         const response = await tweetsAPI.getTweet({id})
-        console.log('response', response)
         const data = response.data
         this.tweet = data
       } catch (error) {
