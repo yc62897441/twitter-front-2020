@@ -15,7 +15,9 @@
         </div>
         <div class="tweet-interaction">
           <div>
-            <img src="../assets/icon-reply.png" alt="">
+            <!-- trigger modal -->
+            <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
+              v-bind:data-bs-target="'#modal'+ tweet.id">
             <p>{{ tweet.Replies.length }}</p>
           </div>
           <div>
@@ -24,13 +26,19 @@
           </div>
         </div>
       </div>
+
+      <ModalTweetReply v-bind:tweet="tweet" />
     </div>
   </div>
 </template>
 
 <script>
 import { fromNowFilter } from '../utils/mixins'
+import ModalTweetReply from './ModalTweetReply.vue'
 export default {
+  components: {
+    ModalTweetReply
+  },
   props: {
     tweets: {
       type: Array,
