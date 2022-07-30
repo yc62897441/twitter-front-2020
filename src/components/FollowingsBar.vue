@@ -13,7 +13,10 @@
         </div>
       </div>
       <div class="follow-btn-wrapper">
-        <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">跟隨</button>
+        <button type="button" class="btn btn-orange" v-on:click="postFollowship(recommendedFollowing.id)"
+          v-bind:disabled="isProcessing" v-if="!recommendedFollowing.Followers.includes(userId)">跟隨</button>
+        <button type="button" class="btn btn-orange btn-isFollowed"
+          v-on:click="deleteFollowship(recommendedFollowing.id)" v-bind:disabled="isProcessing" v-else>正在跟隨</button>
       </div>
     </div>
   </div>
@@ -23,24 +26,68 @@
 import followshipAPI from '../api/followships'
 
 export default {
-  props: {
-    isProcessing: {
-      type: Boolean,
-      required: true
-    }
-  },
   data() {
     return {
-      recommendedFollowings: []
+      recommendedFollowings: [],
+      isProcessing: false,
+      userId: 1
     }
   },
   methods: {
     async fetchRecommendedFollowings() {
       try {
-        const userId = 2 // userId 之後要改成由登入的user資料來取代
+        const userId = 1 // userId 之後要改成由登入的user資料來取代
         const { data } = await followshipAPI.getRecommendedFollowings({ userId: userId })
         this.recommendedFollowings = data
       } catch (error) {
+        console.warn(error)
+      }
+    },
+    async postFollowship(followingId) {
+      try {
+        this.isProcessing = true
+        const userId = 1
+        const formData = {
+          userId: userId,
+          followingId: followingId
+        }
+        const { data } = await followshipAPI.postFollowship({ formData })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        // 更新前端畫面
+        this.recommendedFollowings.forEach(recommendedFollowing => {
+          if (recommendedFollowing.id === followingId) {
+            recommendedFollowing.Followers.push(userId)
+          }
+        })
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    },
+    async deleteFollowship(followingId) {
+      try {
+        this.isProcessing = true
+        const userId = 1
+        const { data } = await followshipAPI.deleteFollowship({ followingId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        // 更新前端畫面
+        this.recommendedFollowings.forEach(recommendedFollowing => {
+          if (recommendedFollowing.id === followingId) {
+            recommendedFollowing.Followers = recommendedFollowing.Followers.map(follower => {
+              if (follower !== userId) {
+                return follower
+              }
+            })
+          }
+        })
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
         console.warn(error)
       }
     }
@@ -144,5 +191,12 @@ export default {
   border: 1px solid #FF6600;
   border-radius: 100px;
   color: #FF6600;
+}
+
+.follow-btn-wrapper .btn-isFollowed {
+  width: 100px;
+  background: #FF6600;
+  border: 1px solid #FF6600;
+  color: #ffffff;
 }
 </style>
