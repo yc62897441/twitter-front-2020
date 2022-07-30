@@ -39,6 +39,18 @@ export default {
     }
   },
   methods: {
+    async aa() {
+      try {
+        const formData = {
+          UserId: UserId,
+          description: description,
+        }
+        const { data } = await tweetsAPI.postTweet({ formData })
+      } catch (error) {
+
+      }
+    },
+
     async fetchTweets() {
       try {
         const response = await tweetsAPI.getTweets()
@@ -65,7 +77,7 @@ export default {
           UserId: UserId,
           description: description,
           createdAt: new Date(),
-        }) 
+        })
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
