@@ -40,6 +40,9 @@ export default {
 </script>
 
 <style>
+
+
+
 .reply-wrapper {
   display: flex;
   padding: 15px;
@@ -102,5 +105,6 @@ export default {
   font-size: 15px;
   line-height: 22px;
   color: #1C1C1C;
+  word-break: break-all
 }
 </style>

@@ -129,6 +129,8 @@ export default {
 </script>
 
 <style>
+
+
 #tweet-wrapper {
   display: flex;
   flex-direction: column;
@@ -172,6 +174,7 @@ export default {
   font-size: 23px;
   line-height: 34px;
   color: #1C1C1C;
+  word-break: break-all
 }
 
 .tweet-date-layer {
@@ -312,6 +315,7 @@ export default {
   font-size: 15px;
   line-height: 22px;
   color: #1C1C1C;
+  word-break: break-all
 }
 
 .tweet-interaction {
