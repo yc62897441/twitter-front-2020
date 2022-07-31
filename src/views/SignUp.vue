@@ -86,12 +86,6 @@ export default {
         })
         const { data } = response
 
-        console.log('====')
-        console.log('====')
-        console.log('data', data)
-        console.log('====')
-        console.log('====')
-
         // 伺服器回傳登入驗證錯誤
         if (data.status !== 'success') {
           throw new Error(data.message)
