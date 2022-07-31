@@ -12,7 +12,7 @@
               <img src="../assets/avatar-photo.png" alt="">
             </div>
             <form class="new-tweet-wrapper-right">
-              <textarea id="message" cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription"
+              <textarea cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription"
                 name="newTweetDescription" required></textarea>
               <button type="button" class="btn btn-orange btn-new-tweet" @click.prevent.stop="handleSubmit"
                 v-bind:disabled="isProcessing">推文</button>
@@ -69,6 +69,7 @@ textarea {
   font-weight: 500;
   font-size: 18px;
   line-height: 26px;
+  resize: none;
 }
 
 textarea:focus,

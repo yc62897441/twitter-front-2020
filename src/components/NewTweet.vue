@@ -4,8 +4,8 @@
       <img src="../assets/avatar-photo.png" alt="">
     </div>
     <form @submit.prevent.stop="handleSubmit" class="new-tweet-wrapper-right">
-      <input v-model="newTweetDescription" type="text" class="form-control" aria-describedby="emailHelp"
-        placeholder="有什麼新鮮事？" name="newTweetDescription" required>
+      <textarea cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription" name="newTweetDescription"
+        required></textarea>
       <button type="submit" class="btn btn-orange btn-new-tweet" v-bind:disabled="isProcessing">推文</button>
     </form>
   </div>

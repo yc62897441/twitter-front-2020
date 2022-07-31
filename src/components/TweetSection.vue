@@ -66,8 +66,8 @@
                 <img src="../assets/avatar-photo.png" alt="">
               </div>
               <form class="new-tweet-wrapper-right">
-                <input v-model="newTweetReply" type="text" class="form-control" aria-describedby="emailHelp"
-                  placeholder="推你的回覆" name="newTweetReply" required>
+                <textarea cols="30" rows="5" placeholder="推你的回覆" v-model="newTweetReply" name="newTweetReply"
+                  required></textarea>
               </form>
             </div>
           </div>
