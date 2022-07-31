@@ -37,8 +37,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-orange btn-new-tweet" v-bind:disabled="isProcessing"
-            @click.prevent.stop="handleSubmit(tweet.id)">回覆</button>
+          <button type="button" class="btn btn-orange btn-new-tweet" data-bs-dismiss="modal"
+            v-bind:disabled="isProcessing" @click.prevent.stop="handleSubmit(tweet.id)">回覆</button>
         </div>
       </div>
     </div>
