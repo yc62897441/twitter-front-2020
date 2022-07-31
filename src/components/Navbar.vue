@@ -18,7 +18,9 @@
         <img src="../assets/setting.png" alt="">
         <span>設定</span>
       </div>
-      <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">推文</button>
+      <!-- trigger modal -->
+      <button class="btn btn-orange" type="button" data-bs-toggle="modal"
+        v-bind:data-bs-target="'#modalNewTweet'">推文</button>
     </div>
 
     <div class="navbar-bottom">

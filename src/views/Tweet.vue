@@ -8,6 +8,7 @@
       <h1><img src="../assets/arrow-left.png" alt=""> 推文</h1>
       <TweetSection v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply" />
       <RepliesSection v-bind:replies="tweet.Replies" v-bind:tweetUser="tweet.User" />
+      <ModalNewTweet />
     </div>
 
     <div class="right-container">
@@ -22,6 +23,7 @@ import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
 import TweetSection from '../components/TweetSection.vue'
 import RepliesSection from '../components/RepliesSection.vue'
+import ModalNewTweet from '../components/ModalNewTweet.vue'
 import tweetsAPI from '../api/tweets'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -30,7 +32,8 @@ export default {
     Navbar,
     FollowingsBar,
     TweetSection,
-    RepliesSection
+    RepliesSection,
+    ModalNewTweet
   },
   data() {
     return {

@@ -8,6 +8,7 @@
       <h1>首頁</h1>
       <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:isProcessing="isProcessing" />
       <TweetsSection v-bind:tweets="tweets" />
+      <ModalNewTweet />
     </div>
 
     <div class="right-container">
@@ -22,6 +23,7 @@ import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
 import TweetsSection from '../components/TweetsSection.vue'
 import NewTweet from '../components/NewTweet.vue'
+import ModalNewTweet from '../components/ModalNewTweet.vue'
 import tweetsAPI from '../api/tweets'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -31,6 +33,7 @@ export default {
     FollowingsBar,
     TweetsSection,
     NewTweet,
+    ModalNewTweet
   },
   data() {
     return {
@@ -39,18 +42,6 @@ export default {
     }
   },
   methods: {
-    async aa() {
-      try {
-        const formData = {
-          UserId: UserId,
-          description: description,
-        }
-        const { data } = await tweetsAPI.postTweet({ formData })
-      } catch (error) {
-
-      }
-    },
-
     async fetchTweets() {
       try {
         const response = await tweetsAPI.getTweets()

@@ -26,6 +26,7 @@
     </div>
 
     <div class="tweet-interaction-icons-layer">
+      <!-- trigger modal -->
       <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
         v-bind:data-bs-target="'#modal' + tweet.id">
       <img src="../assets/icon-like.png" alt="">
