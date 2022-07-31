@@ -6,7 +6,7 @@
 
     <div class="middle-container">
       <h1><img src="../assets/arrow-left.png" alt=""> 推文</h1>
-      <TweetSection v-bind:tweet="tweet" />
+      <TweetSection v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply" />
       <RepliesSection v-bind:replies="tweet.Replies" v-bind:tweetUser="tweet.User" />
     </div>
 
@@ -42,37 +42,23 @@ export default {
     async fetchTweet() {
       try {
         const id = Number(this.$route.params.id)
-        const response = await tweetsAPI.getTweet({id})
+        const response = await tweetsAPI.getTweet({ id })
         const data = response.data
         this.tweet = data
       } catch (error) {
         console.warn(error)
       }
     },
-    // async afterCreateTweet(payload) {
-    //   try {
-    //     this.isProcessing = true
-    //     const { UserId, description } = payload
-    //     const formData = {
-    //       UserId: UserId,
-    //       description: description,
-    //     }
-    //     const { data } = await tweetsAPI.postTweet({ formData })
-    //     if (data.status !== 'success') {
-    //       throw new Error(data.message)
-    //     }
-    //     this.tweets.push({
-    //       id: uuidv4(),
-    //       UserId: UserId,
-    //       description: description,
-    //       createdAt: new Date(),
-    //     })
-    //     this.isProcessing = false
-    //   } catch (error) {
-    //     this.isProcessing = false
-    //     console.warn(error)
-    //   }
-    // }
+    afterPostTweetReply(payload) {
+      this.tweet.Replies.push({
+        TweetId: payload.TweetId,
+        UserId: payload.UserId,
+        comment: payload.comment,
+        createdAt: payload.createdAt,
+        id: payload.id,
+        updatedAt: payload.updatedAt,
+      })
+    },
   },
   created() {
     this.fetchTweet()

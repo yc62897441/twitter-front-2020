@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div v-for="reply in replies" class="reply-wrapper">
+    <div v-for="reply in replies" v-bind:key="reply.id" class="reply-wrapper">
+    <!-- <div v-for="reply in replies" class="reply-wrapper"> -->
       <div class="reply-wrapper-left">
         <img v-bind:src="reply.User.avatar" alt="">
       </div>
@@ -11,7 +12,7 @@
           <div class="reply-info-data">・ {{ reply.createdAt | fromNow }}</div>
         </div>
         <div class="reply-to">
-            回覆給<p>@{{ tweetUser.account }}</p>
+          回覆給<p>@{{ tweetUser.account }}</p>
         </div>
         <div class="reply-description">
           {{ reply.comment }}
