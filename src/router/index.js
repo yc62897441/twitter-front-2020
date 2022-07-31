@@ -31,6 +31,11 @@ const routes = [
     component: () => import('../views/SignInAdmin.vue')
   },
   {
+    path: '/setting',
+    name: 'setting',
+    component: () => import('../views/Setting.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound,

@@ -15,8 +15,10 @@
         <span>個人資料</span>
       </div>
       <div class="icon-wrapper">
-        <img src="../assets/setting.png" alt="">
-        <span>設定</span>
+        <router-link to="/setting">
+          <img src="../assets/setting.png" alt="">
+          <span>設定</span>
+        </router-link>
       </div>
       <!-- trigger modal -->
       <button class="btn btn-orange" type="button" data-bs-toggle="modal"
