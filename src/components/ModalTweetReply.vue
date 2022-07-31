@@ -30,14 +30,15 @@
             <div class="new-tweet-wrapper-left">
               <img src="../assets/avatar-photo.png" alt="">
             </div>
-            <form @submit.prevent.stop="handleSubmit" class="new-tweet-wrapper-right">
+            <form class="new-tweet-wrapper-right">
               <input v-model="newTweetReply" type="text" class="form-control" aria-describedby="emailHelp"
                 placeholder="推你的回覆" name="newTweetReply" required>
             </form>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-orange btn-new-tweet" v-bind:disabled="isProcessing">回覆</button>
+          <button type="button" class="btn btn-orange btn-new-tweet" v-bind:disabled="isProcessing"
+            @click.prevent.stop="handleSubmit(tweet.id)">回覆</button>
         </div>
       </div>
     </div>
@@ -45,6 +46,9 @@
 </template>
 
 <script>
+import tweetsAPI from '../api/tweets'
+import { fromNowFilter } from '../utils/mixins' 
+
 export default {
   props: {
     tweet: {
@@ -54,8 +58,34 @@ export default {
   data() {
     return {
       newTweetReply: '',
+      UserId: 1,
+      isProcessing: false
     }
-  }
+  },
+  methods: {
+    async handleSubmit(tweetId) {
+      try {
+        if (this.newTweetReply === '') {
+          return
+        }
+        this.isProcessing = true
+        const formData = {
+          UserId: this.UserId,
+          comment: this.newTweetReply,
+        }
+        const { data } = await tweetsAPI.postTweetReply({formData, tweetId})
+        this.$emit('after-post-tweet-reply', {
+          ...data,
+        })
+        this.newTweetReply = ''
+        this.isProcessing = false
+      }catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    }
+  },
+  mixins: [fromNowFilter]
 }
 </script>
 

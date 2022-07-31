@@ -9,5 +9,8 @@ export default {
   },
   postTweet: ({formData}) => {
     return apiHelper.post('/tweets', formData)
+  },
+  postTweetReply: ({ formData, tweetId }) => {
+    return apiHelper.post(`/tweets/${tweetId}/replies`, formData)
   }
 }

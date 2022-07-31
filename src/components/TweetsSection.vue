@@ -17,7 +17,7 @@
           <div>
             <!-- trigger modal -->
             <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
-              v-bind:data-bs-target="'#modal'+ tweet.id">
+              v-bind:data-bs-target="'#modal' + tweet.id">
             <p>{{ tweet.Replies.length }}</p>
           </div>
           <div>
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <ModalTweetReply v-bind:tweet="tweet" />
+      <ModalTweetReply v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply" />
     </div>
   </div>
 </template>
@@ -45,7 +45,24 @@ export default {
       required: true
     }
   },
-  mixins: [fromNowFilter]
+  methods: {
+    afterPostTweetReply(payload) {
+      const { TweetId } = payload
+      this.tweets.forEach(tweet => {
+        if (tweet.id === Number(TweetId)) {
+          tweet.Replies.push({
+            TweetId: payload.TweetId,
+            UserId: payload.UserId,
+            comment: payload.comment,
+            createdAt: payload.createdAt,
+            id: payload.id,
+            updatedAt: payload.updatedAt,
+          })
+        }
+      })
+    },
+  },
+  mixins: [fromNowFilter],
 }
 </script>
 
