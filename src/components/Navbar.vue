@@ -35,14 +35,7 @@
 </template>
 
 <script>
-export default {
-  props: {
-    isProcessing: {
-      type: Boolean,
-      required: true
-    }
-  }
-}
+export default {}
 </script>
 
 <style>

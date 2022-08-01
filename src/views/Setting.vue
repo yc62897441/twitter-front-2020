@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" v-bind:isProcessing="isProcessing" />
+      <Navbar class="Navbar" />
     </div>
     <div class="middle-container">
       <h1>帳戶設定</h1>

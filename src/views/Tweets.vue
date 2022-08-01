@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" v-bind:isProcessing="isProcessing" />
+      <Navbar class="Navbar" />
     </div>
 
     <div class="middle-container">
@@ -12,7 +12,7 @@
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar" v-bind:isProcessing="isProcessing" />
+      <FollowingsBar class="FollowingsBar" />
     </div>
 
   </div>
