@@ -7,6 +7,7 @@
     <div class="middle-container">
       <h1>User name</h1>
       <h3> 15 則推文</h3>
+      <UserBoard />
     </div>
 
     <div class="right-container">
@@ -19,12 +20,14 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
+import UserBoard from '../components/UserBoard.vue'
 import usersAPI from '../api/users'
 
 export default {
   components: {
     Navbar,
     FollowingsBar,
+    UserBoard,
   },
   data() {
     return {

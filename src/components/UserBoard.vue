@@ -1,0 +1,124 @@
+<template>
+  <div class="user-board-wrapper">
+    <div class="user-banner-wrapper">
+      <img src="../assets/user-banner.png" alt="">
+    </div>
+
+    <div class="user-avatar-wrapper">
+      <img src="https://sports.cbsimg.net/images/visual/whatshot/chris_bosh_021516.jpg" alt="">
+    </div>
+
+    <!-- trigger modal -->
+    <button class="btn btn-user-info" type="button" data-bs-toggle="modal"
+      v-bind:data-bs-target="'#modalUserInfo'">編輯個人資料</button>
+    <div class="user-info-wrapper">
+      <div class="user-info-name">name</div>
+      <div class="user-info-account">@account</div>
+      <div class="user-info-introduction">introduction</div>
+      <div class="user-info-followship-wrapper">
+        <div class="user-info-followship-followings">15個<p>跟隨中</p>
+        </div>
+        <div class="user-info-followship-followers">20位<p>跟隨者</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    user: {
+      type: Object,
+      required: true
+    }
+  },
+}
+</script>
+
+<style>
+.user-board-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 0px 15px;
+}
+
+.user-banner-wrapper img {
+  width: 598px;
+  height: 200px;
+}
+
+.user-avatar-wrapper img {
+  position: absolute;
+  top: 124px;
+  left: 14px;
+  width: 140px;
+  height: 140px;
+  border: 4px solid #FFFFFF;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.btn-user-info {
+  position: absolute;
+  top: 210px;
+  left: 465px;
+  width: 120px;
+  height: 35px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 15px;
+  color: #FF6600;
+  border: 1px solid #FF6600;
+  border-radius: 100px;
+}
+
+.user-info-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 75px 15px 0px;
+}
+
+.user-info-name {
+  font-weight: 900;
+  font-size: 19px;
+  line-height: 28px;
+  color: #1C1C1C;
+}
+
+.user-info-account {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #657786;
+}
+
+.user-info-introduction {
+  margin-top: 10px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+}
+
+.user-info-followship-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+.user-info-followship-wrapper div {
+  display: flex;
+  flex-direction: row;
+  margin-right: 20px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+}
+
+.user-info-followship-wrapper p {
+  color: #657786;
+}
+</style>
