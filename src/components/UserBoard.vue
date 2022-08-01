@@ -22,11 +22,17 @@
         </div>
       </div>
     </div>
+
+    <ModalUserInfo v-bind:user="user" />
   </div>
 </template>
 
 <script>
+import ModalUserInfo from './ModalUserInfo.vue'
 export default {
+  components: {
+    ModalUserInfo
+  },
   props: {
     user: {
       type: Object,
@@ -37,6 +43,7 @@ export default {
 </script>
 
 <style>
+
 .user-board-wrapper {
   position: relative;
   display: flex;
@@ -47,6 +54,7 @@ export default {
 .user-banner-wrapper img {
   width: 598px;
   height: 200px;
+  object-fit: cover;
 }
 
 .user-avatar-wrapper img {
