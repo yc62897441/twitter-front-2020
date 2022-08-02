@@ -9,8 +9,8 @@
             <div>編輯個人檔案</div>
           </div>
           <div class="user-info-modal-header-right-wrapper">
-            <button type="button" class="btn btn-user-info-modal" aria-label="Close" @click.prevent.stop="handleSubmit"
-              v-bind:disabled="isProcessing">儲存</button>
+            <button type="button" class="btn btn-user-info-modal" data-bs-dismiss="modal" aria-label="Close"
+              @click.prevent.stop="handleSubmit" v-bind:disabled="isProcessing">儲存</button>
           </div>
         </div>
         <div class="user-info-modal-body">
@@ -53,7 +53,7 @@ import usersAPI from '../api/users'
 
 export default {
   props: {
-    user: {
+    propsUser: {
       type: Object,
       required: true
     }
@@ -76,8 +76,8 @@ export default {
           introduction: this.userNewInfo.introduction,
         }
         const { data } = await usersAPI.putUser({ userId, formData })
-        // console.log('data', data)
-        
+        this.$emit('after-put-userInfo', data)
+
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -97,7 +97,7 @@ export default {
   // 自動監控某些屬性，可以帶入兩個值 initialRestaurant(newValue, oldValue)
   // 如果屬性的內容有變更時，就可以去做一些事
   watch: {
-    user(newValue) {
+    propsUser(newValue) {
       this.userNewInfo = {
         ...this.userNewInfo,
         ...newValue

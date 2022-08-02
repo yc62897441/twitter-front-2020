@@ -7,7 +7,7 @@
     <div class="middle-container">
       <h1>User name</h1>
       <h3> 15 則推文</h3>
-      <UserBoard v-bind:user="user" />
+      <UserBoard v-bind:propsUser="user" />
     </div>
 
     <div class="right-container">

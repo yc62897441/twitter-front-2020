@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <ModalUserInfo v-bind:user="user" />
+    <ModalUserInfo v-bind:propsUser="propsUser" v-on:after-put-userInfo="afterPutUserInfo" />
   </div>
 </template>
 
@@ -34,19 +34,32 @@ export default {
     ModalUserInfo
   },
   props: {
-    user: {
+    propsUser: {
       type: Object,
       required: true
     }
   },
   data() {
     return {
+      user: {},
       followingsLength: '',
       followersLength: '',
     }
   },
+  methods: {
+    afterPutUserInfo(payload) {
+      this.user = {
+        ...this.user,
+        ...payload,
+      }
+    }
+  },
   watch: {
-    user(newValue) {
+    propsUser(newValue) {
+      this.user = {
+        ...this.user,
+        ...newValue,
+      }
       this.followingsLength = newValue.Followings.length
       this.followersLength = newValue.Followers.length
     }
