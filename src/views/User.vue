@@ -9,6 +9,7 @@
       <h3> 15 則推文</h3>
       <UserBoard v-bind:propsUser="user" />
       <UserNavPills />
+      <TweetsSection v-bind:tweets="tweets" />
     </div>
 
     <div class="right-container">
@@ -23,19 +24,23 @@ import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
 import UserBoard from '../components/UserBoard.vue'
 import UserNavPills from '../components/UserNavPills.vue'
+import TweetsSection from '../components/TweetsSection.vue'
 import usersAPI from '../api/users'
+import tweetsAPI from '../api/tweets'
 
 export default {
   components: {
     Navbar,
     FollowingsBar,
     UserBoard,
-    UserNavPills
+    UserNavPills,
+    TweetsSection
   },
   data() {
     return {
       userId: 1,
       user: {},
+      tweets: [],
     }
   },
   methods: {
@@ -50,10 +55,20 @@ export default {
       } catch (error) {
         console.warn(error)
       }
-    }
+    },
+    async fetchTweets() {
+      try {
+        const response = await tweetsAPI.getTweets()
+        const data = response.data
+        this.tweets = data
+      } catch (error) {
+        console.warn(error)
+      }
+    },
   },
   created() {
     this.fetchUser()
+    this.fetchTweets()
   }
 }
 </script>
