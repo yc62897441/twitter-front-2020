@@ -16,31 +16,41 @@
         <div class="user-info-modal-body">
           <form class="user-info-form">
             <div class="user-info-form-banner-wrapper">
-              <img src="../assets/user-banner.png" alt="">
+              <img v-bind:src="userNewInfo.banner" alt="" type="file" accept="image/*">
               <div>
-                <img class="user-info-icon" type="button" src="../assets/icon-photo.png" alt="">
+                <label for="userNewBanner">
+                  <img class="user-info-icon" type="button" src="../assets/icon-photo.png" alt="">
+                </label>
                 <img class="user-info-icon" type="button" src="../assets/icon-close(white).png" alt="">
               </div>
             </div>
             <div class="user-info-form-avatar-wrapper">
-              <img src="https://sports.cbsimg.net/images/visual/whatshot/chris_bosh_021516.jpg" alt="">
-              <img class="user-info-icon" type="button" src="../assets/icon-photo.png" alt="">
+              <img v-bind:src="userNewInfo.avatar" alt="">
+              <label for="userNewAvatar">
+                <img class="user-info-icon" type="button" src="../assets/icon-photo.png" alt="">
+              </label>
             </div>
             <div class="form-row mb-3 user-info-form-row">
-              <input v-model="user.name" style="background-color:#F5F8FA;" type="text" class="form-control" placeholder="名稱"
-                required>
+              <input v-model="userNewInfo.name" style="background-color:#F5F8FA;" type="text" class="form-control"
+                placeholder="名稱" required>
             </div>
             <div class="form-row mb-3 user-info-form-row">
-              <textarea cols="30" rows="5" placeholder="自我介紹" v-model="user.introduction"></textarea>
+              <textarea cols="30" rows="5" placeholder="自我介紹" v-model="userNewInfo.introduction"></textarea>
             </div>
           </form>
         </div>
       </div>
     </div>
+
+    <input id="userNewBanner" type="file" accept="image/*" name="userNewBanner" v-on:change="handleFileChange">
+    <input id="userNewAvatar" type="file" accept="image/*" name="userNewAvatar" v-on:change="handleFileChange">
+
   </div>
 </template>
 
 <script>
+import usersAPI from '../api/users'
+
 export default {
   props: {
     user: {
@@ -51,10 +61,48 @@ export default {
   data() {
     return {
       isProcessing: false,
-      newTweetDescription: '',
-      UserId: 1,
+      userId: 1,
+      userNewInfo: {}
     }
   },
+  methods: {
+    async handleSubmit() {
+      try {
+        this.isProcessing = true
+        const userId = this.userId
+
+        const formData = {
+          name: this.userNewInfo.name,
+          introduction: this.userNewInfo.introduction,
+        }
+        const { data } = await usersAPI.putUser({ userId, formData })
+        
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    },
+    handleFileChange(event) {
+      const { files } = event.target
+      const imageURL = window.URL.createObjectURL(files[0])
+      if (event.target.name === 'userNewAvatar') {
+        this.userNewInfo.avatar = imageURL
+      } else if (event.target.name === 'userNewBanner') {
+        this.userNewInfo.banner = imageURL
+      }
+    },
+  },
+  // 自動監控某些屬性，可以帶入兩個值 initialRestaurant(newValue, oldValue)
+  // 如果屬性的內容有變更時，就可以去做一些事
+  watch: {
+    user(newValue) {
+      this.userNewInfo = {
+        ...this.userNewInfo,
+        ...newValue
+      }
+    }
+  }
 }
 </script>
 
@@ -178,5 +226,11 @@ export default {
 .user-info-form-row textarea:focus-visible {
   width: 100%;
   outline: none;
+}
+
+#userNewBanner,
+#userNewAvatar {
+  visibility: hidden;
+  position: absolute;
 }
 </style>
