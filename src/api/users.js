@@ -7,4 +7,7 @@ export default {
   putUser: ({ userId, formData }) => {
     return apiHelper.put(`users/${userId}`, formData)
   },
+  getUserRepliedTweets: ({ userId }) => {
+    return apiHelper.get(`users/${userId}/replied_tweets`)
+  }
 }

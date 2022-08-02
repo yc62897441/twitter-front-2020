@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="reply in replies" v-bind:key="reply.id" class="reply-wrapper">
-    <!-- <div v-for="reply in replies" class="reply-wrapper"> -->
+      <!-- <div v-for="reply in replies" class="reply-wrapper"> -->
       <div class="reply-wrapper-left">
         <img v-bind:src="reply.User.avatar" alt="">
       </div>
@@ -12,7 +12,7 @@
           <div class="reply-info-data">・ {{ reply.createdAt | fromNow }}</div>
         </div>
         <div class="reply-to">
-          回覆給<p>@{{ tweetUser.account }}</p>
+          回覆給<p>@{{ reply.Tweet.User.account }}</p>
         </div>
         <div class="reply-description">
           {{ reply.comment }}
@@ -30,9 +30,6 @@ export default {
     replies: {
       type: Array,
     },
-    tweetUser: {
-      type: Object,
-    }
   },
   mixins: [fromNowFilter]
 }
@@ -40,9 +37,6 @@ export default {
 </script>
 
 <style>
-
-
-
 .reply-wrapper {
   display: flex;
   padding: 15px;

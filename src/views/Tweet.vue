@@ -1,18 +1,18 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar"  />
+      <Navbar class="Navbar" />
     </div>
 
     <div class="middle-container">
       <h1><img src="../assets/arrow-left.png" alt=""> 推文</h1>
       <TweetSection v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply" />
-      <RepliesSection v-bind:replies="tweet.Replies" v-bind:tweetUser="tweet.User" />
+      <RepliesSection v-bind:replies="replies" />
       <ModalNewTweet />
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar"  />
+      <FollowingsBar class="FollowingsBar" />
     </div>
 
   </div>
@@ -39,6 +39,7 @@ export default {
     return {
       tweet: {},
       isProcessing: false,
+      replies: []
     }
   },
   methods: {
@@ -52,8 +53,17 @@ export default {
         console.warn(error)
       }
     },
+    async getTweetReplies() {
+      try {
+        const tweetId = Number(this.$route.params.id)
+        const { data } = await tweetsAPI.getTweetReplies({ tweetId })
+        this.replies = data
+      } catch (error) {
+        console.warn(error)
+      }
+    },
     afterPostTweetReply(payload) {
-      this.tweet.Replies.push({
+      this.replies.push({
         TweetId: payload.TweetId,
         UserId: payload.UserId,
         comment: payload.comment,
@@ -65,9 +75,11 @@ export default {
   },
   created() {
     this.fetchTweet()
+    this.getTweetReplies()
   },
   beforeRouteUpdate(to, from, next) {
     this.fetchTweet()
+    this.getTweetReplies()
     next()
   }
 }
