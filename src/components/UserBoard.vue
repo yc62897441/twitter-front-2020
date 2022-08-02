@@ -72,7 +72,7 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 0px 0px 15px;
+  padding: 0px 0px;
 }
 
 .user-banner-wrapper img {

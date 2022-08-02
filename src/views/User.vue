@@ -8,6 +8,7 @@
       <h1>User name</h1>
       <h3> 15 則推文</h3>
       <UserBoard v-bind:propsUser="user" />
+      <UserNavPills />
     </div>
 
     <div class="right-container">
@@ -21,6 +22,7 @@
 import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
 import UserBoard from '../components/UserBoard.vue'
+import UserNavPills from '../components/UserNavPills.vue'
 import usersAPI from '../api/users'
 
 export default {
@@ -28,6 +30,7 @@ export default {
     Navbar,
     FollowingsBar,
     UserBoard,
+    UserNavPills
   },
   data() {
     return {
