@@ -76,6 +76,7 @@ export default {
           introduction: this.userNewInfo.introduction,
         }
         const { data } = await usersAPI.putUser({ userId, formData })
+        // console.log('data', data)
         
         this.isProcessing = false
       } catch (error) {

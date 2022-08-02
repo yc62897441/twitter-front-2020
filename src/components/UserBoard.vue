@@ -1,24 +1,24 @@
 <template>
   <div class="user-board-wrapper">
     <div class="user-banner-wrapper">
-      <img src="../assets/user-banner.png" alt="">
+      <img v-bind:src="user.banner" alt="">
     </div>
 
     <div class="user-avatar-wrapper">
-      <img src="https://sports.cbsimg.net/images/visual/whatshot/chris_bosh_021516.jpg" alt="">
+      <img v-bind:src="user.avatar" alt="">
     </div>
 
     <!-- trigger modal -->
     <button class="btn btn-user-info" type="button" data-bs-toggle="modal"
       v-bind:data-bs-target="'#modalUserInfo'">編輯個人資料</button>
     <div class="user-info-wrapper">
-      <div class="user-info-name">name</div>
-      <div class="user-info-account">@account</div>
-      <div class="user-info-introduction">introduction</div>
+      <div class="user-info-name">{{ user.name }}</div>
+      <div class="user-info-account">@{{ user.account }}</div>
+      <div class="user-info-introduction">{{ user.introduction }}</div>
       <div class="user-info-followship-wrapper">
-        <div class="user-info-followship-followings">15個<p>跟隨中</p>
+        <div class="user-info-followship-followings">{{ followingsLength }}個<p>跟隨中</p>
         </div>
-        <div class="user-info-followship-followers">20位<p>跟隨者</p>
+        <div class="user-info-followship-followers">{{ followersLength }}位<p>跟隨者</p>
         </div>
       </div>
     </div>
@@ -39,11 +39,22 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      followingsLength: '',
+      followersLength: '',
+    }
+  },
+  watch: {
+    user(newValue) {
+      this.followingsLength = newValue.Followings.length
+      this.followersLength = newValue.Followers.length
+    }
+  }
 }
 </script>
 
 <style>
-
 .user-board-wrapper {
   position: relative;
   display: flex;
