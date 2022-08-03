@@ -10,7 +10,8 @@
       <UserBoard v-bind:propsUser="user" />
       <UserNavPills />
       <!-- <TweetsSection v-bind:tweets="tweets" /> -->
-      <RepliesSection v-bind:replies="replies"/>
+      <!-- <RepliesSection v-bind:replies="replies"/> -->
+      <LikesSection v-bind:likes="likes" />
     </div>
 
     <div class="right-container">
@@ -27,6 +28,7 @@ import UserBoard from '../components/UserBoard.vue'
 import UserNavPills from '../components/UserNavPills.vue'
 import TweetsSection from '../components/TweetsSection.vue'
 import RepliesSection from '../components/RepliesSection.vue'
+import LikesSection from '../components/LikesSection.vue'
 import usersAPI from '../api/users'
 import tweetsAPI from '../api/tweets'
 
@@ -37,7 +39,8 @@ export default {
     UserBoard,
     UserNavPills,
     TweetsSection,
-    RepliesSection
+    RepliesSection,
+    LikesSection
   },
   data() {
     return {
@@ -45,6 +48,7 @@ export default {
       user: {},
       tweets: [],
       replies: [],
+      likes: [],
     }
   },
   methods: {
@@ -78,11 +82,21 @@ export default {
         console.warn(error)
       }
     },
+    async fetchLikes() {
+      try {
+        const userId = this.userId
+        const { data } = await usersAPI.getUserLikes({ userId })
+        this.likes = data
+      } catch (error) {
+        console.warn(error)
+      }
+    },
   },
   created() {
     this.fetchUser()
     this.fetchTweets()
     this.fetchReplies()
+    this.fetchLikes()
   }
 }
 </script>
