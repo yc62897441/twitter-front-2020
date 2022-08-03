@@ -32,7 +32,9 @@
       <img src="../assets/icon-like.png" alt="">
     </div>
 
-    <div class="modal fade" v-bind:id="'modal' + tweet.id" tabindex="-1" aria-labelledby="exampleModalLabel"
+    <ModalTweetReply v-bind:tweet="tweet" />
+
+    <!-- <div class="modal fade" v-bind:id="'modal' + tweet.id" tabindex="-1" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -78,16 +80,19 @@
           </div>
         </div>
       </div>
-    </div>
-
+    </div> -->
   </div>
 </template>
 
 <script>
+import ModalTweetReply from './ModalTweetReply.vue'
 import tweetsAPI from '../api/tweets'
 import { fromNowFilter } from '../utils/mixins'
 
 export default {
+  components: {
+    ModalTweetReply
+  },
   props: {
     tweet: {
       type: Object,
@@ -112,7 +117,7 @@ export default {
           UserId: this.UserId,
           comment: this.newTweetReply,
         }
-        const { data } = await tweetsAPI.postTweetReply({ formData, tweetId })    
+        const { data } = await tweetsAPI.postTweetReply({ formData, tweetId })
         this.$emit('after-post-tweet-reply', {
           ...data,
         })
@@ -129,8 +134,6 @@ export default {
 </script>
 
 <style>
-
-
 #tweet-wrapper {
   display: flex;
   flex-direction: column;
@@ -219,7 +222,7 @@ export default {
   cursor: pointer;
 }
 
-.new-tweet-wrapper {
+/* .new-tweet-wrapper {
   display: flex;
   padding: 15px;
   border-top: 1px solid #E6ECF0;
@@ -255,7 +258,7 @@ export default {
 
 .new-tweet-wrapper-right input:focus {
   box-shadow: none;
-}
+} */
 
 .btn-new-tweet {
   width: 66px;
@@ -263,13 +266,13 @@ export default {
   border-radius: 100px;
 }
 
-.tweet-wrapper {
+/* .tweet-wrapper {
   display: flex;
   padding: 15px;
   border-bottom: 1px solid #E6ECF0;
-}
+} */
 
-.tweet-wrapper-left img {
+/* .tweet-wrapper-left img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -279,20 +282,20 @@ export default {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
-}
+} */
 
-.tweet-info,
+/* .tweet-info,
 .tweet-interaction {
   display: flex;
 }
 
 .tweet-info :nth-child(1) {
   margin-right: 5px;
-}
+} */
 
-.tweet-info-name {
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
+/* .tweet-info-name {
+  font-family: 'Noto Sans TC';
+    font-style: normal;
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;
@@ -301,8 +304,8 @@ export default {
 
 .tweet-info-account,
 .tweet-info-data {
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
+  font-family: 'Noto Sans TC';
+    font-style: normal;
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
@@ -316,9 +319,9 @@ export default {
   line-height: 22px;
   color: #1C1C1C;
   word-break: break-all
-}
+} */
 
-.tweet-interaction {
+/* .tweet-interaction {
   margin-top: 14px;
   font-weight: 500;
   font-size: 13px;
@@ -338,9 +341,9 @@ export default {
 
 .tweet-interaction div p {
   margin-left: 12px;
-}
+} */
 
-.modal-header img {
+/* .modal-header img {
   width: 24px;
   height: 24px;
 }
@@ -361,9 +364,9 @@ export default {
   height: calc(100% - 50px);
   margin: 5px auto 0px;
   background: #CCD6DD;
-}
+} */
 
-.reply-to {
+/* .reply-to {
   display: flex;
   margin-top: 4px;
   font-weight: 500;
@@ -385,5 +388,5 @@ export default {
 
 .modal-footer {
   border: none;
-}
+} */
 </style>
