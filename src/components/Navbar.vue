@@ -6,20 +6,19 @@
           <img src="../assets/alpha_camp_logo.png" alt="">
         </router-link>
       </div>
-      <div class="icon-wrapper">
+      <router-link to="/tweets" class="icon-wrapper">
         <img src="../assets/home.png" alt="">
         <span>首頁</span>
-      </div>
-      <div class="icon-wrapper">
+      </router-link>
+      <router-link v-bind:to="'/users/' + userId" class="icon-wrapper">
         <img src="../assets/user.png" alt="">
         <span>個人資料</span>
-      </div>
-      <div class="icon-wrapper">
-        <router-link to="/setting">
-          <img src="../assets/setting.png" alt="">
-          <span>設定</span>
-        </router-link>
-      </div>
+      </router-link>
+      <router-link to="/setting" class="icon-wrapper">
+        <img src="../assets/setting.png" alt="">
+        <span>設定</span>
+      </router-link>
+
       <!-- trigger modal -->
       <button class="btn btn-orange" type="button" data-bs-toggle="modal"
         v-bind:data-bs-target="'#modalNewTweet'">推文</button>
@@ -35,7 +34,13 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      userId: 1,
+    }
+  }
+}
 </script>
 
 <style>
@@ -51,21 +56,21 @@ export default {}
 
 .logo-wrapper,
 .icon-wrapper {
+  display: flex;
+  align-items: center;
   padding: 5px 10px;
+  border: 1px solid #ffffff;
 }
 
 .logo-wrapper img {
   width: 30px;
   height: 30px;
-  margin-right: 20px;
 }
 
 .icon-wrapper {
-  display: flex;
-  align-items: center;
   margin-top: 35px;
-  border: 1px solid #ffffff;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .icon-wrapper:hover {
