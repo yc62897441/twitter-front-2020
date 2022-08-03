@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" v-bind:id="'modal'+tweet.id" tabindex="-1" aria-labelledby="exampleModalLabel"
+  <div class="modal fade" v-bind:id="'modal' + tweet.id" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -8,29 +8,29 @@
         </div>
         <div class="modal-body">
           <div class="modal-tweet-wrapper">
-            <div class="tweet-wrapper-left modal-tweet-wrapper-left">
+            <div class="modal-tweet-wrapper-left">
               <img v-bind:src="tweet.User.avatar" alt="">
               <span></span>
             </div>
-            <div class="tweet-wrapper-right">
-              <div class="tweet-info">
-                <div class="tweet-info-name"> {{tweet.User.name}}</div>
-                <div class="tweet-info-account"> @{{tweet.User.account}} </div>
-                <div class="tweet-info-data">・{{tweet.createdAt | fromNow}}</div>
+            <div class="modal-tweet-wrapper-right">
+              <div class="modal-tweet-info">
+                <div class="modal-tweet-info-name"> {{ tweet.User.name }}</div>
+                <div class="modal-tweet-info-account"> @{{ tweet.User.account }} </div>
+                <div class="modal-tweet-info-data">・{{ tweet.createdAt | fromNow }}</div>
               </div>
-              <div class="tweet-description">
-                {{ tweet.description}}
+              <div class="modal-tweet-description">
+                {{ tweet.description }}
               </div>
-              <div class="reply-to">
-                回覆給<p>@{{tweet.User.account}}</p>
+              <div class="modal-reply-to">
+                回覆給<p>@{{ tweet.User.account }}</p>
               </div>
             </div>
           </div>
           <div class="modal-new-tweet-wrapper">
-            <div class="new-tweet-wrapper-left">
+            <div class="modal-new-tweet-wrapper-left">
               <img src="../assets/avatar-photo.png" alt="">
             </div>
-            <form class="new-tweet-wrapper-right">
+            <form class="modal-new-tweet-wrapper-right">
               <textarea cols="30" rows="5" placeholder="推你的回覆" v-model="newTweetReply" name="newTweetReply"
                 required></textarea>
             </form>
@@ -47,7 +47,7 @@
 
 <script>
 import tweetsAPI from '../api/tweets'
-import { fromNowFilter } from '../utils/mixins' 
+import { fromNowFilter } from '../utils/mixins'
 
 export default {
   props: {
@@ -73,13 +73,13 @@ export default {
           UserId: this.UserId,
           comment: this.newTweetReply,
         }
-        const { data } = await tweetsAPI.postTweetReply({formData, tweetId})
+        const { data } = await tweetsAPI.postTweetReply({ formData, tweetId })
         this.$emit('after-post-tweet-reply', {
           ...data,
         })
         this.newTweetReply = ''
         this.isProcessing = false
-      }catch (error) {
+      } catch (error) {
         this.isProcessing = false
         console.warn(error)
       }
@@ -105,6 +105,12 @@ export default {
   padding: 15px;
 }
 
+.modal-tweet-wrapper-left img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
 .modal-tweet-wrapper-left span {
   display: block;
   width: 2px;
@@ -113,7 +119,50 @@ export default {
   background: #CCD6DD;
 }
 
-.reply-to {
+.modal-tweet-wrapper-right {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.modal-tweet-info {
+  display: flex;
+}
+
+.modal-tweet-info :nth-child(1) {
+  margin-right: 5px;
+}
+
+.modal-tweet-info-name {
+  /* font-family: 'Noto Sans TC';
+    font-style: normal; */
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 22px;
+  color: #1C1C1C;
+}
+
+.modal-tweet-info-account,
+.modal-tweet-info-data {
+  /* font-family: 'Noto Sans TC';
+    font-style: normal; */
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #657786;
+}
+
+.modal-tweet-description {
+  margin-top: 6px;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #1C1C1C;
+  word-break: break-all
+}
+
+
+.modal-reply-to {
   display: flex;
   margin-top: 4px;
   font-weight: 500;
@@ -122,7 +171,7 @@ export default {
   color: #657786;
 }
 
-.reply-to p {
+.modal-reply-to p {
   margin: 0px;
   margin-left: 2px;
   color: #FF6600;
@@ -131,6 +180,44 @@ export default {
 .modal-new-tweet-wrapper {
   display: flex;
   padding: 0px 15px;
+}
+
+.modal-new-tweet-wrapper-left img {
+  width: 50px;
+  height: 50px;
+}
+
+.modal-new-tweet-wrapper-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: 0px;
+  margin-left: 10px;
+  padding: 0px;
+}
+
+.modal-new-tweet-wrapper-right input::placeholder {
+  color: #9197A3;
+}
+
+.modal-new-tweet-wrapper-right textarea {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  resize: none;
+}
+
+.modal-new-tweet-wrapper-right textarea:focus,
+.modal-new-tweet-wrapper-right textarea:focus-visible {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  outline: none;
 }
 
 .modal-footer {

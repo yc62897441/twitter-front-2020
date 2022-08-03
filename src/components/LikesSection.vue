@@ -31,15 +31,20 @@
           </div>
         </div>
       </div>
+      <ModalTweetReply v-bind:tweet="like.Tweet" />
     </div>
   </div>
 </template>
 
 <script>
 import tweetsAPI from '../api/tweets'
+import ModalTweetReply from './ModalTweetReply.vue'
 import { fromNowFilter } from '../utils/mixins'
 
 export default {
+  components: {
+    ModalTweetReply
+  },
   props: {
     likes: {
       type: Array,
