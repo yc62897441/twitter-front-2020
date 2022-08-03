@@ -2,21 +2,35 @@
   <div class="user-nav-pills-wrapper">
     <fieldset>
       <div>
-        <input type="radio" id="user-nav-pills-tweets" name="user-nav-pills" value="user-nav-pills-tweets" checked>
+        <input type="radio" id="user-nav-pills-tweets" name="user-nav-pills" value="user-nav-pills-tweets"
+          v-on:change="changeUserNavPills" checked>
         <label class="user-nav-pills-link" for="user-nav-pills-tweets">推文</label>
       </div>
       <div>
         <input type="radio" id="user-nav-pills-tweetsAndReplies" name="user-nav-pills"
-          value="user-nav-pills-tweetsAndReplies">
+          value="user-nav-pills-tweetsAndReplies" v-on:change="changeUserNavPills">
         <label class="user-nav-pills-link" for="user-nav-pills-tweetsAndReplies">推文與回覆</label>
       </div>
       <div>
-        <input type="radio" id="user-nav-pills-likes" name="user-nav-pills" value="user-nav-pills-likes">
+        <input type="radio" id="user-nav-pills-likes" name="user-nav-pills" value="user-nav-pills-likes"
+          v-on:change="changeUserNavPills">
         <label class="user-nav-pills-link" for="user-nav-pills-likes">喜歡的內容</label>
       </div>
     </fieldset>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    changeUserNavPills(event) {
+      this.$emit('after-change-user-nav-pills', {
+        value: event.target.value
+      })
+    }
+  }
+}
+</script>
 
 <style>
 .user-nav-pills-wrapper fieldset {

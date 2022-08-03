@@ -8,10 +8,10 @@
       <h1>User name</h1>
       <h3> 15 則推文</h3>
       <UserBoard v-bind:propsUser="user" />
-      <UserNavPills />
-      <!-- <TweetsSection v-bind:tweets="tweets" /> -->
-      <!-- <RepliesSection v-bind:replies="replies"/> -->
-      <LikesSection v-bind:likes="likes" />
+      <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
+      <TweetsSection class="User-TweetsSection" v-bind:tweets="tweets" />
+      <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
+      <LikesSection class="User-LikesSection User-Section-hidden" v-bind:likes="likes" />
     </div>
 
     <div class="right-container">
@@ -76,7 +76,7 @@ export default {
     async fetchReplies() {
       try {
         const userId = this.userId
-        const { data } = await usersAPI.getUserRepliedTweets({userId})
+        const { data } = await usersAPI.getUserRepliedTweets({ userId })
         this.replies = data
       } catch (error) {
         console.warn(error)
@@ -91,6 +91,29 @@ export default {
         console.warn(error)
       }
     },
+    afterChangeUserNavPills(payload) {
+      const nowCheckedSection = payload.value
+      const UserTweetsSection = document.querySelector('.User-TweetsSection')
+      const UserRepliesSection = document.querySelector('.User-RepliesSection')
+      const UserLikesSection = document.querySelector('.User-LikesSection')
+      switch (nowCheckedSection) {
+        case 'user-nav-pills-tweets':
+          UserTweetsSection.classList.remove('User-Section-hidden')
+          UserRepliesSection.classList.add('User-Section-hidden')
+          UserLikesSection.classList.add('User-Section-hidden')
+          break
+        case 'user-nav-pills-tweetsAndReplies':
+          UserTweetsSection.classList.add('User-Section-hidden')
+          UserRepliesSection.classList.remove('User-Section-hidden')
+          UserLikesSection.classList.add('User-Section-hidden')
+          break
+        case 'user-nav-pills-likes':
+          UserTweetsSection.classList.add('User-Section-hidden')
+          UserRepliesSection.classList.add('User-Section-hidden')
+          UserLikesSection.classList.remove('User-Section-hidden')
+          break
+      }
+    }
   },
   created() {
     this.fetchUser()
@@ -115,5 +138,9 @@ export default {
   margin-right: 30px;
   border-left: 1px solid #E6ECF0;
   border-right: 1px solid #E6ECF0;
+}
+
+.User-Section-hidden {
+  display: none;
 }
 </style>
