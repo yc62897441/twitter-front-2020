@@ -3,12 +3,12 @@
     <fieldset>
       <div>
         <input type="radio" id="followship-nav-pills-followers" name="followship-nav-pills"
-          value="followship-nav-pills-followers" checked>
+          value="followship-nav-pills-followers" v-on:change="changeFollowshipNavPills" checked>
         <label class="followship-nav-pills-link" for="followship-nav-pills-followers">跟隨者</label>
       </div>
       <div>
         <input type="radio" id="followship-nav-pills-followings" name="followship-nav-pills"
-          value="followship-nav-pills-followings">
+          value="followship-nav-pills-followings" v-on:change="changeFollowshipNavPills">
         <label class="followship-nav-pills-link" for="followship-nav-pills-followings">正在跟隨</label>
       </div>
     </fieldset>
@@ -17,7 +17,13 @@
 
 <script>
 export default {
-
+  methods: {
+    changeFollowshipNavPills(event) {
+      this.$emit('after-change-followship-nav-pills', {
+        value: event.target.value
+      })
+    }
+  }
 }
 </script>
 

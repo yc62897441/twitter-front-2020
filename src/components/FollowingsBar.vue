@@ -49,7 +49,7 @@ export default {
         const userId = 1
         const formData = {
           userId: userId,
-          followingId: followingId
+          id: followingId
         }
         const { data } = await followshipAPI.postFollowship({ formData })
         if (data.status !== 'success') {

@@ -7,7 +7,7 @@
     <div class="middle-container">
       <h1>User name</h1>
       <h3> 15 則推文</h3>
-      <FollowshipNavPills />
+      <FollowshipNavPills v-on:after-change-followship-nav-pills="afterChangeFollowshipNavPills" />
       <FollowshipSection />
     </div>
 
@@ -37,9 +37,8 @@ export default {
     return {
       userId: 1,
       user: {},
-      tweets: [],
-      replies: [],
-      likes: [],
+      userFollowings: [],
+      userFollowers: [],
     }
   },
   methods: {
@@ -55,9 +54,23 @@ export default {
         console.warn(error)
       }
     },
+    async fetchUserFollowings() {
+      try {
+        const userId = this.userId
+        const response = await usersAPI.getUserFollowings({ userId })
+        const data = response.data
+        this.userFollowings = data
+      } catch (error) {
+        console.warn(error)
+      }
+    },
+    afterChangeFollowshipNavPills(payload) {
+      console.log('not finished')
+    },
   },
   created() {
     this.fetchUser()
+    this.fetchUserFollowings()
   }
 }
 </script>
