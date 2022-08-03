@@ -114,8 +114,6 @@ export default {
 .followingsBar-title {
   margin: 10px 0px;
   margin-left: 15px;
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
   font-weight: 700;
   font-size: 18px;
   line-height: 26px;
@@ -152,8 +150,6 @@ export default {
 }
 
 .info-wrapper-name {
-  /* font-family: 'Noto Sans TC';
-  font-style: normal; */
   font-weight: 700;
   font-size: 15px;
   line-height: 15px;
@@ -161,8 +157,6 @@ export default {
 }
 
 .info-wrapper-account {
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
   font-weight: 700;
   font-size: 15px;
   line-height: 15px;

@@ -81,8 +81,6 @@ export default {}
 }
 
 .icon-wrapper span {
-  /* font-family: 'Noto Sans TC';
-  font-style: normal; */
   font-weight: 700;
   font-size: 18px;
   line-height: 26px;

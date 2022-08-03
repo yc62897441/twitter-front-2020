@@ -97,13 +97,4 @@ export default {
   border-left: 1px solid #E6ECF0;
   border-right: 1px solid #E6ECF0;
 }
-
-/* .left-container {
-  position: relative;
-}
-
-.Navbar {
-  position: fixed;
-  width: 100%
-} */
 </style>

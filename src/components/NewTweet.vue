@@ -59,24 +59,31 @@ export default {
   padding: 0px;
 }
 
-.new-tweet-wrapper-right input {
+.new-tweet-wrapper-right textarea {
+  width: 100%;
   margin: 0px;
   padding: 0px;
   border: none;
   font-weight: 500;
   font-size: 18px;
   line-height: 26px;
+  resize: none;
 }
 
-.new-tweet-wrapper-right input::placeholder {
+.new-tweet-wrapper-right textarea::placeholder {
   color: #9197A3;
 }
 
-.new-tweet-wrapper-right input:focus {
-  box-shadow: none;
+.new-tweet-wrapper-right textarea:focus,
+.new-tweet-wrapper-right textarea:focus-visible {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  outline: none;
 }
 
-.btn-new-tweet {
+.new-tweet-wrapper-right .btn-new-tweet {
   width: 66px;
   height: 38px;
   border-radius: 100px;

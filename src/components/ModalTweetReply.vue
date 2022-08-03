@@ -90,6 +90,9 @@ export default {
 </script>
 
 <style>
+
+
+
 .modal-header img {
   width: 24px;
   height: 24px;
@@ -114,7 +117,7 @@ export default {
 .modal-tweet-wrapper-left span {
   display: block;
   width: 2px;
-  height: calc(100% - 50px);
+  height: calc(100% - 30px);
   margin: 5px auto 0px;
   background: #CCD6DD;
 }
@@ -134,8 +137,6 @@ export default {
 }
 
 .modal-tweet-info-name {
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;
@@ -144,8 +145,6 @@ export default {
 
 .modal-tweet-info-account,
 .modal-tweet-info-data {
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
@@ -160,7 +159,6 @@ export default {
   color: #1C1C1C;
   word-break: break-all
 }
-
 
 .modal-reply-to {
   display: flex;
@@ -222,5 +220,11 @@ export default {
 
 .modal-footer {
   border: none;
+}
+
+.modal-footer .btn-new-tweet {
+  width: 66px;
+  height: 38px;
+  border-radius: 100px;
 }
 </style>

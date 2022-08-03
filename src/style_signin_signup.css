@@ -12,8 +12,6 @@
 
 .title {
   padding-top: 25px;
-  /* font-family: 'Noto Sans TC'; */
-  /* font-style: normal; */
   font-weight: 700;
   font-size: 23px;
   line-height: 33px;
@@ -50,7 +48,6 @@ form input {
 
 .btn {
   border-radius: 50px;
-  /* font-family: 'Noto Sans TC'; */
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -63,7 +60,6 @@ form input {
   justify-content: end;
   height: 26px;
   margin-top: 26px;
-  /* font-family: 'Noto Sans TC'; */
   font-style: normal;
   font-weight: 700;
   font-size: 18px;

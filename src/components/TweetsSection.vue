@@ -95,8 +95,6 @@ export default {
 }
 
 .tweet-info-name {
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;
@@ -105,8 +103,6 @@ export default {
 
 .tweet-info-account,
 .tweet-info-data {
-  /* font-family: 'Noto Sans TC';
-    font-style: normal; */
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;
