@@ -8,7 +8,8 @@
       <h1>User name</h1>
       <h3> 15 則推文</h3>
       <FollowshipNavPills v-on:after-change-followship-nav-pills="afterChangeFollowshipNavPills" />
-      <FollowshipSection v-bind:userFollowings="userFollowings" v-bind:userFollowers="userFollowers" />
+      <FollowshipSection v-bind:userFollowings="userFollowings" v-bind:userFollowers="userFollowers"
+        v-bind:show="show" />
     </div>
 
     <div class="right-container">
@@ -39,6 +40,7 @@ export default {
       user: {},
       userFollowings: [],
       userFollowers: [],
+      show: 'userFollowers'
     }
   },
   methods: {
@@ -75,7 +77,11 @@ export default {
       }
     },
     afterChangeFollowshipNavPills(payload) {
-      console.log('not finished')
+      if (payload.value === 'followship-nav-pills-followings') {
+        this.show = 'userFollowings'
+      } else if (payload.value === 'followship-nav-pills-followers') {
+        this.show = 'userFollowers'
+      }
     },
   },
   created() {

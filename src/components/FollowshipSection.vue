@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="show === '123'">
+    <div v-if="show === 'userFollowings'">
       <div v-for="userFollowing in userFollowings" v-bind:key="userFollowing.followingUser.id"
         class="followship-user-wrapper">
         <div class="followship-user-avatar-wrapper">
@@ -69,13 +69,15 @@ export default {
     userFollowers: {
       type: Array,
     },
+    show: {
+      type: String,
+    },
   },
   data() {
     return {
       isProcessing: false,
       userId: 1,
       userFollowingIds: [],
-      show: '123'
     }
   },
   methods: {
