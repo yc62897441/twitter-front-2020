@@ -8,7 +8,7 @@
       <h1>User name</h1>
       <h3> 15 則推文</h3>
       <FollowshipNavPills v-on:after-change-followship-nav-pills="afterChangeFollowshipNavPills" />
-      <FollowshipSection />
+      <FollowshipSection v-bind:userFollowings="userFollowings" />
     </div>
 
     <div class="right-container">

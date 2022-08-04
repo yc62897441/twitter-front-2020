@@ -1,24 +1,26 @@
 <template>
   <div>
-    <div v-for="recommendedFollowing in recommendedFollowings" class="followship-user-wrapper">
+    <div v-for="userFollowing in userFollowings" class="followship-user-wrapper">
       <div class="followship-user-avatar-wrapper">
-        <img v-bind:src="recommendedFollowing.avatar" alt="">
+        <img v-bind:src="userFollowing.followingUser.avatar" alt="">
       </div>
       <div class="followship-user-main-wrapper">
         <div class="followship-user-main-wrapper-top">
           <div class="followship-user-main-wrapper-top-left">
-            <div class="followship-user-name">{{ recommendedFollowing.name }}</div>
-            <div class="followship-user-account">@{{ recommendedFollowing.account }}</div>
+            <div class="followship-user-name">{{ userFollowing.followingUser.name }}</div>
+            <div class="followship-user-account">@{{ userFollowing.followingUser.account }}</div>
           </div>
           <div class="followship-user-main-wrapper-top-right followship-btn-wrapper">
-            <button type="button" class="btn btn-orange" v-on:click="postFollowship(recommendedFollowing.id)"
-              v-bind:disabled="isProcessing" v-if="!recommendedFollowing.Followers.includes(userId)">跟隨</button>
+            <button type="button" class="btn btn-orange" v-on:click="postFollowship(userFollowing.followingUser.id)"
+              v-bind:disabled="isProcessing"
+              v-if="!userFollowingIds.includes(userFollowing.followingUser.id)">跟隨</button>
             <button type="button" class="btn btn-orange btn-isFollowed"
-              v-on:click="deleteFollowship(recommendedFollowing.id)" v-bind:disabled="isProcessing" v-else>正在跟隨</button>
+              v-on:click="deleteFollowship(userFollowing.followingUser.id)" v-bind:disabled="isProcessing"
+              v-else>正在跟隨</button>
           </div>
         </div>
         <div class="followship-user-main-wrapper-bottom">
-          <div class="followship-user-main-wrapper-introduction">{{ recommendedFollowing.introduction }}</div>
+          <div class="followship-user-main-wrapper-introduction">{{ userFollowing.followingUser.introduction }}</div>
         </div>
       </div>
     </div>
@@ -29,23 +31,19 @@
 import followshipAPI from '../api/followships'
 
 export default {
+  props: {
+    userFollowings: {
+      type: Array,
+    }
+  },
   data() {
     return {
-      recommendedFollowings: [],
       isProcessing: false,
-      userId: 1
+      userId: 1,
+      userFollowingIds: [],
     }
   },
   methods: {
-    async fetchRecommendedFollowings() {
-      try {
-        const userId = 1 // userId 之後要改成由登入的user資料來取代
-        const { data } = await followshipAPI.getRecommendedFollowings({ userId: userId })
-        this.recommendedFollowings = data
-      } catch (error) {
-        console.warn(error)
-      }
-    },
     async postFollowship(followingId) {
       try {
         this.isProcessing = true
@@ -59,11 +57,7 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
-        this.recommendedFollowings.forEach(recommendedFollowing => {
-          if (recommendedFollowing.id === followingId) {
-            recommendedFollowing.Followers.push(userId)
-          }
-        })
+        this.userFollowingIds.push(followingId)
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -79,13 +73,9 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
-        this.recommendedFollowings.forEach(recommendedFollowing => {
-          if (recommendedFollowing.id === followingId) {
-            recommendedFollowing.Followers = recommendedFollowing.Followers.map(follower => {
-              if (follower !== userId) {
-                return follower
-              }
-            })
+        this.userFollowingIds = this.userFollowingIds.map(userFollowingId => {
+          if (userFollowingId !== followingId) {
+            return userFollowingId
           }
         })
         this.isProcessing = false
@@ -94,6 +84,11 @@ export default {
         console.warn(error)
       }
     }
+  },
+  watch: {
+    userFollowings(newValue) {
+      this.userFollowingIds = newValue.map(item => item.followingUser.id)
+    },
   },
   created() {
     this.fetchRecommendedFollowings()
