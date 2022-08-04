@@ -1,26 +1,57 @@
 <template>
   <div>
-    <div v-for="userFollowing in userFollowings" class="followship-user-wrapper">
-      <div class="followship-user-avatar-wrapper">
-        <img v-bind:src="userFollowing.followingUser.avatar" alt="">
-      </div>
-      <div class="followship-user-main-wrapper">
-        <div class="followship-user-main-wrapper-top">
-          <div class="followship-user-main-wrapper-top-left">
-            <div class="followship-user-name">{{ userFollowing.followingUser.name }}</div>
-            <div class="followship-user-account">@{{ userFollowing.followingUser.account }}</div>
+    <div v-if="show === '123'">
+      <div v-for="userFollowing in userFollowings" v-bind:key="userFollowing.followingUser.id"
+        class="followship-user-wrapper">
+        <div class="followship-user-avatar-wrapper">
+          <img v-bind:src="userFollowing.followingUser.avatar" alt="">
+        </div>
+        <div class="followship-user-main-wrapper">
+          <div class="followship-user-main-wrapper-top">
+            <div class="followship-user-main-wrapper-top-left">
+              <div class="followship-user-name">{{ userFollowing.followingUser.name }}</div>
+              <div class="followship-user-account">@{{ userFollowing.followingUser.account }}</div>
+            </div>
+            <div class="followship-user-main-wrapper-top-right followship-btn-wrapper">
+              <button type="button" class="btn btn-orange"
+                v-on:click="postFollowship(userFollowing.followingUser.id, 'userFollowing')"
+                v-bind:disabled="isProcessing"
+                v-if="!userFollowingIds.includes(userFollowing.followingUser.id)">跟隨</button>
+              <button type="button" class="btn btn-orange btn-isFollowed"
+                v-on:click="deleteFollowship(userFollowing.followingUser.id, 'userFollowing')"
+                v-bind:disabled="isProcessing" v-else>正在跟隨</button>
+            </div>
           </div>
-          <div class="followship-user-main-wrapper-top-right followship-btn-wrapper">
-            <button type="button" class="btn btn-orange" v-on:click="postFollowship(userFollowing.followingUser.id)"
-              v-bind:disabled="isProcessing"
-              v-if="!userFollowingIds.includes(userFollowing.followingUser.id)">跟隨</button>
-            <button type="button" class="btn btn-orange btn-isFollowed"
-              v-on:click="deleteFollowship(userFollowing.followingUser.id)" v-bind:disabled="isProcessing"
-              v-else>正在跟隨</button>
+          <div class="followship-user-main-wrapper-bottom">
+            <div class="followship-user-main-wrapper-introduction">{{ userFollowing.followingUser.introduction }}</div>
           </div>
         </div>
-        <div class="followship-user-main-wrapper-bottom">
-          <div class="followship-user-main-wrapper-introduction">{{ userFollowing.followingUser.introduction }}</div>
+      </div>
+    </div>
+    <div v-else>
+      <div v-for="userFollower in userFollowers" v-bind:key="userFollower.followerUser.id"
+        class="followship-user-wrapper">
+        <div class="followship-user-avatar-wrapper">
+          <img v-bind:src="userFollower.followerUser.avatar" alt="">
+        </div>
+        <div class="followship-user-main-wrapper">
+          <div class="followship-user-main-wrapper-top">
+            <div class="followship-user-main-wrapper-top-left">
+              <div class="followship-user-name">{{ userFollower.followerUser.name }}</div>
+              <div class="followship-user-account">@{{ userFollower.followerUser.account }}</div>
+            </div>
+            <div class="followship-user-main-wrapper-top-right followship-btn-wrapper">
+              <button type="button" class="btn btn-orange"
+                v-on:click="postFollowship(userFollower.followerUser.id, 'userFollower')" v-bind:disabled="isProcessing"
+                v-if="!userFollowingIds.includes(userFollower.followerUser.id)">跟隨</button>
+              <button type="button" class="btn btn-orange btn-isFollowed"
+                v-on:click="deleteFollowship(userFollower.followerUser.id, 'userFollower')"
+                v-bind:disabled="isProcessing" v-else>正在跟隨</button>
+            </div>
+          </div>
+          <div class="followship-user-main-wrapper-bottom">
+            <div class="followship-user-main-wrapper-introduction">{{ userFollower.followerUser.introduction }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -34,17 +65,21 @@ export default {
   props: {
     userFollowings: {
       type: Array,
-    }
+    },
+    userFollowers: {
+      type: Array,
+    },
   },
   data() {
     return {
       isProcessing: false,
       userId: 1,
       userFollowingIds: [],
+      show: '123'
     }
   },
   methods: {
-    async postFollowship(followingId) {
+    async postFollowship(followingId, followingOrFollower) {
       try {
         this.isProcessing = true
         const userId = 1
@@ -64,7 +99,7 @@ export default {
         console.warn(error)
       }
     },
-    async deleteFollowship(followingId) {
+    async deleteFollowship(followingId, followingOrFollower) {
       try {
         this.isProcessing = true
         const userId = 1
@@ -90,9 +125,6 @@ export default {
       this.userFollowingIds = newValue.map(item => item.followingUser.id)
     },
   },
-  created() {
-    this.fetchRecommendedFollowings()
-  }
 }
 </script>
 

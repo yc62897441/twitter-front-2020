@@ -8,7 +8,7 @@
       <h1>User name</h1>
       <h3> 15 則推文</h3>
       <FollowshipNavPills v-on:after-change-followship-nav-pills="afterChangeFollowshipNavPills" />
-      <FollowshipSection v-bind:userFollowings="userFollowings" />
+      <FollowshipSection v-bind:userFollowings="userFollowings" v-bind:userFollowers="userFollowers" />
     </div>
 
     <div class="right-container">
@@ -64,6 +64,16 @@ export default {
         console.warn(error)
       }
     },
+    async fetchUserFollowers() {
+      try {
+        const userId = this.userId
+        const response = await usersAPI.getUserFollowers({ userId })
+        const data = response.data
+        this.userFollowers = data
+      } catch (error) {
+        console.warn(error)
+      }
+    },
     afterChangeFollowshipNavPills(payload) {
       console.log('not finished')
     },
@@ -71,6 +81,7 @@ export default {
   created() {
     this.fetchUser()
     this.fetchUserFollowings()
+    this.fetchUserFollowers()
   }
 }
 </script>
