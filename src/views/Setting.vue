@@ -40,6 +40,7 @@
 import Navbar from '../components/Navbar.vue'
 import usersAPI from '../api/users'
 import { Toast } from '../utils/helpers'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -102,6 +103,9 @@ export default {
         console.warn(error)
       }
     }
+  },
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated'])
   },
   created() {
     this.fetchUser()

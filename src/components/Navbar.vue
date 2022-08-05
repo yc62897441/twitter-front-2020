@@ -25,7 +25,7 @@
     </div>
 
     <div class="navbar-bottom">
-      <div class="icon-wrapper">
+      <div class="icon-wrapper" v-on:click="logout">
         <img src="../assets/logout.png" alt="">
         <span>登出</span>
       </div>
@@ -39,6 +39,12 @@ export default {
     return {
       currentUserId: 1,
     }
+  },
+  methods: {
+    logout() {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    },
   }
 }
 </script>
