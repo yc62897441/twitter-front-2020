@@ -32,7 +32,7 @@ export default {
     return {
       isProcessing: false,
       newTweetDescription: '',
-      UserId: 1
+      currentUserId: 1
     }
   },
   methods: {
@@ -43,7 +43,7 @@ export default {
         }
         this.isProcessing = true
         const formData = {
-          UserId: this.UserId,
+          userId: this.currentUserId,
           description: this.newTweetDescription,
         }
         const { data } = await tweetsAPI.postTweet({ formData })

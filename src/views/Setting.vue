@@ -47,7 +47,7 @@ export default {
   },
   data() {
     return {
-      userId: 1,
+      currentUserId: 1,
       user: {
         account: '',
         name: '',
@@ -61,7 +61,7 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const userId = this.userId
+        const userId = this.currentUserId
         const { data } = await usersAPI.getUser({ userId })
         this.user = {
           ...data,
@@ -82,7 +82,7 @@ export default {
           return
         }
         this.isProcessing = true
-        const userId = this.userId
+        const userId = this.currentUserId
         const formData = {
           name: this.user.name,
           email: this.user.email,

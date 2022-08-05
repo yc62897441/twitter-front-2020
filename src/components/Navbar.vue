@@ -10,7 +10,7 @@
         <img src="../assets/home.png" alt="">
         <span>首頁</span>
       </router-link>
-      <router-link v-bind:to="'/users/' + userId" class="icon-wrapper">
+      <router-link v-bind:to="'/users/' + currentUserId" class="icon-wrapper">
         <img src="../assets/user.png" alt="">
         <span>個人資料</span>
       </router-link>
@@ -37,7 +37,7 @@
 export default {
   data() {
     return {
-      userId: 1,
+      currentUserId: 1,
     }
   }
 }

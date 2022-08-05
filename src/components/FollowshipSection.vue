@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       isProcessing: false,
-      userId: 1,
+      currentUserId: 1,
       userFollowingIds: [],
     }
   },
@@ -84,9 +84,9 @@ export default {
     async postFollowship(followingId, followingOrFollower) {
       try {
         this.isProcessing = true
-        const userId = 1
+        const currentUserId = 1
         const formData = {
-          userId: userId,
+          userId: currentUserId,
           id: followingId
         }
         const { data } = await followshipAPI.postFollowship({ formData })
@@ -104,7 +104,7 @@ export default {
     async deleteFollowship(followingId, followingOrFollower) {
       try {
         this.isProcessing = true
-        const userId = 1
+        const currentUserId = 1
         const { data } = await followshipAPI.deleteFollowship({ followingId })
         if (data.status !== 'success') {
           throw new Error(data.message)

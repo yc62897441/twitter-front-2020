@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       newTweetReply: '',
-      UserId: 1,
+      currentUserId: 1,
       isProcessing: false
     }
   },
@@ -66,7 +66,7 @@ export default {
         }
         this.isProcessing = true
         const formData = {
-          UserId: this.UserId,
+          userId: this.currentUserId,
           comment: this.newTweetReply,
         }
         const { data } = await tweetsAPI.postTweetReply({ formData, tweetId })

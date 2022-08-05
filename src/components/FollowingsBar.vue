@@ -30,14 +30,14 @@ export default {
     return {
       recommendedFollowings: [],
       isProcessing: false,
-      userId: 1
+      currentUserId: 1
     }
   },
   methods: {
     async fetchRecommendedFollowings() {
       try {
-        const userId = 1 // userId 之後要改成由登入的user資料來取代
-        const { data } = await followshipAPI.getRecommendedFollowings({ userId: userId })
+        const currentUserId = 1 // currentUserId 之後要改成由登入的user資料來取代
+        const { data } = await followshipAPI.getRecommendedFollowings({ userId: currentUserId })
         this.recommendedFollowings = data
       } catch (error) {
         console.warn(error)
@@ -46,9 +46,9 @@ export default {
     async postFollowship(followingId) {
       try {
         this.isProcessing = true
-        const userId = 1
+        const currentUserId = 1
         const formData = {
-          userId: userId,
+          userId: currentUserId,
           id: followingId
         }
         const { data } = await followshipAPI.postFollowship({ formData })
@@ -58,7 +58,7 @@ export default {
         // 更新前端畫面
         this.recommendedFollowings.forEach(recommendedFollowing => {
           if (recommendedFollowing.id === followingId) {
-            recommendedFollowing.Followers.push(userId)
+            recommendedFollowing.Followers.push(currentUserId)
           }
         })
         this.isProcessing = false
@@ -70,7 +70,7 @@ export default {
     async deleteFollowship(followingId) {
       try {
         this.isProcessing = true
-        const userId = 1
+        const currentUserId = 1
         const { data } = await followshipAPI.deleteFollowship({ followingId })
         if (data.status !== 'success') {
           throw new Error(data.message)
@@ -79,7 +79,7 @@ export default {
         this.recommendedFollowings.forEach(recommendedFollowing => {
           if (recommendedFollowing.id === followingId) {
             recommendedFollowing.Followers = recommendedFollowing.Followers.map(follower => {
-              if (follower !== userId) {
+              if (follower !== currentUserId) {
                 return follower
               }
             })

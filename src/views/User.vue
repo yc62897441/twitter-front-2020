@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      userId: 1,
+      currentUserId: 1,
       user: {},
       tweets: [],
       replies: [],
@@ -54,7 +54,7 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const userId = this.userId
+        const userId = this.currentUserId
         const response = await usersAPI.getUser({ userId })
         const data = response.data
         this.user = {
@@ -75,7 +75,7 @@ export default {
     },
     async fetchReplies() {
       try {
-        const userId = this.userId
+        const userId = this.currentUserId
         const { data } = await usersAPI.getUserRepliedTweets({ userId })
         this.replies = data
       } catch (error) {
@@ -84,7 +84,7 @@ export default {
     },
     async fetchLikes() {
       try {
-        const userId = this.userId
+        const userId = this.currentUserId
         const { data } = await usersAPI.getUserLikes({ userId })
         this.likes = data
       } catch (error) {

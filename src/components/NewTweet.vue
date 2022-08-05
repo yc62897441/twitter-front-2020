@@ -22,13 +22,13 @@ export default {
   data() {
     return {
       newTweetDescription: '',
-      userId: 1
+      currentUserId: 1
     }
   },
   methods: {
     handleSubmit() {
       this.$emit('after-create-tweet', {
-        UserId: this.userId,
+        UserId: this.currentUserId,
         description: this.newTweetDescription,
       })
       this.newTweetDescription = ''

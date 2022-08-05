@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      userId: 1,
+      currentUserId: 1,
       isProcessing: false,
       userLikesId: []
     }
@@ -61,7 +61,7 @@ export default {
     async likeTweet(tweetId, likeId) {
       try {
         this.isProcessing = true
-        const userId = this.userId
+        const currentUserId = this.currentUserId
         const { data } = await tweetsAPI.likeTweet({tweetId})
         if (data.status === 'success') {
           this.userLikesId.push(likeId)
@@ -75,7 +75,7 @@ export default {
     async unlikeTweet(tweetId, likeId) {
       try {
         this.isProcessing = true
-        const userId = this.userId
+        const currentUserId = this.currentUserId
         const { data } = await tweetsAPI.unlikeTweet({ tweetId })
         if (data.status === 'success') {
           this.userLikesId = this.userLikesId.map(userLikeId => {

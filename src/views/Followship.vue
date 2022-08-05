@@ -36,7 +36,7 @@ export default {
   },
   data() {
     return {
-      userId: 1,
+      currentUserId: 1,
       user: {},
       userFollowings: [],
       userFollowers: [],
@@ -46,7 +46,7 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const userId = this.userId
+        const userId = this.currentUserId
         const response = await usersAPI.getUser({ userId })
         const data = response.data
         this.user = {
@@ -58,7 +58,7 @@ export default {
     },
     async fetchUserFollowings() {
       try {
-        const userId = this.userId
+        const userId = this.currentUserId
         const response = await usersAPI.getUserFollowings({ userId })
         const data = response.data
         this.userFollowings = data
@@ -68,7 +68,7 @@ export default {
     },
     async fetchUserFollowers() {
       try {
-        const userId = this.userId
+        const userId = this.currentUserId
         const response = await usersAPI.getUserFollowers({ userId })
         const data = response.data
         this.userFollowers = data
