@@ -1,19 +1,28 @@
 import { apiHelper } from '../utils/helpers'
+const getToken = () => localStorage.getItem('token')
 
 export default {
   getUser: ({ userId }) => {
     return apiHelper.get(`users/${userId}`)
   },
+  getCurrentUser: () => {
+    return apiHelper.get('get_current_user', {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
   putUser: ({ userId, formData }) => {
     return apiHelper.put(`users/${userId}`, formData)
+  },
+  getUserTweets: ({ userId })=> {
+    return apiHelper.get(`users/${userId}/tweets`)
   },
   getUserRepliedTweets: ({ userId }) => {
     return apiHelper.get(`users/${userId}/replied_tweets`)
   },
-  getUserLikes: ({userId}) => {
+  getUserLikes: ({ userId }) => {
     return apiHelper.get(`users/${userId}/likes`)
   },
-  getUserFollowings: ({userId}) => {
+  getUserFollowings: ({ userId }) => {
     return apiHelper.get(`users/${userId}/followings`)
   },
   getUserFollowers: ({ userId }) => {

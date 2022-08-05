@@ -1,10 +1,8 @@
 import { apiHelper } from '../utils/helpers'
 
 export default {
-  getTweets: ({ userId }) => {
-    return apiHelper.get('/tweets', {
-      headers: { userId: userId }
-    })
+  getTweets: () => {
+    return apiHelper.get('/tweets')
   },
   getTweet: ({ id }) => {
     return apiHelper.get(`/tweets/${id}`)

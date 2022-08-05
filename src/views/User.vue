@@ -63,9 +63,9 @@ export default {
         console.warn(error)
       }
     },
-    async fetchTweets(userId) {
+    async fetchUserTweets(userId) {
       try {
-        const response = await tweetsAPI.getTweets({ userId })
+        const response = await usersAPI.getUserTweets({ userId })
         const data = response.data
         this.tweets = data
       } catch (error) {
@@ -115,14 +115,14 @@ export default {
   mounted() {
     const userId = this.$route.params.id
     this.fetchUser(userId)
-    this.fetchTweets(userId)
+    this.fetchUserTweets(userId)
     this.fetchReplies(userId)
     this.fetchLikes(userId)
   },
   beforeRouteUpdate(to, from, next) {
     const userId = to.params.id
     this.fetchUser(userId)
-    this.fetchTweets(userId)
+    this.fetchUserTweets(userId)
     this.fetchReplies(userId)
     this.fetchLikes(userId)
     next()
