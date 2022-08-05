@@ -52,9 +52,8 @@ export default {
     }
   },
   methods: {
-    async fetchUser() {
+    async fetchUser(userId) {
       try {
-        const userId = this.currentUserId
         const response = await usersAPI.getUser({ userId })
         const data = response.data
         this.user = {
@@ -64,27 +63,25 @@ export default {
         console.warn(error)
       }
     },
-    async fetchTweets() {
+    async fetchTweets(userId) {
       try {
-        const response = await tweetsAPI.getTweets()
+        const response = await tweetsAPI.getTweets({ userId })
         const data = response.data
         this.tweets = data
       } catch (error) {
         console.warn(error)
       }
     },
-    async fetchReplies() {
+    async fetchReplies(userId) {
       try {
-        const userId = this.currentUserId
         const { data } = await usersAPI.getUserRepliedTweets({ userId })
         this.replies = data
       } catch (error) {
         console.warn(error)
       }
     },
-    async fetchLikes() {
+    async fetchLikes(userId) {
       try {
-        const userId = this.currentUserId
         const { data } = await usersAPI.getUserLikes({ userId })
         this.likes = data
       } catch (error) {
@@ -115,11 +112,20 @@ export default {
       }
     }
   },
-  created() {
-    this.fetchUser()
-    this.fetchTweets()
-    this.fetchReplies()
-    this.fetchLikes()
+  mounted() {
+    const userId = this.$route.params.id
+    this.fetchUser(userId)
+    this.fetchTweets(userId)
+    this.fetchReplies(userId)
+    this.fetchLikes(userId)
+  },
+  beforeRouteUpdate(to, from, next) {
+    const userId = to.params.id
+    this.fetchUser(userId)
+    this.fetchTweets(userId)
+    this.fetchReplies(userId)
+    this.fetchLikes(userId)
+    next()
   }
 }
 </script>
