@@ -9,8 +9,14 @@
     </div>
 
     <!-- trigger modal -->
-    <button class="btn btn-user-info" type="button" data-bs-toggle="modal"
+    <button v-if="user.id === currentUserId" class="btn btn-user-info" type="button" data-bs-toggle="modal"
       v-bind:data-bs-target="'#modalUserInfo'">編輯個人資料</button>
+    <div v-else class="user-interaction-wrapper">
+      <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png" alt="">
+      <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-noti.png" alt="">
+      <button class="user-interaction-wrapper-item btn btn-orange" type="button">跟隨</button>
+      <button class="user-interaction-wrapper-item btn btn-orange btn-isFollowed" type="button">正在跟隨</button>
+    </div>
     <div class="user-info-wrapper">
       <div class="user-info-name">{{ user.name }}</div>
       <div class="user-info-account">@{{ user.account }}</div>
@@ -37,7 +43,11 @@ export default {
     propsUser: {
       type: Object,
       required: true
-    }
+    },
+    currentUserId: {
+      type: Number,
+      required: true
+    },
   },
   data() {
     return {
@@ -104,6 +114,40 @@ export default {
   color: #FF6600;
   border: 1px solid #FF6600;
   border-radius: 100px;
+}
+
+.user-interaction-wrapper {
+  position: absolute;
+  top: 210px;
+  right: 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.user-interaction-wrapper img {
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+}
+
+.user-interaction-wrapper .btn-orange {
+  margin: 0px;
+  width: 60px;
+  height: 35px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 15px;
+  background-color: #ffffff;
+  color: #FF6600;
+  border: 1px solid #FF6600;
+  border-radius: 100px;
+}
+
+.user-interaction-wrapper .btn-isFollowed {
+  width: 100px;
+  background-color: #FF6600;
+  color: #ffffff;
+  border: 1px solid #FF6600;
 }
 
 .user-info-wrapper {

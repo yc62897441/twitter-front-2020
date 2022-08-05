@@ -7,7 +7,7 @@
     <div class="middle-container">
       <h1>User name</h1>
       <h3> 15 則推文</h3>
-      <UserBoard v-bind:propsUser="user" />
+      <UserBoard v-bind:propsUser="user" v-bind:currentUserId="currentUserId" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:tweets="tweets" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
