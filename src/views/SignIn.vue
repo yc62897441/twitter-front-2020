@@ -51,9 +51,9 @@ export default {
         const response = await authorizationAPI.signIn({
           email: this.email,
           password: this.password
-        })      
+        })
         const { data } = response
-        
+
         // 伺服器回傳登入驗證錯誤
         if (data.status !== 'success') {
           throw new Error(data.message)
@@ -63,10 +63,8 @@ export default {
         // 儲存 token 到瀏覽器內 
         localStorage.setItem('token', data.token)
 
-        // 先將 user data 存到 localstorage，之後再修改儲存到 Vuex
-        localStorage.setItem('user', data.user)
-        // 將資料傳到 Vuex 中
-        // this.$store.commit('setCurrentUser', data.user)
+        // 將 Vue 物件提交 mutation 事件，'setCurrentUser' 是在 mutations 定義好的 setCurrentUser
+        this.$store.commit('setCurrentUser', data.user)
 
         // 跳轉頁面，導入首頁
         this.$router.push('/tweets')
