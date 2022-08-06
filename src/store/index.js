@@ -43,7 +43,12 @@ export default new Vuex.Store({
       try {
         // 每次路由改變(如重新整理)時，都會再去 getCurrentUser，並且用 setCurrentUser 將資料存到 vuex state 中
         // 如果沒有加這個，路由改變時，state 的 currentUser 就會變回預設空空的內容
-        const { data } = await usersAPI.getCurrentUser()
+        const response = await usersAPI.getCurrentUser()
+        if (response.statusText !== 'OK') {
+          throw new Error(response.statusText)
+        }
+        const data = response.data
+        console.log('data', data)
         commit('setCurrentUser', data)
         return true
       } catch (error) {
