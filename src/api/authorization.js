@@ -18,4 +18,10 @@ export default {
       password
     })
   },
+  getTweets() {
+    return apiHelper.get('/admin/tweets')
+  },
+  deleteTweet({tweetId}) {
+    return apiHelper.delete(`/admin/tweets/${tweetId}`)
+  },
 }
