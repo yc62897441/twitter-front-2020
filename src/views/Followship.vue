@@ -57,7 +57,6 @@ export default {
     },
     async fetchUserFollowings(userId) {
       try {
-        console.log('fetchUserFollowings userId', userId, typeof userId)
         const response = await usersAPI.getUserFollowings({ userId })
         const data = response.data
         this.userFollowings = data

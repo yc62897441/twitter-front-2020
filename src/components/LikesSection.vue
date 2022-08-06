@@ -83,7 +83,6 @@ export default {
         const { data } = await tweetsAPI.unlikeTweet({ tweetId })
         if (data.status === 'success') {
           this.userLikesId = this.userLikesId.map(userLikeId => {
-            console.log('typeof userLikeId', typeof userLikeId, '; typeof likeId', typeof likeId,)
             if (userLikeId !== likeId) {
               return userLikeId
             }
@@ -106,9 +105,6 @@ export default {
 </script>
 
 <style>
-
-
-
 .like-wrapper {
   display: flex;
   padding: 15px;
