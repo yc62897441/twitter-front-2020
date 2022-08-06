@@ -42,6 +42,16 @@ const routes = [
     component: () => import('../views/SignInAdmin.vue')
   },
   {
+    path: '/admin/main',
+    name: 'adminMain',
+    component: () => import('../views/AdminMain.vue')
+  },
+  {
+    path: '/admin/users',
+    name: 'adminUsers',
+    component: () => import('../views/AdminUsers.vue')
+  },
+  {
     path: '/setting',
     name: 'setting',
     component: () => import('../views/Setting.vue')
