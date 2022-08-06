@@ -1,18 +1,19 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" />
+      <Navbar class="Navbar" v-bind:currentUser="currentUser" />
     </div>
 
     <div class="middle-container">
       <h1><img src="../assets/arrow-left.png" alt=""> 推文</h1>
-      <TweetSection v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply" />
+      <TweetSection v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply"
+        v-bind:currentUser="currentUser" />
       <RepliesSection v-bind:replies="replies" />
-      <ModalNewTweet />
+      <ModalNewTweet v-bind:currentUser="currentUser" />
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar" />
+      <FollowingsBar class="FollowingsBar" v-bind:currentUser="currentUser" />
     </div>
 
   </div>
@@ -25,6 +26,7 @@ import TweetSection from '../components/TweetSection.vue'
 import RepliesSection from '../components/RepliesSection.vue'
 import ModalNewTweet from '../components/ModalNewTweet.vue'
 import tweetsAPI from '../api/tweets'
+import { mapState } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
@@ -72,6 +74,9 @@ export default {
         updatedAt: payload.updatedAt,
       })
     },
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   created() {
     this.fetchTweet()

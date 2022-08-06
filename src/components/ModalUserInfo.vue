@@ -61,7 +61,6 @@ export default {
   data() {
     return {
       isProcessing: false,
-      currentUserId: 1,
       userNewInfo: {}
     }
   },
@@ -69,7 +68,7 @@ export default {
     async handleSubmit() {
       try {
         this.isProcessing = true
-        const userId = this.currentUserId
+        const userId = this.propsUser.id
 
         const formData = {
           name: this.userNewInfo.name,
@@ -102,6 +101,12 @@ export default {
         ...this.userNewInfo,
         ...newValue
       }
+    }
+  },
+  created() {
+    this.userNewInfo = {
+      ...this.userNewInfo,
+      ...this.propsUser
     }
   }
 }

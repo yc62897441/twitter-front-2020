@@ -1,7 +1,7 @@
 <template>
   <div class="new-tweet-wrapper">
     <div class="new-tweet-wrapper-left">
-      <img src="../assets/avatar-photo.png" alt="">
+      <img v-bind:src="currentUser.avatar" alt="">
     </div>
     <form @submit.prevent.stop="handleSubmit" class="new-tweet-wrapper-right">
       <textarea cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription" name="newTweetDescription"
@@ -17,18 +17,21 @@ export default {
     isProcessing: {
       type: Boolean,
       required: true
+    },
+    currentUser: {
+      type: Object,
+      required: true
     }
   },
   data() {
     return {
       newTweetDescription: '',
-      currentUserId: 1
     }
   },
   methods: {
     handleSubmit() {
       this.$emit('after-create-tweet', {
-        UserId: this.currentUserId,
+        UserId: this.currentUser.id,
         description: this.newTweetDescription,
       })
       this.newTweetDescription = ''
@@ -48,6 +51,8 @@ export default {
 .new-tweet-wrapper-left img {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .new-tweet-wrapper-right {

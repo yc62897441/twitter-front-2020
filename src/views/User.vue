@@ -1,21 +1,22 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" />
+      <Navbar class="Navbar" v-bind:currentUser="currentUser" />
     </div>
 
     <div class="middle-container">
       <h1>User name</h1>
       <h3> 15 則推文</h3>
-      <UserBoard v-bind:propsUser="user" v-bind:currentUserId="currentUserId" />
+      <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
-      <TweetsSection class="User-TweetsSection" v-bind:tweets="tweets" />
+      <TweetsSection class="User-TweetsSection" v-bind:tweets="tweets" v-bind:currentUser="currentUser" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
-      <LikesSection class="User-LikesSection User-Section-hidden" v-bind:likes="likes" />
+      <LikesSection class="User-LikesSection User-Section-hidden" v-bind:likes="likes"
+        v-bind:currentUser="currentUser" />
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar" />
+      <FollowingsBar class="FollowingsBar" v-bind:currentUser="currentUser" />
     </div>
 
   </div>
@@ -31,6 +32,7 @@ import RepliesSection from '../components/RepliesSection.vue'
 import LikesSection from '../components/LikesSection.vue'
 import usersAPI from '../api/users'
 import tweetsAPI from '../api/tweets'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -44,7 +46,6 @@ export default {
   },
   data() {
     return {
-      currentUserId: 1,
       user: {},
       tweets: [],
       replies: [],
@@ -111,6 +112,9 @@ export default {
           break
       }
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   mounted() {
     const userId = this.$route.params.id

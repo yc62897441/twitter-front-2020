@@ -1,19 +1,19 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" />
+      <Navbar class="Navbar" v-bind:currentUser="currentUser" />
     </div>
 
     <div class="middle-container">
       <h1>User name</h1>
       <h3> 15 則推文</h3>
       <FollowshipNavPills v-on:after-change-followship-nav-pills="afterChangeFollowshipNavPills" />
-      <FollowshipSection v-bind:userFollowings="userFollowings" v-bind:userFollowers="userFollowers"
-        v-bind:show="show" />
+      <FollowshipSection v-bind:currentUser="currentUser" v-bind:user="user" v-bind:userFollowings="userFollowings"
+        v-bind:userFollowers="userFollowers" v-bind:show="show" />
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar" />
+      <FollowingsBar class="FollowingsBar" v-bind:currentUser="currentUser" />
     </div>
   </div>
 </template>
@@ -23,9 +23,9 @@ import Navbar from '../components/Navbar.vue'
 import FollowingsBar from '../components/FollowingsBar.vue'
 import FollowshipNavPills from '../components/FollowshipNavPills.vue'
 import FollowshipSection from '../components/FollowshipSection.vue'
-
 import usersAPI from '../api/users'
 import tweetsAPI from '../api/tweets'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -44,9 +44,8 @@ export default {
     }
   },
   methods: {
-    async fetchUser() {
+    async fetchUser(userId) {
       try {
-        const userId = this.currentUserId
         const response = await usersAPI.getUser({ userId })
         const data = response.data
         this.user = {
@@ -56,9 +55,9 @@ export default {
         console.warn(error)
       }
     },
-    async fetchUserFollowings() {
+    async fetchUserFollowings(userId) {
       try {
-        const userId = this.currentUserId
+        console.log('fetchUserFollowings userId', userId, typeof userId)
         const response = await usersAPI.getUserFollowings({ userId })
         const data = response.data
         this.userFollowings = data
@@ -66,9 +65,8 @@ export default {
         console.warn(error)
       }
     },
-    async fetchUserFollowers() {
+    async fetchUserFollowers(userId) {
       try {
-        const userId = this.currentUserId
         const response = await usersAPI.getUserFollowers({ userId })
         const data = response.data
         this.userFollowers = data
@@ -84,10 +82,26 @@ export default {
       }
     },
   },
-  created() {
-    this.fetchUser()
-    this.fetchUserFollowings()
-    this.fetchUserFollowers()
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  // created() {
+  //   this.fetchUser()
+  //   this.fetchUserFollowings()
+  //   this.fetchUserFollowers()
+  // },
+  mounted() {
+    const userId = Number(this.$route.params.id)
+    this.fetchUser(userId)
+    this.fetchUserFollowings(userId)
+    this.fetchUserFollowers(userId)
+  },
+  beforeRouteUpdate(to, from, next) {
+    const userId = Number(to.params.id)
+    this.fetchUser(userId)
+    this.fetchUserFollowings(userId)
+    this.fetchUserFollowers(userId)
+    next()
   }
 }
 </script>

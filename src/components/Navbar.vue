@@ -10,7 +10,7 @@
         <img src="../assets/home.png" alt="">
         <span>首頁</span>
       </router-link>
-      <router-link v-bind:to="'/users/' + currentUserId" class="icon-wrapper">
+      <router-link v-bind:to="'/users/' + currentUser.id" class="icon-wrapper">
         <img src="../assets/user.png" alt="">
         <span>個人資料</span>
       </router-link>
@@ -35,9 +35,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      currentUserId: 1,
+  props: {
+    currentUser: {
+      type: Object,
+      required: true
     }
   },
   methods: {

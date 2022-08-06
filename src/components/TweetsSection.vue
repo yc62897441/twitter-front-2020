@@ -27,7 +27,8 @@
         </div>
       </div>
 
-      <ModalTweetReply v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply" />
+      <ModalTweetReply v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply"
+        v-bind:currentUser="currentUser" />
     </div>
   </div>
 </template>
@@ -43,7 +44,11 @@ export default {
     tweets: {
       type: Array,
       required: true
-    }
+    },
+    currentUser: {
+      type: Object,
+      required: true
+    },
   },
   methods: {
     afterPostTweetReply(payload) {
@@ -67,6 +72,7 @@ export default {
 </script>
 
 <style>
+
 .tweet-wrapper {
   display: flex;
   padding: 15px;
@@ -76,6 +82,7 @@ export default {
 .tweet-wrapper-left img {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
 }
 

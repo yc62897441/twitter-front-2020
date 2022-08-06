@@ -9,7 +9,7 @@
     </div>
 
     <!-- trigger modal -->
-    <button v-if="user.id === currentUserId" class="btn btn-user-info" type="button" data-bs-toggle="modal"
+    <button v-if="user.id === currentUser.id" class="btn btn-user-info" type="button" data-bs-toggle="modal"
       v-bind:data-bs-target="'#modalUserInfo'">編輯個人資料</button>
     <div v-else class="user-interaction-wrapper">
       <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png" alt="">
@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <ModalUserInfo v-bind:propsUser="propsUser" v-on:after-put-userInfo="afterPutUserInfo" />
+    <ModalUserInfo v-bind:propsUser="currentUser" v-on:after-put-userInfo="afterPutUserInfo" />
   </div>
 </template>
 
@@ -44,8 +44,8 @@ export default {
       type: Object,
       required: true
     },
-    currentUserId: {
-      type: Number,
+    currentUser: {
+      type: Object,
       required: true
     },
   },

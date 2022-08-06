@@ -9,7 +9,7 @@
         <div class="modal-body">
           <div class="modal-new-tweet-wrapper">
             <div class="modal-new-tweet-wrapper-left">
-              <img src="../assets/avatar-photo.png" alt="">
+              <img v-bind:src="currentUser.avatar" alt="">
             </div>
             <form class="modal-new-tweet-wrapper-right">
               <textarea cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription"
@@ -28,11 +28,16 @@
 import tweetsAPI from '../api/tweets'
 
 export default {
+  props: {
+    currentUser: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       isProcessing: false,
       newTweetDescription: '',
-      currentUserId: 1
     }
   },
   methods: {
@@ -43,7 +48,7 @@ export default {
         }
         this.isProcessing = true
         const formData = {
-          userId: this.currentUserId,
+          userId: this.currentUser.id,
           description: this.newTweetDescription,
         }
         const { data } = await tweetsAPI.postTweet({ formData })
@@ -61,8 +66,6 @@ export default {
 </script>
 
 <style>
-
-
 .modal-new-tweet-wrapper {
   display: flex;
   padding: 15px;
@@ -71,6 +74,8 @@ export default {
 .modal-new-tweet-wrapper-left img {
   width: 50px;
   height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .modal-new-tweet-wrapper-right {

@@ -28,7 +28,7 @@
           </div>
           <div class="modal-new-tweet-wrapper">
             <div class="modal-new-tweet-wrapper-left">
-              <img src="../assets/avatar-photo.png" alt="">
+              <img v-bind:src="currentUser.avatar" alt="">
             </div>
             <form class="modal-new-tweet-wrapper-right">
               <textarea cols="30" rows="5" placeholder="推你的回覆" v-model="newTweetReply" name="newTweetReply"
@@ -53,12 +53,15 @@ export default {
   props: {
     tweet: {
       type: Object
+    },
+    currentUser: {
+      type: Object,
+      required: true
     }
   },
   data() {
     return {
       newTweetReply: '',
-      currentUserId: 1,
       isProcessing: false
     }
   },
@@ -70,7 +73,7 @@ export default {
         }
         this.isProcessing = true
         const formData = {
-          userId: this.currentUserId,
+          userId: this.currentUser.id,
           comment: this.newTweetReply,
         }
         const { data } = await tweetsAPI.postTweetReply({ formData, tweetId })
@@ -91,8 +94,6 @@ export default {
 
 <style>
 
-
-
 .modal-header img {
   width: 24px;
   height: 24px;
@@ -111,6 +112,7 @@ export default {
 .modal-tweet-wrapper-left img {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
 }
 
@@ -183,6 +185,8 @@ export default {
 .modal-new-tweet-wrapper-left img {
   width: 50px;
   height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
 .modal-new-tweet-wrapper-right {

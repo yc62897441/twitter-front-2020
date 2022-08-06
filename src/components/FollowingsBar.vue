@@ -1,7 +1,6 @@
 <template>
   <div class="followingsBar-wrapper">
     <div class="followingsBar-title">Popular</div>
-
     <div v-for="recommendedFollowing in recommendedFollowings" class="recommended-following-wrapper">
       <div class="following-info-wrapper">
         <div class="avatar-wrapper">
@@ -14,7 +13,7 @@
       </div>
       <div class="follow-btn-wrapper">
         <button type="button" class="btn btn-orange" v-on:click="postFollowship(recommendedFollowing.id)"
-          v-bind:disabled="isProcessing" v-if="!recommendedFollowing.Followers.includes(userId)">跟隨</button>
+          v-bind:disabled="isProcessing" v-if="!recommendedFollowing.Followers.includes(currentUser.id)">跟隨</button>
         <button type="button" class="btn btn-orange btn-isFollowed"
           v-on:click="deleteFollowship(recommendedFollowing.id)" v-bind:disabled="isProcessing" v-else>正在跟隨</button>
       </div>
@@ -26,17 +25,22 @@
 import followshipAPI from '../api/followships'
 
 export default {
+  props: {
+    currentUser: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       recommendedFollowings: [],
       isProcessing: false,
-      currentUserId: 1
     }
   },
   methods: {
     async fetchRecommendedFollowings() {
       try {
-        const currentUserId = 1 // currentUserId 之後要改成由登入的user資料來取代
+        const currentUserId = this.currentUser.id
         const { data } = await followshipAPI.getRecommendedFollowings({ userId: currentUserId })
         this.recommendedFollowings = data
       } catch (error) {
@@ -46,7 +50,7 @@ export default {
     async postFollowship(followingId) {
       try {
         this.isProcessing = true
-        const currentUserId = 1
+        const currentUserId = this.currentUser.id
         const formData = {
           userId: currentUserId,
           id: followingId
@@ -70,7 +74,7 @@ export default {
     async deleteFollowship(followingId) {
       try {
         this.isProcessing = true
-        const currentUserId = 1
+        const currentUserId = this.currentUser.id
         const { data } = await followshipAPI.deleteFollowship({ followingId })
         if (data.status !== 'success') {
           throw new Error(data.message)
@@ -99,6 +103,7 @@ export default {
 </script>
 
 <style>
+
 .followingsBar-wrapper {
   position: fixed;
   display: flex;
@@ -140,6 +145,7 @@ export default {
 .avatar-wrapper img {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
 }
 

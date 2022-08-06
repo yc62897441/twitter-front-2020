@@ -1,18 +1,19 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" />
+      <Navbar class="Navbar" v-bind:currentUser="currentUser" />
     </div>
 
     <div class="middle-container">
       <h1>首頁</h1>
-      <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:isProcessing="isProcessing" />
-      <TweetsSection v-bind:tweets="tweets" />
-      <ModalNewTweet />
+      <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:currentUser="currentUser"
+        v-bind:isProcessing="isProcessing" />
+      <TweetsSection v-bind:tweets="tweets" v-bind:currentUser="currentUser" />
+      <ModalNewTweet v-bind:currentUser="currentUser" />
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar" />
+      <FollowingsBar class="FollowingsBar" v-bind:currentUser="currentUser" />
     </div>
 
   </div>
@@ -25,6 +26,7 @@ import TweetsSection from '../components/TweetsSection.vue'
 import NewTweet from '../components/NewTweet.vue'
 import ModalNewTweet from '../components/ModalNewTweet.vue'
 import tweetsAPI from '../api/tweets'
+import { mapState } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
 
 export default {
@@ -75,6 +77,9 @@ export default {
         console.warn(error)
       }
     }
+  },
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated'])
   },
   created() {
     this.fetchTweets()

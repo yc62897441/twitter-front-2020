@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <ModalTweetReply v-bind:tweet="like.Tweet" />
+      <ModalTweetReply v-bind:tweet="like.Tweet" v-bind:currentUser="currentUser" />
     </div>
   </div>
 </template>
@@ -48,6 +48,10 @@ export default {
   props: {
     likes: {
       type: Array,
+    },
+    currentUser: {
+      type: Object,
+      required: true
     },
   },
   data() {
@@ -104,6 +108,7 @@ export default {
 <style>
 
 
+
 .like-wrapper {
   display: flex;
   padding: 15px;
@@ -113,6 +118,7 @@ export default {
 .like-wrapper-left img {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" />
+      <Navbar class="Navbar" v-bind:currentUser="currentUser" />
     </div>
     <div class="middle-container">
       <h1>帳戶設定</h1>
@@ -62,7 +62,7 @@ export default {
   methods: {
     async fetchUser() {
       try {
-        const userId = this.currentUserId
+        const userId = this.currentUser.id
         const { data } = await usersAPI.getUser({ userId })
         this.user = {
           ...data,
@@ -83,7 +83,7 @@ export default {
           return
         }
         this.isProcessing = true
-        const userId = this.currentUserId
+        const userId = this.currentUser.id
         const formData = {
           name: this.user.name,
           email: this.user.email,

@@ -48,7 +48,6 @@ export default new Vuex.Store({
           throw new Error(response.statusText)
         }
         const data = response.data
-        console.log('data', data)
         commit('setCurrentUser', data)
         return true
       } catch (error) {

@@ -32,7 +32,7 @@
       <img src="../assets/icon-like.png" alt="">
     </div>
 
-    <ModalTweetReply v-bind:tweet="tweet" />
+    <ModalTweetReply v-bind:tweet="tweet" v-bind:currentUser="currentUser" />
   </div>
 </template>
 
@@ -49,12 +49,15 @@ export default {
     tweet: {
       type: Object,
       required: true
+    },
+    currentUser: {
+      type: Object,
+      required: true
     }
   },
   data() {
     return {
       newTweetReply: '',
-      currentUserId: 1,
       isProcessing: false
     }
   },
@@ -66,7 +69,7 @@ export default {
         }
         this.isProcessing = true
         const formData = {
-          userId: this.currentUserId,
+          userId: this.currentUser.id,
           comment: this.newTweetReply,
         }
         const { data } = await tweetsAPI.postTweetReply({ formData, tweetId })
@@ -102,6 +105,7 @@ export default {
 .tweet-user-info-layer img {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
 }
 

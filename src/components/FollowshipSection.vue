@@ -12,11 +12,12 @@
               <div class="followship-user-name">{{ userFollowing.followingUser.name }}</div>
               <div class="followship-user-account">@{{ userFollowing.followingUser.account }}</div>
             </div>
-            <div class="followship-user-main-wrapper-top-right followship-btn-wrapper">
+            <div class="followship-user-main-wrapper-top-right followship-btn-wrapper"
+              v-if="Number(userFollowing.followingUser.id) !== Number(currentUser.id)">
               <button type="button" class="btn btn-orange"
                 v-on:click="postFollowship(userFollowing.followingUser.id, 'userFollowing')"
                 v-bind:disabled="isProcessing"
-                v-if="!userFollowingIds.includes(userFollowing.followingUser.id)">跟隨</button>
+                v-if="!currentUser.Followings.includes(userFollowing.followingUser.id)">跟隨</button>
               <button type="button" class="btn btn-orange btn-isFollowed"
                 v-on:click="deleteFollowship(userFollowing.followingUser.id, 'userFollowing')"
                 v-bind:disabled="isProcessing" v-else>正在跟隨</button>
@@ -40,10 +41,11 @@
               <div class="followship-user-name">{{ userFollower.followerUser.name }}</div>
               <div class="followship-user-account">@{{ userFollower.followerUser.account }}</div>
             </div>
-            <div class="followship-user-main-wrapper-top-right followship-btn-wrapper">
+            <div class="followship-user-main-wrapper-top-right followship-btn-wrapper"
+              v-if="Number(userFollower.followerUser.id) !== Number(currentUser.id)">
               <button type="button" class="btn btn-orange"
                 v-on:click="postFollowship(userFollower.followerUser.id, 'userFollower')" v-bind:disabled="isProcessing"
-                v-if="!userFollowingIds.includes(userFollower.followerUser.id)">跟隨</button>
+                v-if="!currentUser.Followings.includes(userFollower.followerUser.id)">跟隨</button>
               <button type="button" class="btn btn-orange btn-isFollowed"
                 v-on:click="deleteFollowship(userFollower.followerUser.id, 'userFollower')"
                 v-bind:disabled="isProcessing" v-else>正在跟隨</button>
@@ -63,6 +65,10 @@ import followshipAPI from '../api/followships'
 
 export default {
   props: {
+    user: {
+      type: Object,
+      required: true
+    },
     userFollowings: {
       type: Array,
     },
@@ -71,6 +77,10 @@ export default {
     },
     show: {
       type: String,
+    },
+    currentUser: {
+      type: Object,
+      required: true
     },
   },
   data() {
@@ -84,7 +94,7 @@ export default {
     async postFollowship(followingId, followingOrFollower) {
       try {
         this.isProcessing = true
-        const currentUserId = 1
+        const currentUserId = this.currentUser.id
         const formData = {
           userId: currentUserId,
           id: followingId
@@ -104,7 +114,6 @@ export default {
     async deleteFollowship(followingId, followingOrFollower) {
       try {
         this.isProcessing = true
-        const currentUserId = 1
         const { data } = await followshipAPI.deleteFollowship({ followingId })
         if (data.status !== 'success') {
           throw new Error(data.message)
@@ -144,6 +153,7 @@ export default {
 .followship-user-avatar-wrapper img {
   width: 50px;
   height: 50px;
+  object-fit: cover;
   border-radius: 50%;
 }
 
