@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <NavBarAdmin class="NavBarAdmin" />
+      <NavBarAdmin class="NavBarAdmin" v-bind:currentUser="currentUser"
+        v-bind:currentViewPageName="currentViewPageName" />
     </div>
     <div class="middle-container">
       <h1>使用者列表</h1>
@@ -11,10 +12,23 @@
 
 <script>
 import NavBarAdmin from '../components/NavBarAdmin.vue'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     NavBarAdmin,
+  },
+  data() {
+    return {
+      currentViewPageName: '',
+    }
+  },
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  mounted() {
+    console.log('this.$route', this.$route)
+    this.currentViewPageName = this.$route.name
   },
 }
 </script>

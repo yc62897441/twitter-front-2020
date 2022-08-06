@@ -2,15 +2,23 @@
   <div class="navbar-wrapper">
     <div class="navbar-top">
       <div class="logo-wrapper">
-        <router-link to="/tweets">
+        <router-link to="/admin/main">
           <img src="../assets/alpha_camp_logo.png" alt="">
         </router-link>
       </div>
-      <router-link to="/admin/main" class="icon-wrapper">
+      <router-link v-if="currentViewPageName ==='adminMain'" to="/admin/main" class="icon-wrapper">
+        <img src="../assets/icon-admin-main-checked.png" alt="">
+        <span>推文清單</span>
+      </router-link>
+      <router-link v-else to="/admin/main" class="icon-wrapper">
         <img src="../assets/icon-admin-main.png" alt="">
         <span>推文清單</span>
       </router-link>
-      <router-link to="/admin/users" class="icon-wrapper">
+      <router-link v-if="currentViewPageName ==='adminUsers'" to="/admin/users" class="icon-wrapper">
+        <img src="../assets/icon-admin-users-checked.png" alt="">
+        <span>使用者列表</span>
+      </router-link>
+      <router-link v-else to="/admin/users" class="icon-wrapper">
         <img src="../assets/icon-admin-users.png" alt="">
         <span>使用者列表</span>
       </router-link>
@@ -31,6 +39,10 @@ export default {
     currentUser: {
       type: Object,
       required: true
+    },
+    currentViewPageName: {
+      type: String,
+      required: true
     }
   },
   methods: {
@@ -38,7 +50,7 @@ export default {
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
     },
-  }
+  },
 }
 </script>
 
@@ -89,12 +101,5 @@ export default {
   font-size: 18px;
   line-height: 26px;
   color: #1C1C1C;
-}
-
-.btn-orange {
-  margin-top: 25px;
-  width: 210px;
-  height: 38px;
-  border-radius: 100px;
 }
 </style>
