@@ -21,11 +21,11 @@
             <p>{{ tweet.repliesLength }}</p>
           </div>
           <div v-if="currentUser.userLikesId.includes(tweet.id)">
-            <img src="../assets/icon-isLiked.png" type="button" alt="" v-on:click="unlikeTweet(tweet.id, tweet.id)">
+            <img src="../assets/icon-isLiked.png" type="button" alt="" v-on:click="unlikeTweet(tweet.id)">
             <p>{{ tweet.likesLength }}</p>
           </div>
           <div v-else>
-            <img src="../assets/icon-like.png" type="button" alt="" v-on:click="likeTweet(tweet.id, tweet.id)">
+            <img src="../assets/icon-like.png" type="button" alt="" v-on:click="likeTweet(tweet.id)">
             <p>{{ tweet.likesLength }}</p>
           </div>
         </div>
@@ -74,15 +74,15 @@ export default {
         }
       })
     },
-    async likeTweet(tweetId, likeId) {
+    async likeTweet(tweetId) {
       try {
         this.isProcessing = true
         const currentUserId = this.currentUserId
         const { data } = await tweetsAPI.likeTweet({ tweetId })
         if (data.status === 'success') {
-          this.currentUser.userLikesId.push(likeId)
+          this.currentUser.userLikesId.push(tweetId)
           this.tweets.forEach(tweet => {
-            if (tweet.id === likeId) {
+            if (tweet.id === tweetId) {
               tweet.likesLength += 1
             }
           })
@@ -93,19 +93,19 @@ export default {
         console.warn(error)
       }
     },
-    async unlikeTweet(tweetId, likeId) {
+    async unlikeTweet(tweetId) {
       try {
         this.isProcessing = true
         const currentUserId = this.currentUserId
         const { data } = await tweetsAPI.unlikeTweet({ tweetId })
         if (data.status === 'success') {
           this.currentUser.userLikesId = this.currentUser.userLikesId.map(userLikeId => {
-            if (userLikeId !== likeId) {
+            if (userLikeId !== tweetId) {
               return userLikeId
             }
           })
           this.tweets.forEach(tweet => {
-            if (tweet.id === likeId) {
+            if (tweet.id === tweetId) {
               tweet.likesLength -= 1
             }
           })

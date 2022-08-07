@@ -19,15 +19,17 @@
             <!-- trigger modal -->
             <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
               v-bind:data-bs-target="'#modal' + like.Tweet.id">
-            <p>{{ like.Tweet.Replies.length }}</p>
+            <p>{{ like.Tweet.repliesLength }}</p>
           </div>
-          <div v-if="userLikesId.includes(like.id)">
-            <img src="../assets/icon-isLiked.png" alt="" type="button" v-on:click="unlikeTweet(like.Tweet.id, like.id)">
-            <p class="like-interaction-liked-p">{{ like.Tweet.Likes.length }}</p>
+          <div v-if="currentUser.userLikesId.includes(like.Tweet.id)">
+            <img src="../assets/icon-isLiked.png" alt="" type="button"
+              v-on:click="unlikeTweet(like.Tweet.id)">
+            <p class="like-interaction-liked-p">{{ like.Tweet.likesLength }}</p>
           </div>
           <div v-else>
-            <img src="../assets/icon-like.png" alt="" type="button" v-on:click="likeTweet(like.Tweet.id, like.id )">
-            <p>{{ like.Tweet.Likes.length }}</p>
+            <img src="../assets/icon-like.png" alt="" type="button"
+              v-on:click="likeTweet(like.Tweet.id)">
+            <p>{{ like.Tweet.likesLength }}</p>
           </div>
         </div>
       </div>
@@ -40,35 +42,36 @@
 import tweetsAPI from '../api/tweets'
 import ModalTweetReply from './ModalTweetReply.vue'
 import { fromNowFilter } from '../utils/mixins'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     ModalTweetReply
   },
   props: {
-    likes: {
+    prosLikes: {
       type: Array,
-    },
-    currentUser: {
-      type: Object,
-      required: true
     },
   },
   data() {
     return {
-      currentUserId: 1,
+      likes: [],
       isProcessing: false,
-      userLikesId: []
     }
   },
   methods: {
-    async likeTweet(tweetId, likeId) {
+    async likeTweet(tweetId) {
       try {
         this.isProcessing = true
-        const currentUserId = this.currentUserId
+        const currentUserId = this.currentUser.id
         const { data } = await tweetsAPI.likeTweet({tweetId})
         if (data.status === 'success') {
-          this.userLikesId.push(likeId)
+          this.likes.forEach(like => {
+            if (like.Tweet.id === tweetId) {
+              like.Tweet.likesLength += 1
+            }
+          })
+          this.currentUser.userLikesId.push(tweetId)
         }
         this.isProcessing = false
       } catch (error) {
@@ -76,14 +79,19 @@ export default {
         console.warn(error)
       }
     },
-    async unlikeTweet(tweetId, likeId) {
+    async unlikeTweet(tweetId) {
       try {
         this.isProcessing = true
-        const currentUserId = this.currentUserId
+        const currentUserId = this.currentUser.id
         const { data } = await tweetsAPI.unlikeTweet({ tweetId })
         if (data.status === 'success') {
-          this.userLikesId = this.userLikesId.map(userLikeId => {
-            if (userLikeId !== likeId) {
+          this.likes.forEach(like => {
+            if (like.Tweet.id === tweetId) {
+              like.Tweet.likesLength -= 1
+            }
+          })
+          this.currentUser.userLikesId = this.currentUser.userLikesId.map(userLikeId => {
+            if (userLikeId !== tweetId) {
               return userLikeId
             }
           })
@@ -95,9 +103,12 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapState(['currentUser'])
+  },
   watch: {
-    likes(newValue) {
-      this.userLikesId = newValue.map(like => like.id)
+    prosLikes(newValue) {
+      this.likes = newValue
     },
   },
   mixins: [fromNowFilter]

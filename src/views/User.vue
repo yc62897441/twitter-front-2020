@@ -20,8 +20,7 @@
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
-      <LikesSection class="User-LikesSection User-Section-hidden" v-bind:likes="likes"
-        v-bind:currentUser="currentUser" />
+      <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes" />
     </div>
 
     <div class="right-container">

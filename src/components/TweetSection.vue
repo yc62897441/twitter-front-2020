@@ -30,8 +30,8 @@
       <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
         v-bind:data-bs-target="'#modal' + tweet.id">
       <img v-if="currentUser.userLikesId.includes(tweet.id)" src="../assets/icon-isLiked.png" type="button" alt=""
-        v-on:click="unlikeTweet(tweet.id, tweet.id)">
-      <img v-else src="../assets/icon-like.png" type="button" alt="" v-on:click="likeTweet(tweet.id, tweet.id)">
+        v-on:click="unlikeTweet(tweet.id)">
+      <img v-else src="../assets/icon-like.png" type="button" alt="" v-on:click="likeTweet(tweet.id)">
     </div>
 
     <ModalTweetReply v-bind:tweet="tweet" v-bind:currentUser="currentUser" />
@@ -83,13 +83,13 @@ export default {
         console.warn(error)
       }
     },
-    async likeTweet(tweetId, likeId) {
+    async likeTweet(tweetId) {
       try {
         this.isProcessing = true
         const currentUserId = this.currentUserId
         const { data } = await tweetsAPI.likeTweet({ tweetId })
         if (data.status === 'success') {
-          this.currentUser.userLikesId.push(likeId)
+          this.currentUser.userLikesId.push(tweetId)
           this.tweet.likesLength += 1
         }
         this.isProcessing = false
@@ -98,14 +98,14 @@ export default {
         console.warn(error)
       }
     },
-    async unlikeTweet(tweetId, likeId) {
+    async unlikeTweet(tweetId) {
       try {
         this.isProcessing = true
         const currentUserId = this.currentUserId
         const { data } = await tweetsAPI.unlikeTweet({ tweetId })
         if (data.status === 'success') {
           this.currentUser.userLikesId = this.currentUser.userLikesId.map(userLikeId => {
-            if (userLikeId !== likeId) {
+            if (userLikeId !== tweetId) {
               return userLikeId
             }
           })
