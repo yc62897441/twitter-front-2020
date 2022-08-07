@@ -63,14 +63,7 @@ export default {
       const { TweetId } = payload
       this.tweets.forEach(tweet => {
         if (tweet.id === Number(TweetId)) {
-          tweet.Replies.push({
-            TweetId: payload.TweetId,
-            UserId: payload.UserId,
-            comment: payload.comment,
-            createdAt: payload.createdAt,
-            id: payload.id,
-            updatedAt: payload.updatedAt,
-          })
+          tweet.repliesLength += 1
         }
       })
     },

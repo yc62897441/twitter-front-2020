@@ -11,8 +11,7 @@
           <div class="like-tweet-info-data">・{{ like.Tweet.createdAt | fromNow }} </div>
         </div>
         <div class="like-tweet-description">
-          {{ like.Tweet.description }} Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit
-          officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.
+          {{ like.Tweet.description }}
         </div>
         <div class="like-interaction">
           <div>
@@ -22,18 +21,17 @@
             <p>{{ like.Tweet.repliesLength }}</p>
           </div>
           <div v-if="currentUser.userLikesId.includes(like.Tweet.id)">
-            <img src="../assets/icon-isLiked.png" alt="" type="button"
-              v-on:click="unlikeTweet(like.Tweet.id)">
+            <img src="../assets/icon-isLiked.png" alt="" type="button" v-on:click="unlikeTweet(like.Tweet.id)">
             <p class="like-interaction-liked-p">{{ like.Tweet.likesLength }}</p>
           </div>
           <div v-else>
-            <img src="../assets/icon-like.png" alt="" type="button"
-              v-on:click="likeTweet(like.Tweet.id)">
+            <img src="../assets/icon-like.png" alt="" type="button" v-on:click="likeTweet(like.Tweet.id)">
             <p>{{ like.Tweet.likesLength }}</p>
           </div>
         </div>
       </div>
-      <ModalTweetReply v-bind:tweet="like.Tweet" v-bind:currentUser="currentUser" />
+      <ModalTweetReply v-bind:tweet="like.Tweet" v-bind:currentUser="currentUser"
+        v-on:after-post-tweet-reply="afterPostTweetReply" />
     </div>
   </div>
 </template>
@@ -64,7 +62,7 @@ export default {
       try {
         this.isProcessing = true
         const currentUserId = this.currentUser.id
-        const { data } = await tweetsAPI.likeTweet({tweetId})
+        const { data } = await tweetsAPI.likeTweet({ tweetId })
         if (data.status === 'success') {
           this.likes.forEach(like => {
             if (like.Tweet.id === tweetId) {
@@ -101,6 +99,14 @@ export default {
         this.isProcessing = false
         console.warn(error)
       }
+    },
+    afterPostTweetReply(payload) {
+      const { TweetId } = payload
+      this.likes.forEach(like => {
+        if (like.Tweet.id === Number(TweetId)) {
+          like.Tweet.repliesLength += 1
+        }
+      })
     },
   },
   computed: {
@@ -196,5 +202,4 @@ export default {
 .like-interaction-liked-p {
   color: #E0245E;
 }
-
 </style>

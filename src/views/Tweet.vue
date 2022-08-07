@@ -81,6 +81,17 @@ export default {
         createdAt: payload.createdAt,
         id: payload.id,
         updatedAt: payload.updatedAt,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name,
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar,
+        },
+        Tweet: {
+          User: {
+            account: this.tweet.User.account
+          }
+        }
       })
     },
   },

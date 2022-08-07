@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div v-for="reply in replies" v-bind:key="reply.id" class="reply-wrapper">
-      <!-- <div v-for="reply in replies" class="reply-wrapper"> -->
+    <div v-for="reply in replies" v-bind:key="'reply' + reply.id" class="reply-wrapper">
       <div class="reply-wrapper-left">
         <img v-bind:src="reply.User.avatar" alt="">
       </div>
@@ -33,7 +32,6 @@ export default {
   },
   mixins: [fromNowFilter]
 }
-
 </script>
 
 <style>

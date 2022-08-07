@@ -34,7 +34,8 @@
       <img v-else src="../assets/icon-like.png" type="button" alt="" v-on:click="likeTweet(tweet.id)">
     </div>
 
-    <ModalTweetReply v-bind:tweet="tweet" v-bind:currentUser="currentUser" />
+    <ModalTweetReply v-bind:tweet="tweet" v-bind:currentUser="currentUser"
+      v-on:after-post-tweet-reply="afterPostTweetReply" />
   </div>
 </template>
 
@@ -82,6 +83,13 @@ export default {
         this.isProcessing = false
         console.warn(error)
       }
+    },
+    afterPostTweetReply(payload) {
+      const { TweetId } = payload
+      this.tweet.repliesLength += 1
+      this.$emit('after-post-tweet-reply', {
+        ...payload,
+      })
     },
     async likeTweet(tweetId) {
       try {
