@@ -18,7 +18,7 @@
       </div>
       <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
-      <TweetsSection class="User-TweetsSection" v-bind:tweets="tweets" v-bind:currentUser="currentUser" />
+      <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets" v-bind:currentUser="currentUser" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
       <LikesSection class="User-LikesSection User-Section-hidden" v-bind:likes="likes"
         v-bind:currentUser="currentUser" />
