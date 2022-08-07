@@ -16,8 +16,7 @@
         </div>
       </div>
 
-      <TweetSection v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply"
-        v-bind:currentUser="currentUser" />
+      <TweetSection v-bind:propsTweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply" />
       <RepliesSection v-bind:replies="replies" />
       <ModalNewTweet v-bind:currentUser="currentUser" />
     </div>

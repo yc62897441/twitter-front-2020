@@ -8,7 +8,7 @@
       <h1>首頁</h1>
       <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:currentUser="currentUser"
         v-bind:isProcessing="isProcessing" />
-      <TweetsSection v-bind:propsTweets="tweets" v-bind:currentUser="currentUser" />
+      <TweetsSection v-bind:propsTweets="tweets" />
       <ModalNewTweet v-bind:currentUser="currentUser" />
     </div>
 

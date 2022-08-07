@@ -19,9 +19,9 @@
     </div>
 
     <div class="tweet-interaction-layer">
-      <div>{{ tweet.Replies.length }}<p>回覆</p>
+      <div>{{ tweet.repliesLength }}<p>回覆</p>
       </div>
-      <div>{{ tweet.Likes.length }}<p>喜歡次數</p>
+      <div>{{ tweet.likesLength }}<p>喜歡次數</p>
       </div>
     </div>
 
@@ -29,7 +29,9 @@
       <!-- trigger modal -->
       <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
         v-bind:data-bs-target="'#modal' + tweet.id">
-      <img src="../assets/icon-like.png" alt="">
+      <img v-if="currentUser.userLikesId.includes(tweet.id)" src="../assets/icon-isLiked.png" type="button" alt=""
+        v-on:click="unlikeTweet(tweet.id, tweet.id)">
+      <img v-else src="../assets/icon-like.png" type="button" alt="" v-on:click="likeTweet(tweet.id, tweet.id)">
     </div>
 
     <ModalTweetReply v-bind:tweet="tweet" v-bind:currentUser="currentUser" />
@@ -40,23 +42,21 @@
 import ModalTweetReply from './ModalTweetReply.vue'
 import tweetsAPI from '../api/tweets'
 import { fromNowFilter } from '../utils/mixins'
+import { mapState } from 'vuex'
 
 export default {
   components: {
     ModalTweetReply
   },
   props: {
-    tweet: {
+    propsTweet: {
       type: Object,
       required: true
     },
-    currentUser: {
-      type: Object,
-      required: true
-    }
   },
   data() {
     return {
+      tweet: {},
       newTweetReply: '',
       isProcessing: false
     }
@@ -81,6 +81,50 @@ export default {
       } catch (error) {
         this.isProcessing = false
         console.warn(error)
+      }
+    },
+    async likeTweet(tweetId, likeId) {
+      try {
+        this.isProcessing = true
+        const currentUserId = this.currentUserId
+        const { data } = await tweetsAPI.likeTweet({ tweetId })
+        if (data.status === 'success') {
+          this.currentUser.userLikesId.push(likeId)
+          this.tweet.likesLength += 1
+        }
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    },
+    async unlikeTweet(tweetId, likeId) {
+      try {
+        this.isProcessing = true
+        const currentUserId = this.currentUserId
+        const { data } = await tweetsAPI.unlikeTweet({ tweetId })
+        if (data.status === 'success') {
+          this.currentUser.userLikesId = this.currentUser.userLikesId.map(userLikeId => {
+            if (userLikeId !== likeId) {
+              return userLikeId
+            }
+          })
+          this.tweet.likesLength -= 1
+        }
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    },
+  },
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  watch: {
+    propsTweet(newValue) {
+      this.tweet = {
+        ...newValue,
       }
     }
   },
