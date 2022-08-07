@@ -5,8 +5,17 @@
     </div>
 
     <div class="middle-container">
-      <h1>User name</h1>
-      <h3> 15 則推文</h3>
+      <div class="middle-container-wrapper">
+        <div class="middle-container-arrow-wrapper">
+          <router-link to="/tweets">
+            <img src="../assets/arrow-left.png" alt="">
+          </router-link>
+        </div>
+        <div class="middle-container-page-title-wrapper">
+          <h1>User name</h1>
+          <h3>15 則推文</h3>
+        </div>
+      </div>
       <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:tweets="tweets" v-bind:currentUser="currentUser" />

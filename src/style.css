@@ -3,6 +3,35 @@ html {
   --white: #ffffff;
 }
 
+.middle-container h1 {
+  margin: 15px 0px 15px 25px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  color: #1C1C1C;
+}
+
+.middle-container h3 {
+  margin: -15px 0px 15px 25px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 19px;
+  color: #657786;
+}
+
+.middle-container-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.middle-container-arrow-wrapper img {
+  width: 17px;
+  height: 14px;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
 .btn-orange {
   background-color: var(--orange);
   color: var(--white);

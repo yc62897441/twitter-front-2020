@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="admin-tweets-wrapper">
     <div v-for="tweet in tweets" :key="tweet.id" class="admin-tweet-wrapper">
       <div class="admin-tweet-wrapper-left">
         <img v-bind:src="tweet.User.avatar" alt="">
@@ -49,7 +49,7 @@ export default {
         this.tweets.forEach(tweet => {
           if (tweet.id !== tweetId) {
             temTweets.push(tweet)
-          } 
+          }
         })
         this.tweets = temTweets
       } catch (error) {
@@ -67,6 +67,10 @@ export default {
 </script>
 
 <style>
+.admin-tweets-wrapper {
+  border-top: 1px solid #E6ECF0;
+}
+
 .admin-tweet-wrapper {
   display: flex;
   padding: 15px;

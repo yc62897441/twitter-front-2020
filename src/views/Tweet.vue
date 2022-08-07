@@ -5,7 +5,17 @@
     </div>
 
     <div class="middle-container">
-      <h1><img src="../assets/arrow-left.png" alt=""> 推文</h1>
+      <div class="middle-container-wrapper">
+        <div class="middle-container-arrow-wrapper">
+          <router-link to="/tweets">
+            <img src="../assets/arrow-left.png" alt="">
+          </router-link>
+        </div>
+        <div class="middle-container-page-title-wrapper">
+          <h1>推文</h1>
+        </div>
+      </div>
+
       <TweetSection v-bind:tweet="tweet" v-on:after-post-tweet-reply="afterPostTweetReply"
         v-bind:currentUser="currentUser" />
       <RepliesSection v-bind:replies="replies" />
