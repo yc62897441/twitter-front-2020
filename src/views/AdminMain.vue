@@ -60,7 +60,7 @@ export default {
 }
 
 .middle-container {
-  width: 600px;
+  width: 1055px;
   margin-left: 240px;
   margin-right: 30px;
   border-left: 1px solid #E6ECF0;

@@ -67,7 +67,7 @@ export default {
         // this.$store.commit('setCurrentUser', data.user)
 
         // 跳轉頁面，導入首頁
-        this.$router.push('/tweets')
+        this.$router.push('/admin/main')
       } catch (error) {
         this.isProcessing = false
         this.password = ''
