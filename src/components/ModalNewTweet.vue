@@ -14,8 +14,8 @@
             <form class="modal-new-tweet-wrapper-right">
               <textarea cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription"
                 name="newTweetDescription" required></textarea>
-              <button type="button" class="btn btn-orange btn-new-tweet" @click.prevent.stop="handleSubmit"
-                v-bind:disabled="isProcessing">推文</button>
+              <button type="button" class="btn btn-orange btn-new-tweet" data-bs-dismiss="modal"
+                @click.prevent.stop="handleSubmit" v-bind:disabled="isProcessing">推文</button>
             </form>
           </div>
         </div>
@@ -55,6 +55,9 @@ export default {
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
+        this.$emit('after-post-new-tweet', {
+          ...formData,
+        })
         this.newTweetDescription = ''
         this.isProcessing = false
       } catch (error) {

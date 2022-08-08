@@ -9,7 +9,7 @@
       <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:currentUser="currentUser"
         v-bind:isProcessing="isProcessing" />
       <TweetsSection v-bind:propsTweets="tweets" />
-      <ModalNewTweet v-bind:currentUser="currentUser" />
+      <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
     <div class="right-container">
@@ -66,17 +66,53 @@ export default {
           throw new Error(data.message)
         }
         this.tweets.push({
-          id: uuidv4(),
-          UserId: UserId,
+          Likes: [],
+          Replies: [],
+          User: {
+            account: this.currentUser.account,
+            avatar: this.currentUser.avatar,
+            banner: this.currentUser.banner,
+            id: this.currentUser.id,
+            introduction: this.currentUser.introduction,
+            name: this.currentUser.name,
+            role: this.currentUser.role,
+          },
+          UserId: this.currentUser.id,
+          createdAt: Date.now(),
           description: description,
-          createdAt: new Date(),
+          id: uuidv4(),
+          likesLength: 0,
+          repliesLength: 0,
+          updatedAt: Date.now(),
         })
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
         console.warn(error)
       }
-    }
+    },
+    afterPostNewTweet(payload) {
+      this.tweets.push({
+        Likes: [],
+        Replies: [],
+        User: {
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar,
+          banner: this.currentUser.banner,
+          id: this.currentUser.id,
+          introduction: this.currentUser.introduction,
+          name: this.currentUser.name,
+          role: this.currentUser.role,
+        },
+        UserId: this.currentUser.id,
+        createdAt: Date.now(),
+        description: payload.description,
+        id: uuidv4(),
+        likesLength: 0,
+        repliesLength: 0,
+        updatedAt: Date.now(),
+      })
+    },
   },
   computed: {
     ...mapState(['currentUser', 'isAuthenticated'])

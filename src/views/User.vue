@@ -21,6 +21,7 @@
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
       <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes" />
+      <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
     <div class="right-container">
@@ -38,9 +39,11 @@ import UserNavPills from '../components/UserNavPills.vue'
 import TweetsSection from '../components/TweetsSection.vue'
 import RepliesSection from '../components/RepliesSection.vue'
 import LikesSection from '../components/LikesSection.vue'
+import ModalNewTweet from '../components/ModalNewTweet.vue'
 import usersAPI from '../api/users'
 import tweetsAPI from '../api/tweets'
 import { mapState } from 'vuex'
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   components: {
@@ -50,7 +53,8 @@ export default {
     UserNavPills,
     TweetsSection,
     RepliesSection,
-    LikesSection
+    LikesSection,
+    ModalNewTweet,
   },
   data() {
     return {
@@ -119,7 +123,29 @@ export default {
           UserLikesSection.classList.remove('User-Section-hidden')
           break
       }
-    }
+    },
+    afterPostNewTweet(payload) {
+      this.tweets.push({
+        Likes: [],
+        Replies: [],
+        User: {
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar,
+          banner: this.currentUser.banner,
+          id: this.currentUser.id,
+          introduction: this.currentUser.introduction,
+          name: this.currentUser.name,
+          role: this.currentUser.role,
+        },
+        UserId: this.currentUser.id,
+        createdAt: Date.now(),
+        description: payload.description,
+        id: uuidv4(),
+        likesLength: 0,
+        repliesLength: 0,
+        updatedAt: Date.now(),
+      })
+    },
   },
   computed: {
     ...mapState(['currentUser'])
