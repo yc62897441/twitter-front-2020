@@ -5,8 +5,8 @@
     </div>
 
     <div class="middle-container">
-      <h1>User name</h1>
-      <h3> 15 則推文</h3>
+      <h1>{{ user.name }}</h1>
+      <h3>{{ user.repliesLength }}則推文</h3>
       <FollowshipNavPills v-on:after-change-followship-nav-pills="afterChangeFollowshipNavPills" />
       <FollowshipSection v-bind:currentUser="currentUser" v-bind:user="user" v-bind:userFollowings="userFollowings"
         v-bind:userFollowers="userFollowers" v-bind:show="show" />

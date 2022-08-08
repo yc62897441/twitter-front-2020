@@ -1,7 +1,9 @@
 <template>
   <div class="new-tweet-wrapper">
     <div class="new-tweet-wrapper-left">
-      <img v-bind:src="currentUser.avatar" alt="">
+      <router-link class="link" v-bind:to="'/users/' + currentUser.id">
+        <img v-bind:src="currentUser.avatar" alt="">
+      </router-link>
     </div>
     <form @submit.prevent.stop="handleSubmit" class="new-tweet-wrapper-right">
       <textarea cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription" name="newTweetDescription"

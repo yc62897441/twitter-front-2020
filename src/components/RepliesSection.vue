@@ -2,16 +2,25 @@
   <div>
     <div v-for="reply in replies" v-bind:key="'reply' + reply.id" class="reply-wrapper">
       <div class="reply-wrapper-left">
-        <img v-bind:src="reply.User.avatar" alt="">
+        <router-link class="link" v-bind:to="'/users/' + reply.User.id">
+          <img v-bind:src="reply.User.avatar" alt="">
+        </router-link>
       </div>
       <div class="reply-wrapper-right">
         <div class="reply-info">
-          <div class="reply-info-name"> {{ reply.User.name }} </div>
-          <div class="reply-info-account"> @{{ reply.User.account }} </div>
-          <div class="reply-info-data">・ {{ reply.createdAt | fromNow }}</div>
+          <router-link class="link" v-bind:to="'/users/' + reply.User.id">
+            <div class="reply-info-name"> {{ reply.User.name }} </div>
+          </router-link>
+          <router-link class="link" v-bind:to="'/users/' + reply.User.id">
+            <div class="reply-info-account">@{{ reply.User.account }} </div>
+          </router-link>
+          <div class="reply-info-data">・{{ reply.createdAt | fromNow }}</div>
         </div>
         <div class="reply-to">
-          回覆給<p>@{{ reply.Tweet.User.account }}</p>
+          回覆給
+          <router-link class="link" v-bind:to="'/users/' + reply.Tweet.User.id">
+            <p>@{{ reply.Tweet.User.account }}</p>
+          </router-link>
         </div>
         <div class="reply-description">
           {{ reply.comment }}
@@ -58,11 +67,8 @@ export default {
   display: flex;
 }
 
-.reply-info :nth-child(1) {
-  margin-right: 5px;
-}
-
 .reply-info-name {
+  margin-right: 5px;
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;

@@ -2,17 +2,25 @@
   <div>
     <div v-for="like in likes" v-bind:key="like.id" class="like-wrapper">
       <div class="like-wrapper-left">
-        <img v-bind:src="like.Tweet.User.avatar" alt="">
+        <router-link class="link" v-bind:to="'/users/' + like.Tweet.User.id">
+          <img v-bind:src="like.Tweet.User.avatar" alt="">
+        </router-link>
       </div>
       <div class="like-wrapper-right">
         <div class="like-tweet-info">
-          <div class="like-tweet-info-name"> {{ like.Tweet.User.name }} </div>
-          <div class="like-tweet-info-account"> @{{ like.Tweet.User.account }} </div>
+          <router-link class="link" v-bind:to="'/users/' + like.Tweet.User.id">
+            <div class="like-tweet-info-name"> {{ like.Tweet.User.name }}</div>
+          </router-link>
+          <router-link class="link" v-bind:to="'/users/' + like.Tweet.User.id">
+            <div class="like-tweet-info-account"> @{{ like.Tweet.User.account }}</div>
+          </router-link>
           <div class="like-tweet-info-data">・{{ like.Tweet.createdAt | fromNow }} </div>
         </div>
-        <div class="like-tweet-description">
-          {{ like.Tweet.description }}
-        </div>
+        <router-link class="link" v-bind:to="'/tweets/' + like.Tweet.id">
+          <div class="like-tweet-description">
+            {{ like.Tweet.description }}
+          </div>
+        </router-link>
         <div class="like-interaction">
           <div>
             <!-- trigger modal -->
@@ -129,6 +137,7 @@ export default {
 </script>
 
 <style>
+
 .like-wrapper {
   display: flex;
   padding: 15px;
@@ -152,11 +161,8 @@ export default {
   display: flex;
 }
 
-.like-tweet-info :nth-child(1) {
-  margin-right: 5px;
-}
-
 .like-tweet-info-name {
+  margin-right: 5px;
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;
@@ -203,6 +209,7 @@ export default {
 }
 
 .like-interaction div p {
+  margin: 0px;
   margin-left: 12px;
 }
 

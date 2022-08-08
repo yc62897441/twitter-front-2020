@@ -5,7 +5,9 @@
     </div>
 
     <div class="user-avatar-wrapper">
-      <img v-bind:src="user.avatar" alt="">
+      <router-link class="link" v-bind:to="'/users/' + user.id">
+        <img v-bind:src="user.avatar" alt="">
+      </router-link>
     </div>
 
     <!-- trigger modal -->
@@ -22,10 +24,16 @@
       <div class="user-info-account">@{{ user.account }}</div>
       <div class="user-info-introduction">{{ user.introduction }}</div>
       <div class="user-info-followship-wrapper">
-        <div class="user-info-followship-followings">{{ followingsLength }}個<p>跟隨中</p>
-        </div>
-        <div class="user-info-followship-followers">{{ followersLength }}位<p>跟隨者</p>
-        </div>
+        <!-- <router-link class="link" v-bind:to="'/users/' + user.id + '/followship'"> -->
+        <router-link class="link"
+          v-bind:to="{ name: 'userFollowship', params: { id: user.id }, query: { show: 'followings' } }">
+          <div class="user-info-followship-followings">{{ followingsLength }}個<p>跟隨中</p>
+          </div>
+        </router-link>
+        <router-link class="link" v-bind:to="'/users/' + user.id + '/followship'">
+          <div class="user-info-followship-followers">{{ followersLength }}位<p>跟隨者</p>
+          </div>
+        </router-link>
       </div>
     </div>
 

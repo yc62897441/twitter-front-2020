@@ -4,7 +4,9 @@
     <div v-for="recommendedFollowing in recommendedFollowings" class="recommended-following-wrapper">
       <div class="following-info-wrapper">
         <div class="avatar-wrapper">
-          <img v-bind:src="recommendedFollowing.avatar" alt="">
+          <router-link class="link" v-bind:to="'/users/' + recommendedFollowing.id">
+            <img v-bind:src="recommendedFollowing.avatar" alt="">
+          </router-link>
         </div>
         <div class="info-wrapper">
           <div class="info-wrapper-name">{{ recommendedFollowing.name }}</div>

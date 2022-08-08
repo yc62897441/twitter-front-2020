@@ -2,17 +2,25 @@
   <div>
     <div v-for="tweet in tweets" :key="tweet.id" class="tweet-wrapper">
       <div class="tweet-wrapper-left">
-        <img v-bind:src="tweet.User.avatar" alt="">
+        <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+          <img v-bind:src="tweet.User.avatar" alt="">
+        </router-link>
       </div>
       <div class="tweet-wrapper-right">
         <div class="tweet-info">
-          <div class="tweet-info-name">{{ tweet.User.name }}</div>
-          <div class="tweet-info-account"> @{{ tweet.User.account }}</div>
+          <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+            <div class="tweet-info-name">{{ tweet.User.name }}</div>
+          </router-link>
+          <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+            <div class="tweet-info-account"> @{{ tweet.User.account }}</div>
+          </router-link>
           <div class="tweet-info-data">・{{ tweet.createdAt | fromNow }}</div>
         </div>
-        <div class="tweet-description">
-          {{ tweet.description }}
-        </div>
+        <router-link class="link" v-bind:to="'/tweets/' + tweet.id">
+          <div class="tweet-description">
+            {{ tweet.description }}
+          </div>
+        </router-link>
         <div class="tweet-interaction">
           <div>
             <!-- trigger modal -->
@@ -139,6 +147,7 @@ export default {
 .tweet-wrapper-right {
   display: flex;
   flex-direction: column;
+  width: 100%;
   margin-left: 10px;
 }
 
@@ -147,11 +156,8 @@ export default {
   display: flex;
 }
 
-.tweet-info :nth-child(1) {
-  margin-right: 5px;
-}
-
 .tweet-info-name {
+  margin-right: 5px;
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;
@@ -172,7 +178,7 @@ export default {
   font-size: 15px;
   line-height: 22px;
   color: #1C1C1C;
-  word-break: break-all
+  word-break: break-all;
 }
 
 .tweet-interaction {
@@ -194,6 +200,7 @@ export default {
 }
 
 .tweet-interaction div p {
+  margin: 0px;
   margin-left: 12px;
 }
 </style>

@@ -12,8 +12,8 @@
           </router-link>
         </div>
         <div class="middle-container-page-title-wrapper">
-          <h1>User name</h1>
-          <h3>15 則推文</h3>
+          <h1>{{ user.name }}</h1>
+          <h3>{{ user.repliesLength }}則推文</h3>
         </div>
       </div>
       <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" />
