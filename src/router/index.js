@@ -62,6 +62,11 @@ const routes = [
     component: NotFound,
     // 動態載入寫法 component: () => import('../views/NotFound.vue')
   },
+  {
+    path: '/test/:id',
+    name: 'test',
+    component: () => import('../views/Test.vue')
+  },
 ]
 
 const router = new VueRouter({
