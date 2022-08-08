@@ -16,8 +16,11 @@
         <div class="like-interaction">
           <div>
             <!-- trigger modal -->
+            <!-- 改用 ModalTweetReplyLikesSection，使用 ModalTweetReply 時，在 LikesSection 點擊 trigger modal，如果該 tweet 的 user 是 currentUser 則 Modal 不會顯示只會有灰幕-->
+            <!-- <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
+              v-bind:data-bs-target="'#modal' + like.Tweet.id"> -->
             <img src="../assets/icon-reply.png" alt="" type="button" data-bs-toggle="modal"
-              v-bind:data-bs-target="'#modal' + like.Tweet.id">
+              v-bind:data-bs-target="'#modalTweetReplyLikesSection' + like.Tweet.id">
             <p>{{ like.Tweet.repliesLength }}</p>
           </div>
           <div v-if="currentUser.userLikesId.includes(like.Tweet.id)">
@@ -30,7 +33,9 @@
           </div>
         </div>
       </div>
-      <ModalTweetReply v-bind:tweet="like.Tweet" v-bind:currentUser="currentUser"
+      <!-- <ModalTweetReply v-bind:tweet="like.Tweet" v-bind:currentUser="currentUser"
+        v-on:after-post-tweet-reply="afterPostTweetReply" /> -->
+      <ModalTweetReplyLikesSection v-bind:tweet="like.Tweet" v-bind:currentUser="currentUser"
         v-on:after-post-tweet-reply="afterPostTweetReply" />
     </div>
   </div>
@@ -39,12 +44,14 @@
 <script>
 import tweetsAPI from '../api/tweets'
 import ModalTweetReply from './ModalTweetReply.vue'
+import ModalTweetReplyLikesSection from './ModalTweetReplyLikesSection.vue'
 import { fromNowFilter } from '../utils/mixins'
 import { mapState } from 'vuex'
 
 export default {
   components: {
-    ModalTweetReply
+    ModalTweetReply,
+    ModalTweetReplyLikesSection,
   },
   props: {
     prosLikes: {
