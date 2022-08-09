@@ -61,22 +61,65 @@ export default {
   data() {
     return {
       isProcessing: false,
-      userNewInfo: {}
+      userNewInfo: {},
+      banner: '',
+      avatar: '',
     }
   },
   methods: {
-    async handleSubmit() {
+    async handleSubmit(e) {
       try {
-        this.isProcessing = true
-        const userId = this.propsUser.id
+        // 建立 formData()
+        let formData = new FormData()
 
-        const formData = {
+        // formData 加入 avatar、banner檔案。如果沒有傳入檔案，會是空字串，但不影響流程
+        formData.append("files", this.banner)
+        formData.append("files", this.avatar)
+
+        // 如果 userNewInfo.name、userNewInfo.introduction 不是空白，則加入 formData
+        if (this.userNewInfo.name) {
+          formData.append('name', this.userNewInfo.name)
+        } else {
+          // user.name 不可為空白，空白則中斷函式
+          return
+        }
+        if (this.userNewInfo.introduction) {
+          formData.append('introduction', this.userNewInfo.introduction)
+        }
+
+        // 傳送資料到後端
+        const response = await usersAPI.putUserInfo({ formData })
+
+        // 錯誤，跳到錯誤處理
+        if (response.data.status !== 'success') {
+          console.log('error message:', response.data.message)
+          throw new Error()
+        }
+
+        // 定義要回傳到父層，更新 UserBoard.vue 的資訊
+        const emitData = {
           name: this.userNewInfo.name,
           introduction: this.userNewInfo.introduction,
         }
-        const { data } = await usersAPI.putUser({ userId, formData })
-        this.$emit('after-put-userInfo', data)
+        if (response.data.results) {
+          //如 有更新 avatar 或 banner，則 results 至少會有一個物件，將該物件中的 imgurLink 存到 emitData 中
+          let avatar = undefined
+          let banner = undefined
+          response.data.results.forEach(result => {
+            if (result.originalname === 'avatar') {
+              avatar = result.imgurLink
+              emitData.avatar = avatar
+            } else if (result.originalname === 'banner') {
+              banner = result.imgurLink
+              emitData.banner = banner
+            }
+          })
+        }
 
+        // 回傳到父層，更新 UserBoard.vue 的資訊
+        this.$emit('after-put-userInfo', {
+          ...emitData,
+        })
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -88,8 +131,10 @@ export default {
       const imageURL = window.URL.createObjectURL(files[0])
       if (event.target.name === 'userNewAvatar') {
         this.userNewInfo.avatar = imageURL
+        this.avatar = new File([event.target.files[0]], 'avatar')
       } else if (event.target.name === 'userNewBanner') {
         this.userNewInfo.banner = imageURL
+        this.banner = new File([event.target.files[0]], 'banner')
       }
     },
   },

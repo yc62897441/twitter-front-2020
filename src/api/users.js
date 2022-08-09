@@ -13,7 +13,14 @@ export default {
   putUser: ({ userId, formData }) => {
     return apiHelper.put(`users/${userId}`, formData)
   },
-  getUserTweets: ({ userId })=> {
+  putUserInfo: ({ formData }) => {
+    return apiHelper.put('/users/userInfo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  },
+  getUserTweets: ({ userId }) => {
     return apiHelper.get(`users/${userId}/tweets`)
   },
   getUserRepliedTweets: ({ userId }) => {
