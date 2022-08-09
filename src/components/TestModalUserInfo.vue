@@ -72,7 +72,7 @@ export default {
     return {
       isProcessing: false,
       userNewInfo: {},
-      file: '',  // 上傳單一檔案
+      // file: '',  // 上傳單一檔案，目前用不到
       files: '',  // 上傳多個檔案
       banner: '',
       avatar: '',
@@ -81,36 +81,40 @@ export default {
   methods: {
     async handleSubmit(e) {
       try {
-        const userNewBanner = document.querySelector('#userNewBanner')
-        const token = localStorage.getItem('token')
+        // 建立 formData()
         let formData = new FormData()
+
+        // formData 加入 avatar、banner檔案。如果沒有傳入檔案，會是空字串，但不影響流程
         formData.append("files", this.banner)
         formData.append("files", this.avatar)
+
+        // 如果 userNewInfo.name、userNewInfo.introduction 不是空白，則加入 formData
         if (this.userNewInfo.name) {
           formData.append('name', this.userNewInfo.name)
-          console.log('append name')
+        } else {
+          // user.name 不可為空白，空白則中斷函式
+          return
         }
         if (this.userNewInfo.introduction) {
           formData.append('introduction', this.userNewInfo.introduction)
-          console.log('append introduction')
         }
 
-        console.log('formData', formData)
-        // formData.append('name', this.userNewInfo.name)
-        // formData.append('introduction', this.userNewInfo.introduction)
+        // 傳送資料到後端
+        const response = await testAPI.postTest({ formData })
 
+        // 錯誤，跳到錯誤處理
+        if (response.data.status !== 'success') {
+          console.log('error message:', response.data.message)
+          throw new Error()
+        }
 
-        const response = await axios.post('http://localhost:3000/api/test/', formData, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        if (response.data.status === 'success') {
-          const emitData = {
-            name: this.userNewInfo.name,
-            introduction: this.userNewInfo.introduction,
-          }
+        // 定義要回傳到父層，更新 UserBoard.vue 的資訊
+        const emitData = {
+          name: this.userNewInfo.name,
+          introduction: this.userNewInfo.introduction,
+        }
+        if (response.data.results) {
+          //如 有更新 avatar 或 banner，則 results 至少會有一個物件，將該物件中的 imgurLink 存到 emitData 中
           let avatar = undefined
           let banner = undefined
           response.data.results.forEach(result => {
@@ -122,45 +126,18 @@ export default {
               emitData.banner = banner
             }
           })
-          this.$emit('after-put-userInfo', {
-            ...emitData,
-          })
-        } else {
-          console.log('error message:', response.data.message)
-          throw new Error()
         }
+
+        // 回傳到父層，更新 UserBoard.vue 的資訊
+        this.$emit('after-put-userInfo', {
+          ...emitData,
+        })
+        this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
         console.warn(error)
       }
     },
-    // 上傳多個圖片，成功
-    // async handleSubmit(e) {
-    //   try {
-    //     const userNewBanner = document.querySelector('#userNewBanner')
-    //     const token = localStorage.getItem('token')
-
-    //     let formData = new FormData()
-    //     formData.append("files", this.banner)
-    //     formData.append("files", this.avatar)
-    //     formData.append('name', this.userNewInfo.name)
-    //     formData.append('introduction', this.userNewInfo.introduction)
-
-    //     console.log('formData', formData)
-
-    //     const response = await axios.post('http://localhost:3000/api/test/', formData, {
-    //       headers: {
-    //         'Authorization': `Bearer ${token}`,
-    //         'Content-Type': 'multipart/form-data'
-    //       }
-    //     })
-
-    //     console.log('response', response)
-    //   } catch (error) {
-    //     this.isProcessing = false
-    //     console.warn(error)
-    //   }
-    // },
     // 上傳單一圖片，成功
     // async handleSubmit(e) {
     //   try {
@@ -203,7 +180,6 @@ export default {
       } else if (event.target.name === 'userNewBanner') {
         this.userNewInfo.banner = imageURL
         this.banner = new File([event.target.files[0]], 'banner')
-        //this.banner = event.target.files[0]
       }
       // 檔案先存到 data 的寫法，跟上面完全沒關係。this works
       // 搭配「上傳單一圖片的 async handleSubmit(e) 」使用
