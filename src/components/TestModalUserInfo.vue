@@ -59,6 +59,7 @@
 <script>
 import usersAPI from '../api/users'
 import testAPI from '../api/test'
+import axios from 'axios'
 
 export default {
   props: {
@@ -70,46 +71,143 @@ export default {
   data() {
     return {
       isProcessing: false,
-      userNewInfo: {}
+      userNewInfo: {},
+      file: '',  // 上傳單一檔案
+      files: '',  // 上傳多個檔案
+      banner: '',
+      avatar: '',
     }
   },
   methods: {
     async handleSubmit(e) {
       try {
         const userNewBanner = document.querySelector('#userNewBanner')
+        const token = localStorage.getItem('token')
+        let formData = new FormData()
+        formData.append("files", this.banner)
+        formData.append("files", this.avatar)
+        if (this.userNewInfo.name) {
+          formData.append('name', this.userNewInfo.name)
+          console.log('append name')
+        }
+        if (this.userNewInfo.introduction) {
+          formData.append('introduction', this.userNewInfo.introduction)
+          console.log('append introduction')
+        }
 
-
-        console.log('userNewBanner.files[0]', userNewBanner.files['0'])
-        const formData = new FormData()
-        formData.userNewBanner = userNewBanner.files['0']
         console.log('formData', formData)
-        const response = await testAPI.postTest({formData}) 
-        console.log('response', response)
+        // formData.append('name', this.userNewInfo.name)
+        // formData.append('introduction', this.userNewInfo.introduction)
 
-        // this.isProcessing = true
-        // const userId = this.propsUser.id
 
-        // const formData = {
-        //   name: this.userNewInfo.name,
-        //   introduction: this.userNewInfo.introduction,
-        // }
-        // const { data } = await usersAPI.putUser({ userId, formData })
-        // this.$emit('after-put-userInfo', data)
-
-        // this.isProcessing = false
+        const response = await axios.post('http://localhost:3000/api/test/', formData, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        if (response.data.status === 'success') {
+          const emitData = {
+            name: this.userNewInfo.name,
+            introduction: this.userNewInfo.introduction,
+          }
+          let avatar = undefined
+          let banner = undefined
+          response.data.results.forEach(result => {
+            if (result.originalname === 'avatar') {
+              avatar = result.imgurLink
+              emitData.avatar = avatar
+            } else if (result.originalname === 'banner') {
+              banner = result.imgurLink
+              emitData.banner = banner
+            }
+          })
+          this.$emit('after-put-userInfo', {
+            ...emitData,
+          })
+        } else {
+          console.log('error message:', response.data.message)
+          throw new Error()
+        }
       } catch (error) {
         this.isProcessing = false
         console.warn(error)
       }
     },
+    // 上傳多個圖片，成功
+    // async handleSubmit(e) {
+    //   try {
+    //     const userNewBanner = document.querySelector('#userNewBanner')
+    //     const token = localStorage.getItem('token')
+
+    //     let formData = new FormData()
+    //     formData.append("files", this.banner)
+    //     formData.append("files", this.avatar)
+    //     formData.append('name', this.userNewInfo.name)
+    //     formData.append('introduction', this.userNewInfo.introduction)
+
+    //     console.log('formData', formData)
+
+    //     const response = await axios.post('http://localhost:3000/api/test/', formData, {
+    //       headers: {
+    //         'Authorization': `Bearer ${token}`,
+    //         'Content-Type': 'multipart/form-data'
+    //       }
+    //     })
+
+    //     console.log('response', response)
+    //   } catch (error) {
+    //     this.isProcessing = false
+    //     console.warn(error)
+    //   }
+    // },
+    // 上傳單一圖片，成功
+    // async handleSubmit(e) {
+    //   try {
+    //     this.isProcessing = true
+    //     const userNewBanner = document.querySelector('#userNewBanner')
+    //     const token = localStorage.getItem('token')
+    //     let formData = new FormData()
+    //     formData.append('file', this.file)
+    //     formData.append('name', this.userNewInfo.name)
+    //     formData.append('introduction', this.userNewInfo.introduction)
+    //     console.log('formData', formData)
+
+    //     const response = await axios.post('http://localhost:3000/api/test/', formData, {
+    //       headers: {
+    //         'Authorization': `Bearer ${token}`,
+    //         'Content-Type': 'multipart/form-data'
+    //       }
+    //     })
+    //     console.log('response', response)
+
+    //     if (response.data.status === 'success') {
+    //       this.$emit('after-put-userInfo', {
+    //         name: this.userNewInfo.name,
+    //         introduction: this.userNewInfo.introduction,
+    //         banner: response.data.link
+    //       })
+    //     }
+    //     this.isProcessing = false
+    //   } catch (error) {
+    //     this.isProcessing = false
+    //     console.warn(error)
+    //   }
+    // },
     handleFileChange(event) {
       const { files } = event.target
       const imageURL = window.URL.createObjectURL(files[0])
       if (event.target.name === 'userNewAvatar') {
         this.userNewInfo.avatar = imageURL
+        this.avatar = new File([event.target.files[0]], 'avatar')
       } else if (event.target.name === 'userNewBanner') {
         this.userNewInfo.banner = imageURL
+        this.banner = new File([event.target.files[0]], 'banner')
+        //this.banner = event.target.files[0]
       }
+      // 檔案先存到 data 的寫法，跟上面完全沒關係。this works
+      // 搭配「上傳單一圖片的 async handleSubmit(e) 」使用
+      //  this.file = event.target.files[0]
     },
   },
   // 自動監控某些屬性，可以帶入兩個值 initialRestaurant(newValue, oldValue)
