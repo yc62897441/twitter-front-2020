@@ -21,7 +21,7 @@
 
       <!-- trigger modal -->
       <button class="btn btn-orange navbar-btn" type="button" data-bs-toggle="modal"
-        v-bind:data-bs-target="'#modalNewTweet'">推文</button>
+        v-bind:data-bs-target="'#modalNewTweet'" v-bind:disabled="isSettingPage">推文</button>
     </div>
 
     <div class="navbar-bottom">
@@ -41,6 +41,10 @@ export default {
     currentUser: {
       type: Object,
       required: true
+    },
+    isSettingPage: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -57,6 +61,7 @@ export default {
 </script>
 
 <style>
+
 .navbar-wrapper {
   position: fixed;
   display: flex;
@@ -110,5 +115,11 @@ export default {
   width: 210px;
   height: 38px;
   border-radius: 100px;
+}
+
+.navbar-btn:disabled {
+  background-color: var(--orange);
+  color: var(--white);
+  border: 1px solid var(--orange);
 }
 </style>

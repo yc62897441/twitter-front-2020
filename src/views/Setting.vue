@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="left-container">
-      <Navbar class="Navbar" v-bind:currentUser="currentUser" />
+      <Navbar class="Navbar" v-bind:currentUser="currentUser" v-bind:isSettingPage="isSettingPage" />
     </div>
     <div class="middle-container">
       <h1>帳戶設定</h1>
@@ -56,7 +56,8 @@ export default {
         password: '',
         checkPassword: '',
       },
-      isProcessing: false
+      isProcessing: false,
+      isSettingPage: true,
     }
   },
   methods: {
