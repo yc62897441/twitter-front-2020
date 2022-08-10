@@ -15,7 +15,10 @@
       v-bind:data-bs-target="'#modalUserInfo'">編輯個人資料</button>
     <div v-else class="user-interaction-wrapper">
       <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png" alt="">
-      <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-noti.png" alt="">
+      <img v-if="!currentUser.NotiObjs.includes(user.id)" class="user-interaction-wrapper-item" type="button"
+        src="../assets/icon-noti.png" v-on:click="postNoti(user.id)" v-bind:disabled="isProcessing" alt="">
+      <img v-else class="user-interaction-wrapper-item" type="button" src="../assets/icon-noti-on.png"
+        v-on:click="deleteNoti(user.id)" v-bind:disabled="isProcessing" alt="">
       <button v-if="!currentUser.Followings.includes(user.id)" class="user-interaction-wrapper-item btn btn-orange"
         type="button" v-on:click="postFollowship(user.id)" v-bind:disabled="isProcessing">跟隨</button>
       <button v-else class="user-interaction-wrapper-item btn btn-orange btn-isFollowed" type="button"
@@ -46,6 +49,7 @@
 <script>
 import ModalUserInfo from './ModalUserInfo.vue'
 import followshipAPI from '../api/followships'
+import notifyAPI from '../api/notify'
 
 export default {
   components: {
@@ -115,7 +119,47 @@ export default {
         this.isProcessing = false
         console.warn(error)
       }
-    }
+    },
+    async postNoti(notiObjId) {
+      try {
+        this.isProcessing = true
+        const currentUserId = this.currentUser.id
+        const formData = {
+          userId: currentUserId,
+          id: notiObjId
+        }
+        const { data } = await notifyAPI.postNoti({ formData })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        // 更新前端畫面
+        this.currentUser.NotiObjs.push(notiObjId)
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    },
+    async deleteNoti(notiObjId) {
+      try {
+        this.isProcessing = true
+        const currentUserId = this.currentUser.id
+        const { data } = await notifyAPI.deleteNoti({ notiObjId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        // 更新前端畫面
+        this.currentUser.NotiObjs = this.currentUser.NotiObjs.map(notiObj => {
+          if (notiObj !== notiObjId) {
+            return notiObj
+          }
+        })
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    },
   },
   watch: {
     propsUser(newValue) {
