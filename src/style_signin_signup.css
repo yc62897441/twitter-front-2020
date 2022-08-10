@@ -1,11 +1,11 @@
-.container {
+/* .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 65px;
-}
+} */
 
-.logo-wrapper img {
+/* .logo-wrapper img {
   width: 40px;
   height: 40px;
 }
@@ -41,9 +41,9 @@ form {
 
 form input {
   height: 52px;
-  margin-bottom: 32px;
+  margin-bottom: 32px; */
   /* background-color: inline-style-setting; */
-  border-radius: 0px 0px 4px 4px;
+  /* border-radius: 0px 0px 4px 4px;
 }
 
 .btn {
@@ -67,4 +67,4 @@ form input {
   text-align: right;
   text-decoration-line: underline;
   color: #0099FF;
-}
+} */
