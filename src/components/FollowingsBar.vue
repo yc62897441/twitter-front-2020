@@ -15,7 +15,7 @@
       </div>
       <div class="follow-btn-wrapper">
         <button type="button" class="btn btn-orange" v-on:click="postFollowship(recommendedFollowing.id)"
-          v-bind:disabled="isProcessing" v-if="!recommendedFollowing.Followers.includes(currentUser.id)">跟隨</button>
+          v-bind:disabled="isProcessing" v-if="!currentUser.Followings.includes(recommendedFollowing.id)">跟隨</button>
         <button type="button" class="btn btn-orange btn-isFollowed"
           v-on:click="deleteFollowship(recommendedFollowing.id)" v-bind:disabled="isProcessing" v-else>正在跟隨</button>
       </div>
@@ -62,11 +62,7 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
-        this.recommendedFollowings.forEach(recommendedFollowing => {
-          if (recommendedFollowing.id === followingId) {
-            recommendedFollowing.Followers.push(currentUserId)
-          }
-        })
+        this.currentUser.Followings.push(followingId)
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -82,13 +78,9 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
-        this.recommendedFollowings.forEach(recommendedFollowing => {
-          if (recommendedFollowing.id === followingId) {
-            recommendedFollowing.Followers = recommendedFollowing.Followers.map(follower => {
-              if (follower !== currentUserId) {
-                return follower
-              }
-            })
+        this.currentUser.Followings = this.currentUser.Followings.map(followings => {
+          if (followings !== followingId) {
+            return followings
           }
         })
         this.isProcessing = false
@@ -105,7 +97,6 @@ export default {
 </script>
 
 <style>
-
 .followingsBar-wrapper {
   position: fixed;
   display: flex;
