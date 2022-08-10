@@ -43,8 +43,7 @@ export default {
   methods: {
     async deleteTweet(tweetId) {
       try {
-        // 思考要如何一起與該 tweet 相關的 replies, likes
-        // const response = await authorizationAPI.deleteTweet({tweetId})
+        const response = await authorizationAPI.deleteTweet({tweetId})
         let temTweets = []
         this.tweets.forEach(tweet => {
           if (tweet.id !== tweetId) {
