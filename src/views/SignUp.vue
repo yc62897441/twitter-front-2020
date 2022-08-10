@@ -26,7 +26,7 @@
           <input v-model="checkPassword" style="background-color:#F5F8FA;" type="password" class="form-control"
             id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword" required>
         </div>
-        <button type="submit" class="btn sign-btn btn-orange" v-bind:disabled="isProcessing">註冊</button>
+        <button type="submit" class="btn sign-btn" v-bind:disabled="isProcessing">註冊</button>
         <div class="sign-form-footer">
           <router-link to="/signin">登入</router-link>
         </div>

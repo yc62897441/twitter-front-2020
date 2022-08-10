@@ -16,7 +16,7 @@
           <input v-model="password" style="background-color:#F5F8FA;" type="password" class="form-control"
             id="signInInputPassword" placeholder="密碼" name="password" required>
         </div>
-        <button type="submit" class="btn sign-btn btn-orange" v-bind:disabled="isProcessing">登入</button>
+        <button type="submit" class="btn sign-btn" v-bind:disabled="isProcessing">登入</button>
         <div class="sign-form-footer">
           <router-link to="/signup">註冊Alphitter</router-link>
           <p>·</p>

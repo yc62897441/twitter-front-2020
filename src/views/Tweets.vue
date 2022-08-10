@@ -28,6 +28,7 @@ import ModalNewTweet from '../components/ModalNewTweet.vue'
 import tweetsAPI from '../api/tweets'
 import { mapState } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
+import { Toast } from '../utils/helpers'
 
 export default {
   components: {
@@ -85,6 +86,10 @@ export default {
           repliesLength: 0,
           updatedAt: Date.now(),
         })
+        Toast.fire({
+          icon: 'success',
+          title: '推文發送成功'
+        })
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -111,6 +116,10 @@ export default {
         likesLength: 0,
         repliesLength: 0,
         updatedAt: Date.now(),
+      })
+      Toast.fire({
+        icon: 'success',
+        title: '推文發送成功'
       })
     },
   },

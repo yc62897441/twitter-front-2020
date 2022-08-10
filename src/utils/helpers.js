@@ -27,6 +27,7 @@ export const apiHelper = axiosInstance
 export const Toast = Swal.mixin({
   toast: true,
   position: 'top',
-  showConfirmButton: true,
-  timer: 3000
+  showConfirmButton: false,
+  timer: 3000,
+  color: '#000000',
 })

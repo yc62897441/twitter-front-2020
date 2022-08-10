@@ -20,7 +20,7 @@
       </router-link>
 
       <!-- trigger modal -->
-      <button class="btn btn-orange" type="button" data-bs-toggle="modal"
+      <button class="btn btn-orange navbar-btn" type="button" data-bs-toggle="modal"
         v-bind:data-bs-target="'#modalNewTweet'">推文</button>
     </div>
 
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { Toast } from '../utils/helpers'
+
 export default {
   props: {
     currentUser: {
@@ -45,6 +47,10 @@ export default {
     logout() {
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
+      Toast.fire({
+        icon: 'success',
+        title: '成功登出'
+      })
     },
   }
 }
@@ -99,7 +105,7 @@ export default {
   color: #1C1C1C;
 }
 
-.btn-orange {
+.navbar-btn {
   margin-top: 25px;
   width: 210px;
   height: 38px;
