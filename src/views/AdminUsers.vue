@@ -4,7 +4,7 @@
       <NavBarAdmin class="NavBarAdmin" v-bind:currentUser="currentUser"
         v-bind:currentViewPageName="currentViewPageName" />
     </div>
-    <div class="middle-container">
+    <div class="admin-middle-container">
       <h1>使用者列表</h1>
       <AdminUsersSection v-bind:users="users" />
     </div>
@@ -50,20 +50,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.container {
-  display: flex;
-  flex-direction: row;
-  padding: 0px;
-  align-items: flex-start;
-}
-
-.middle-container {
-  width: 1055px;
-  margin-left: 240px;
-  margin-right: 30px;
-  border-left: 1px solid #E6ECF0;
-  border-right: 1px solid #E6ECF0;
-}
-</style>
