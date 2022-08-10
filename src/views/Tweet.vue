@@ -54,9 +54,9 @@ export default {
     }
   },
   methods: {
-    async fetchTweet() {
+    async fetchTweet(tweetId) {
       try {
-        const id = Number(this.$route.params.id)
+        const id = tweetId
         const response = await tweetsAPI.getTweet({ id })
         const data = response.data
         this.tweet = data
@@ -64,9 +64,8 @@ export default {
         console.warn(error)
       }
     },
-    async getTweetReplies() {
+    async getTweetReplies(tweetId) {
       try {
-        const tweetId = Number(this.$route.params.id)
         const { data } = await tweetsAPI.getTweetReplies({ tweetId })
         this.replies = data
       } catch (error) {
@@ -98,13 +97,15 @@ export default {
   computed: {
     ...mapState(['currentUser'])
   },
-  created() {
-    this.fetchTweet()
-    this.getTweetReplies()
+  mounted() {
+    const tweetId = this.$route.params.id
+    this.fetchTweet(tweetId)
+    this.getTweetReplies(tweetId)
   },
   beforeRouteUpdate(to, from, next) {
-    this.fetchTweet()
-    this.getTweetReplies()
+    const tweetId = to.params.id
+    this.fetchTweet(tweetId)
+    this.getTweetReplies(tweetId)
     next()
   }
 }
