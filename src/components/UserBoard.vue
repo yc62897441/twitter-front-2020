@@ -16,8 +16,10 @@
     <div v-else class="user-interaction-wrapper">
       <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png" alt="">
       <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-noti.png" alt="">
-      <button class="user-interaction-wrapper-item btn btn-orange" type="button">跟隨</button>
-      <button class="user-interaction-wrapper-item btn btn-orange btn-isFollowed" type="button">正在跟隨</button>
+      <button v-if="!currentUser.Followings.includes(user.id)" class="user-interaction-wrapper-item btn btn-orange"
+        type="button" v-on:click="postFollowship(user.id)" v-bind:disabled="isProcessing">跟隨</button>
+      <button v-else class="user-interaction-wrapper-item btn btn-orange btn-isFollowed" type="button"
+        v-on:click="deleteFollowship(user.id)" v-bind:disabled="isProcessing">正在跟隨</button>
     </div>
     <div class="user-info-wrapper">
       <div class="user-info-name">{{ user.name }}</div>
@@ -43,6 +45,8 @@
 
 <script>
 import ModalUserInfo from './ModalUserInfo.vue'
+import followshipAPI from '../api/followships'
+
 export default {
   components: {
     ModalUserInfo
@@ -62,6 +66,7 @@ export default {
       user: {},
       followingsLength: '',
       followersLength: '',
+      isProcessing: false,
     }
   },
   methods: {
@@ -69,6 +74,46 @@ export default {
       this.user = {
         ...this.user,
         ...payload,
+      }
+    },
+    async postFollowship(followingId) {
+      try {
+        this.isProcessing = true
+        const currentUserId = this.currentUser.id
+        const formData = {
+          userId: currentUserId,
+          id: followingId
+        }
+        const { data } = await followshipAPI.postFollowship({ formData })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        // 更新前端畫面
+        this.currentUser.Followings.push(followingId)
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
+      }
+    },
+    async deleteFollowship(followingId) {
+      try {
+        this.isProcessing = true
+        const currentUserId = this.currentUser.id
+        const { data } = await followshipAPI.deleteFollowship({ followingId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        // 更新前端畫面
+        this.currentUser.Followings = this.currentUser.Followings.map(followings => {
+          if (followings !== followingId) {
+            return followings
+          }
+        })
+        this.isProcessing = false
+      } catch (error) {
+        this.isProcessing = false
+        console.warn(error)
       }
     }
   },
