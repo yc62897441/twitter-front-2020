@@ -93,7 +93,6 @@ export default {
 </script>
 
 <style>
-
 .modal-header img {
   width: 24px;
   height: 24px;
@@ -193,6 +192,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  width: 100%;
   margin: 0px;
   margin-left: 10px;
   padding: 0px;

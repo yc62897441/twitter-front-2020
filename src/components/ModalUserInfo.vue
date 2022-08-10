@@ -259,7 +259,7 @@ export default {
 }
 
 .user-info-form :nth-child(3) {
-  margin-top: 190px;
+  margin-top: 246px;
 }
 
 .user-info-form-row textarea {

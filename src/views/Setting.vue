@@ -6,28 +6,28 @@
     <div class="middle-container">
       <h1>帳戶設定</h1>
       <div class="setting-form-wrapper">
-        <form @submit.prevent.stop="handleSubmit">
-          <div class="form-row">
+        <form @submit.prevent.stop="handleSubmit" class="setting-form">
+          <div class="form-row setting-form-row">
             <input v-model="user.account" style="background-color:#F5F8FA;" type="text" class="form-control"
               id="signUpInputAccount" aria-describedby="accountHelp" placeholder="帳號" name="account" required autofocus>
           </div>
-          <div class="form-row">
+          <div class="form-row setting-form-row">
             <input v-model="user.name" style="background-color:#F5F8FA;" type="text" class="form-control"
               id="signUpInputName" aria-describedby="nameHelp" placeholder="名稱" name="name" required>
           </div>
-          <div class="form-row">
+          <div class="form-row setting-form-row">
             <input v-model="user.email" style="background-color:#F5F8FA;" type="email" class="form-control"
               id="signUpInputEmail" aria-describedby="emailHelp" placeholder="email" name="email" required>
           </div>
-          <div class="form-row">
+          <div class="form-row setting-form-row">
             <input v-model="user.password" style="background-color:#F5F8FA;" type="password" class="form-control"
               id="signUpInputPassword" placeholder="密碼" name="password">
           </div>
-          <div class="form-row">
+          <div class="form-row setting-form-row">
             <input v-model="user.checkPassword" style="background-color:#F5F8FA;" type="password" class="form-control"
               id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword">
           </div>
-          <button type="submit" class="btn btn-orange" v-bind:disabled="isProcessing">儲存</button>
+          <button type="submit" class="btn setting-form-btn btn-orange" v-bind:disabled="isProcessing">儲存</button>
         </form>
       </div>
     </div>
@@ -114,45 +114,54 @@ export default {
 </script>
 
 <style>
-.container {
-  display: flex;
-  flex-direction: row;
-  padding: 0px;
-  align-items: flex-start;
-}
-
-.middle-container {
-  width: 600px;
-  margin-left: 240px;
-  margin-right: 30px;
-  border-left: 1px solid #E6ECF0;
-  border-right: 1px solid #E6ECF0;
-}
-
 .setting-form-wrapper {
   padding: 15px;
+  border-top: 1px solid #E6ECF0;
 }
 
-.setting-form-wrapper form {
+.setting-form {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-}
-
-.setting-form-wrapper form div {
   width: 100%;
 }
 
-.setting-form-wrapper form input {
-  margin: 32px 0px 0px;
+.setting-form-row {
+  position: relative;
+  width: 100%;
 }
 
-.setting-form-wrapper form :nth-child(1) input {
+.setting-form-row::after {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 2px;
+  content: '';
+  background: #657786;
+  border-radius: 0px 0px 4px 4px;
+}
+
+.setting-form-row input {
+  height: 52px;
+  margin: 32px 0px 0px;
+  border-radius: 4px 4px 0px 0px;
+  /* background-color: inline-style-setting; */
+}
+
+.setting-form :nth-child(1) input {
   margin: 0px 0px;
 }
 
-.setting-form-wrapper .btn-orange {
+.setting-form-btn {
   width: 116px;
   height: 46px;
+  background: #FF6600;
+  color: #FFFFFF;
+  border-radius: 50px;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
 }
 </style>
