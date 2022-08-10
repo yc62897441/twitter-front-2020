@@ -4,7 +4,7 @@
       <div class="sign-logo-wrapper">
         <img src="../assets/alpha_camp_logo.png" alt="">
       </div>
-      <div class="sign-title">登入 Alphitter</div>
+      <div class="sign-title">登入Alphitter</div>
       <form @submit.prevent.stop="handleSubmit" class="sign-form">
         <div class="form-row sign-form-row mb-3">
           <!-- <label for="signInInputEmail" class="form-label">Email address</label> -->
@@ -18,7 +18,9 @@
         </div>
         <button type="submit" class="btn sign-btn btn-orange" v-bind:disabled="isProcessing">登入</button>
         <div class="sign-form-footer">
-          <router-link to="/signup">註冊 Alphitter</router-link> · <router-link to="/admin/signin">後臺登入</router-link>
+          <router-link to="/signup">註冊Alphitter</router-link>
+          <p>·</p>
+          <router-link to="/admin/signin">後臺登入</router-link>
         </div>
       </form>
     </div>
@@ -83,84 +85,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.sign-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  padding-top: 65px;
-}
-
-.sign-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 600px;
-}
-
-.sign-logo-wrapper img {
-  width: 40px;
-  height: 40px;
-}
-
-.sign-title {
-  padding-top: 25px;
-  font-weight: 700;
-  font-size: 23px;
-  line-height: 33px;
-  color: #1C1C1C;
-}
-
-.sign-form {
-  width: 100%;
-  max-width: 540px;
-  padding-top: 40px;
-}
-
-.sign-form-row {
-  position: relative;
-}
-
-.sign-form-row::after {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  height: 2px;
-  content: '';
-  background: #657786;
-  border-radius: 0px 0px 4px 4px;
-}
-
-.sign-form input {
-  height: 52px;
-  margin-bottom: 32px;
-  /* background-color: inline-style-setting; */
-  border-radius: 0px 0px 4px 4px;
-}
-
-.sign-btn {
-  border-radius: 50px;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 26px;
-  color: #FFFFFF;
-}
-
-.sign-form-footer {
-  display: flex;
-  justify-content: end;
-  height: 26px;
-  margin-top: 26px;
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 26px;
-  text-align: right;
-  text-decoration-line: underline;
-  color: #0099FF;
-}
-</style>
