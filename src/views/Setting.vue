@@ -74,7 +74,7 @@ export default {
     },
     async handleSubmit() {
       try {
-        if (!this.name || !this.email || !this.account) {
+        if (!this.user.name || !this.user.email || !this.user.account) {
           Toast.fire({
             icon: 'warning',
             title: 'Name、Email、Account 不可為空白'
@@ -99,16 +99,21 @@ export default {
           password: this.user.password,
           checkPassword: this.user.checkPassword
         }
-        const { data } = await usersAPI.putUser({ userId, formData })
+        const response = await usersAPI.putUser({ userId, formData })
+        // 根據後端回傳，此時的 data 是更新後的 user 物件
+        const data = response.data
 
         // 伺服器回傳錯誤
-        if (data.status !== 'success') {
+        if (response.status !== 200) {
           throw new Error()
         }
 
         this.user = {
           ...data,
         }
+        this.$store.dispatch('afterPutUserInfo', {
+          ...data,
+        })
         this.isProcessing = false
         this.user.password = ''
         this.user.checkPassword = ''
