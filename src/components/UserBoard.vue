@@ -79,6 +79,9 @@ export default {
         ...this.user,
         ...payload,
       }
+      this.$emit('after-put-userInfo', {
+        ...payload,
+      } )
     },
     async postFollowship(followingId) {
       try {

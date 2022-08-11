@@ -16,7 +16,7 @@
           <h3>{{ user.repliesLength }}則推文</h3>
         </div>
       </div>
-      <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" />
+      <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" v-on:after-put-userInfo="afterPutUserInfo" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
@@ -150,6 +150,21 @@ export default {
         icon: 'success',
         title: '推文發送成功'
       })
+    },
+    afterPutUserInfo(payload) {
+      // 更新畫面上的 tweets、replies、likes、user name
+      this.tweets.forEach(tweet => {
+        tweet.User.name = payload.name
+      })
+      this.replies.forEach(reply => {
+        reply.User.name = payload.name
+      })
+      this.likes.forEach(like => {
+        if (like.Tweet.User.id === this.currentUser.id) {
+          like.Tweet.User.name = payload.name
+        }
+      })
+      this.user.name = payload.name
     },
   },
   computed: {

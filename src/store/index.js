@@ -54,7 +54,10 @@ export default new Vuex.Store({
         console.warn(error)
         return false
       }
-    }
+    },
+    afterPutUserInfo(context, status) {
+      context.commit('setCurrentUser', status) 
+    },
   },
   modules: {
   }

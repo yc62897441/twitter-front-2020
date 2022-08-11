@@ -127,6 +127,10 @@ export default {
         this.$emit('after-put-userInfo', {
           ...emitData,
         })
+        // 回傳到 vuex，更新 currentUser 的資訊
+        this.$store.dispatch('afterPutUserInfo', {
+          ...emitData,
+        })
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
