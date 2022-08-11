@@ -104,7 +104,7 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
-        this.userFollowingIds.push(followingId)
+        this.currentUser.Followings.push(followingId)
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -119,9 +119,9 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
-        this.userFollowingIds = this.userFollowingIds.map(userFollowingId => {
-          if (userFollowingId !== followingId) {
-            return userFollowingId
+        this.currentUser.Followings = this.currentUser.Followings.map(followings => {
+          if (followings !== followingId) {
+            return followings
           }
         })
         this.isProcessing = false
