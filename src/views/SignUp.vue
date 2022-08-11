@@ -75,7 +75,7 @@ export default {
 
         Toast.fire({
           icon: 'warning',
-          title: 'isProcessing'
+          title: '正在處理註冊流程，請稍後'
         })
         this.isProcessing = true
 
@@ -107,6 +107,11 @@ export default {
         let title = '註冊失敗，請稍後再試'
         if (error.response.data.message) {
           title = error.response.data.message
+        } else if (error.response.data.errorMessages.length > 0) {
+          title = ''
+          error.response.data.errorMessages.forEach(errorMessage => {
+            title += `${errorMessage}\n`
+          })
         }
         Toast.fire({
           icon: 'error',
