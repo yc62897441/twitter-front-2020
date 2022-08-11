@@ -60,7 +60,7 @@ export default {
 
         // 伺服器回傳登入驗證錯誤
         if (data.status !== 'success') {
-          throw new Error(data.message)
+          throw new Error()
         }
 
         // 登入驗證成功
@@ -75,11 +75,14 @@ export default {
       } catch (error) {
         this.isProcessing = false
         this.password = ''
+        let title = '請確認您輸入了正確的帳號密碼'
+        if (error.response.data.message) {
+          title = error.response.data.message
+        }
         Toast.fire({
           icon: 'warning',
-          title: '請確認您輸入了正確的帳號密碼'
+          title: title
         })
-        console.warn('error', error)
       }
     }
   }

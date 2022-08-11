@@ -50,6 +50,7 @@
 
 <script>
 import usersAPI from '../api/users'
+import { Toast } from '../utils/helpers'
 
 export default {
   props: {
@@ -69,6 +70,16 @@ export default {
   methods: {
     async handleSubmit(e) {
       try {
+        // user name 不可為空白，空白則跳出函式
+        if (!this.userNewInfo.name) {
+          Toast.fire({
+            icon: 'warning',
+            title: 'Name 不可為空白'
+          })
+          this.userNewInfo.name = this.propsUser.name
+          return
+        }
+
         // 建立 formData()
         let formData = new FormData()
 
@@ -79,9 +90,6 @@ export default {
         // 如果 userNewInfo.name、userNewInfo.introduction 不是空白，則加入 formData
         if (this.userNewInfo.name) {
           formData.append('name', this.userNewInfo.name)
-        } else {
-          // user.name 不可為空白，空白則中斷函式
-          return
         }
         if (this.userNewInfo.introduction) {
           formData.append('introduction', this.userNewInfo.introduction)
@@ -92,7 +100,6 @@ export default {
 
         // 錯誤，跳到錯誤處理
         if (response.data.status !== 'success') {
-          console.log('error message:', response.data.message)
           throw new Error()
         }
 
@@ -123,7 +130,15 @@ export default {
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
-        console.warn(error)
+        let title = '更新失敗，請稍後再試'
+        // 如果後端有提供錯誤訊息，以後端為主
+        if (error.response.data.message) {
+          title = error.response.data.message
+        }
+        Toast.fire({
+          icon: 'error',
+          title: title
+        })
       }
     },
     handleFileChange(event) {

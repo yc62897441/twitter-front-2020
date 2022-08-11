@@ -90,12 +90,12 @@ export default {
 
         // 伺服器回傳登入驗證錯誤
         if (data.status !== 'success') {
-          throw new Error(data.message)
+          throw new Error()
         }
 
         Toast.fire({
           icon: 'success',
-          title: data.message || '註冊成功'
+          title: '註冊成功'
         })
 
         // 跳轉頁面，導入登入頁面
@@ -104,11 +104,14 @@ export default {
         this.isProcessing = false
         this.password = ''
         this.checkPassword = ''
+        let title = '註冊失敗，請稍後再試'
+        if (error.response.data.message) {
+          title = error.response.data.message
+        }
         Toast.fire({
           icon: 'error',
-          title: error || '註冊失敗，請稍後再試'
+          title: title
         })
-        console.warn('error', error)
       }
     }
   }

@@ -74,6 +74,13 @@ export default {
     },
     async handleSubmit() {
       try {
+        if (!this.name || !this.email || !this.account) {
+          Toast.fire({
+            icon: 'warning',
+            title: 'Name、Email、Account 不可為空白'
+          })
+          return
+        }
         if (this.user.password !== this.user.checkPassword) {
           this.user.password = ''
           this.user.checkPassword = ''
@@ -93,6 +100,12 @@ export default {
           checkPassword: this.user.checkPassword
         }
         const { data } = await usersAPI.putUser({ userId, formData })
+
+        // 伺服器回傳錯誤
+        if (data.status !== 'success') {
+          throw new Error()
+        }
+
         this.user = {
           ...data,
         }
@@ -101,7 +114,15 @@ export default {
         this.user.checkPassword = ''
       } catch (error) {
         this.isProcessing = false
-        console.warn(error)
+        let title = '更新失敗，請稍後再試'
+        // 如果後端有提供錯誤訊息，以後端為主
+        if (error.response.data.message) {
+          title = error.response.data.message
+        }
+        Toast.fire({
+          icon: 'error',
+          title: title
+        })
       }
     }
   },
