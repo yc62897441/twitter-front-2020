@@ -85,9 +85,12 @@ export default {
         // 建立 formData()
         let formData = new FormData()
 
-        // formData 加入 avatar、banner檔案。如果沒有傳入檔案，會是空字串，但不影響流程
+        // formData 加入 avatar、banner檔案，傳回後端會是 req.body.files(陣列，裡面每個物件都是一張圖)。如果沒有傳入檔案，會是空字串，但不影響流程
+        // 如果使用者 cancel banner，此時 this.banner 會是 default banner URL 字串型態，傳回後端會是 req.body.banner
         if (typeof this.banner === 'object') {
           formData.append("files", this.banner)
+        } else if (typeof this.banner === 'string') {
+          formData.append('banner', this.banner)
         }
         formData.append("files", this.avatar)
 
