@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="user-info-modal-header">
           <div class="user-info-modal-header-left-wrapper">
-            <img src="../assets/icon-close.png" alt="" type="button" data-bs-dismiss="modal" aria-label="Close">
+            <img src="../assets/icon-close.png" alt="" type="button" data-bs-dismiss="modal" aria-label="Close" v-on:click="cancelEdit">
             <div>編輯個人檔案</div>
           </div>
           <div class="user-info-modal-header-right-wrapper">
@@ -21,7 +21,8 @@
                 <label for="userNewBanner">
                   <img class="user-info-icon" type="button" src="../assets/icon-photo.png" alt="">
                 </label>
-                <img class="user-info-icon" type="button" src="../assets/icon-close(white).png" alt="">
+                <img class="user-info-icon" type="button" src="../assets/icon-close(white).png"
+                  v-on:click="removeBanner" alt="">
               </div>
             </div>
             <div class="user-info-form-avatar-wrapper">
@@ -65,6 +66,7 @@ export default {
       userNewInfo: {},
       banner: '',
       avatar: '',
+      userOriginalInfo: {},
     }
   },
   methods: {
@@ -84,7 +86,9 @@ export default {
         let formData = new FormData()
 
         // formData 加入 avatar、banner檔案。如果沒有傳入檔案，會是空字串，但不影響流程
-        formData.append("files", this.banner)
+        if (typeof this.banner === 'object') {
+          formData.append("files", this.banner)
+        }
         formData.append("files", this.avatar)
 
         // 如果 userNewInfo.name、userNewInfo.introduction 不是空白，則加入 formData
@@ -122,6 +126,9 @@ export default {
             }
           })
         }
+        if (typeof this.banner === 'string') {
+          emitData.banner = this.banner
+        }
 
         // 回傳到父層，更新 UserBoard.vue 的資訊
         this.$emit('after-put-userInfo', {
@@ -156,6 +163,16 @@ export default {
         this.banner = new File([event.target.files[0]], 'banner')
       }
     },
+    removeBanner() { 
+      const defaultBannerURL = 'https://i.imgur.com/wjSOQDI.png'
+      this.banner = defaultBannerURL
+      this.userNewInfo.banner = defaultBannerURL
+    },
+    cancelEdit() {
+      this.userNewInfo.name = this.userOriginalInfo.name
+      this.userNewInfo.introduction = this.userOriginalInfo.introduction
+      this.userNewInfo.banner = this.userOriginalInfo.banner
+    }
   },
   // 自動監控某些屬性，可以帶入兩個值 initialRestaurant(newValue, oldValue)
   // 如果屬性的內容有變更時，就可以去做一些事
@@ -165,11 +182,17 @@ export default {
         ...this.userNewInfo,
         ...newValue
       }
+      this.userOriginalInfo = {
+        ...newValue
+      }
     }
   },
   created() {
     this.userNewInfo = {
       ...this.userNewInfo,
+      ...this.propsUser
+    }
+    this.userOriginalInfo = {
       ...this.propsUser
     }
   }
