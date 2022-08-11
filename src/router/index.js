@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NotFound from '../views/NotFound.vue'
 import store from '../store/index'
+import { Toast } from '../utils/helpers'
 
 Vue.use(VueRouter)
 
@@ -97,6 +98,10 @@ router.beforeEach(async (to, from, next) => {
 
   // 如果 isAuthenticated 為 false，且進入需要驗證的頁面，則轉址到登入頁
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
+    Toast.fire({
+      icon: 'error',
+      title: '無法存取該頁面，請先登入'
+    })
     next('/signin')
     return
   }
