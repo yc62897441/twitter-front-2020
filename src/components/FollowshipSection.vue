@@ -62,6 +62,7 @@
 
 <script>
 import followshipAPI from '../api/followships'
+import eventBus from "../utils/eventBus"
 
 export default {
   props: {
@@ -173,6 +174,28 @@ export default {
         this.isProcessing = false
         console.warn(error)
       }
+    },
+    getFromBrotherFollowingBar() {
+      eventBus.$on("emit-data", (param) => {
+        if (param.method === 'post') {
+          // 更新前端畫面
+          // 如果在 currentUser 在 FollowingBar post/delete Followship，在要 currentUser 的 FollowshipSection 的 userFollowings(正在跟隨) 畫面上，增減 userFollowingsInData 的筆數
+          let newUserFollowing = {
+            ...param.data,
+          }
+
+          // 確認 newUserFollowing 不在 userFollowingsInData 中，才新增，避免有資料筆數重複
+          let isNewUserFollowingAlreadyInuserFollowingsInData = false
+          this.userFollowingsInData.forEach(item => {
+            if (item.followingUser.id === newUserFollowing.followingUser.id) {
+              isNewUserFollowingAlreadyInuserFollowingsInData = true
+            }
+          })
+          if (!isNewUserFollowingAlreadyInuserFollowingsInData) {
+            this.userFollowingsInData.unshift(newUserFollowing)
+          }
+        }
+      })
     }
   },
   watch: {
@@ -182,6 +205,9 @@ export default {
         this.userFollowingsInData = newValue.map(item => item)
       }
     },
+  },
+  created: function () {
+    this.getFromBrotherFollowingBar()
   },
 }
 </script>

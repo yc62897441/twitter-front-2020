@@ -25,6 +25,7 @@
 
 <script>
 import followshipAPI from '../api/followships'
+import eventBus from "../utils/eventBus"
 
 export default {
   props: {
@@ -63,6 +64,23 @@ export default {
         }
         // 更新前端畫面
         this.currentUser.Followings.push(followingId)
+
+        // 更新前端畫面
+        // 如果在 currentUser 的 Followship 畫面，使用者 post/delete Followship 後，要在 FollowshipSection 的 userFollowings(正在跟隨) 畫面上增加 userFollowingsInData 的筆數。(不需要做減少的功能，已經有做連動切換 "跟隨/正在跟隨" button 樣式 的功能，可供使用者判斷；保留該筆資料，如使用者不小心 delete Followship 時，還可以再點追蹤 button post Followship)
+        if (Number(this.$route.params.id) === this.currentUser.id && this.$route.name === 'userFollowship') {
+          let newUserFollowing = {}
+          this.recommendedFollowings.forEach(recommendedFollowing => {
+            if (recommendedFollowing.id === followingId) {
+              newUserFollowing = {
+                followingUser: {
+                  ...recommendedFollowing,
+                }
+              }
+            }
+          })
+          this.dataToBrotherFollowshipSection('post', newUserFollowing)
+        }
+
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -88,6 +106,12 @@ export default {
         this.isProcessing = false
         console.warn(error)
       }
+    },
+    dataToBrotherFollowshipSection(method, data) {
+      eventBus.$emit("emit-data", {
+        method: method,
+        data: data
+      });
     }
   },
   created() {
