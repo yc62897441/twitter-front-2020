@@ -6,12 +6,12 @@
           <img v-bind:src="tweet.User.avatar" alt="">
         </router-link>
       </div>
-      <div class="user-info-wrapper">
+      <div class="tweet-user-info-wrapper">
         <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
-          <div class="user-info-name">{{ tweet.User.name }}</div>
+          <div class="tweet-user-info-name">{{ tweet.User.name }}</div>
         </router-link>
         <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
-          <div class="user-info-account">@{{ tweet.User.account }}</div>
+          <div class="tweet-user-info-account">@{{ tweet.User.account }}</div>
         </router-link>
       </div>
     </div>
@@ -167,18 +167,18 @@ export default {
   border-radius: 50%;
 }
 
-.user-info-wrapper {
+.tweet-user-info-wrapper {
   margin-left: 10px;
 }
 
-.user-info-name {
+.tweet-user-info-name {
   font-weight: 700;
   font-size: 15px;
   line-height: 22px;
   color: #1C1C1C;
 }
 
-.user-info-account {
+.tweet-user-info-account {
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;

@@ -37,13 +37,13 @@
               </div>
             </div>
           </div>
-          <div class="modal-new-tweet-wrapper">
-            <div class="modal-new-tweet-wrapper-left">
+          <div class="modal-tweet-reply-wrapper">
+            <div class="modal-tweet-reply-wrapper-left">
               <router-link class="link" v-bind:to="'/users/' + currentUser.id">
                 <img v-bind:src="currentUser.avatar" alt="" type="button" data-bs-dismiss="modal" aria-label="Close">
               </router-link>
             </div>
-            <form class="modal-new-tweet-wrapper-right">
+            <form class="modal-tweet-reply-wrapper-right">
               <textarea cols="30" rows="5" placeholder="推你的回覆" v-model="newTweetReply" name="newTweetReply"
                 required></textarea>
             </form>
@@ -106,6 +106,7 @@ export default {
 </script>
 
 <style>
+
 .modal-header img {
   width: 24px;
   height: 24px;
@@ -189,19 +190,19 @@ export default {
   color: #FF6600;
 }
 
-.modal-new-tweet-wrapper {
+.modal-tweet-reply-wrapper {
   display: flex;
-  padding: 0px 15px;
+  padding: 15px;
 }
 
-.modal-new-tweet-wrapper-left img {
+.modal-tweet-reply-wrapper-left img {
   width: 50px;
   height: 50px;
   object-fit: cover;
   border-radius: 50%;
 }
 
-.modal-new-tweet-wrapper-right {
+.modal-tweet-reply-wrapper-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -211,11 +212,11 @@ export default {
   padding: 0px;
 }
 
-.modal-new-tweet-wrapper-right input::placeholder {
+.modal-tweet-reply-wrapper-right input::placeholder {
   color: #9197A3;
 }
 
-.modal-new-tweet-wrapper-right textarea {
+.modal-tweet-reply-wrapper-right textarea {
   width: 100%;
   margin: 0px;
   padding: 0px;
@@ -226,8 +227,8 @@ export default {
   resize: none;
 }
 
-.modal-new-tweet-wrapper-right textarea:focus,
-.modal-new-tweet-wrapper-right textarea:focus-visible {
+.modal-tweet-reply-wrapper-right textarea:focus,
+.modal-tweet-reply-wrapper-right textarea:focus-visible {
   width: 100%;
   margin: 0px;
   padding: 0px;
