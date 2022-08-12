@@ -61,6 +61,7 @@
 <script>
 import tweetsAPI from '../api/tweets'
 import { fromNowFilter } from '../utils/mixins'
+import { Toast } from '../utils/helpers'
 
 export default {
   props: {
@@ -81,7 +82,11 @@ export default {
   methods: {
     async handleSubmit(tweetId) {
       try {
-        if (this.newTweetReply === '') {
+        if (this.newTweetReply.trim() === '') {
+          Toast.fire({
+            icon: 'warning',
+            title: '回覆內容不可為空白'
+          })
           return
         }
         this.isProcessing = true

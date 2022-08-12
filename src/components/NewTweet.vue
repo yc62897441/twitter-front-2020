@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { Toast } from '../utils/helpers'
+
 export default {
   props: {
     isProcessing: {
@@ -32,6 +34,13 @@ export default {
   },
   methods: {
     handleSubmit() {
+      if (!this.newTweetDescription.trim()) {
+        Toast.fire({
+          icon: 'warning',
+          title: '推文內容不可為空白'
+        })
+        return
+      }
       this.$emit('after-create-tweet', {
         UserId: this.currentUser.id,
         description: this.newTweetDescription,
