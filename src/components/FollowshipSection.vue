@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="show === 'userFollowings'">
-      <div v-for="userFollowing in userFollowings" v-bind:key="userFollowing.followingUser.id"
+      <div v-for="userFollowing in userFollowingsInData" v-bind:key="userFollowing.followingUser.id"
         class="followship-user-wrapper">
         <div class="followship-user-avatar-wrapper">
           <img v-bind:src="userFollowing.followingUser.avatar" alt="">
@@ -88,6 +88,8 @@ export default {
       isProcessing: false,
       currentUserId: 1,
       userFollowingIds: [],
+      // 因為 userFollowings 內的筆數，會因為使用者操作 post/delete Followship 後而增減，且更新 userFollowings(正在跟隨) 畫面上的筆數，故從 prop 拉資料到 data 以利作業
+      userFollowingsInData: [],
     }
   },
   methods: {
@@ -104,7 +106,35 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
+        // 切換 跟隨/正在跟隨 button 
         this.currentUser.Followings.push(followingId)
+
+        // 更新前端畫面
+        // 如果在 currentUser 的 FollowshipSection 的 userFollowers(跟隨者) 畫面，則在使用者 post/delete Followship 後要增減 userFollowings(正在跟隨) 畫面上 userFollowingsInData 的筆數
+        if (Number(this.$route.params.id) === this.currentUser.id && this.show === 'userFollowers') {
+          let newUserFollowing = {}
+          this.userFollowers.forEach(userFollower => {
+            if (userFollower.followerUser.id === followingId) {
+              newUserFollowing = {
+                followingUser: {
+                  ...userFollower.followerUser,
+                }
+              }
+            }
+          })
+
+          // 確認 newUserFollowing 不在 userFollowingsInData 中，才新增，避免有資料筆數重複
+          let isNewUserFollowingAlreadyInuserFollowingsInData = false
+          this.userFollowingsInData.forEach(item => {
+            if (item.followingUser.id === newUserFollowing.followingUser.id) {
+              isNewUserFollowingAlreadyInuserFollowingsInData = true
+            }
+          })
+          if (!isNewUserFollowingAlreadyInuserFollowingsInData) {
+            this.userFollowingsInData.unshift(newUserFollowing)
+          }
+        }
+
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -119,11 +149,25 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
+        // 切換 跟隨/正在跟隨 button 
         this.currentUser.Followings = this.currentUser.Followings.map(followings => {
           if (followings !== followingId) {
             return followings
           }
         })
+
+        // 更新前端畫面
+        // 如果在 currentUser 的 FollowshipSection 的 userFollowers(跟隨者) 畫面，則在使用者 post/delete Followship 後要增減 userFollowings(正在跟隨) 畫面上 userFollowingsInData 的筆數
+        if (Number(this.$route.params.id) === this.currentUser.id && this.show === 'userFollowers') {
+          const temUserFollowings = []
+          this.userFollowings.forEach(userFollowing => {
+            if (userFollowing.followingUser.id !== followingId) {
+              temUserFollowings.push(userFollowing)
+            }
+          })
+          this.userFollowingsInData = temUserFollowings
+        }
+
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -134,6 +178,9 @@ export default {
   watch: {
     userFollowings(newValue) {
       this.userFollowingIds = newValue.map(item => item.followingUser.id)
+      if (Number(this.$route.params.id) === this.currentUser.id) {
+        this.userFollowingsInData = newValue.map(item => item)
+      }
     },
   },
 }
