@@ -9,8 +9,12 @@
           </router-link>
         </div>
         <div class="info-wrapper">
-          <div class="info-wrapper-name">{{ recommendedFollowing.name }}</div>
-          <div class="info-wrapper-account">@{{ recommendedFollowing.account }}</div>
+          <router-link class="link" v-bind:to="'/users/' + recommendedFollowing.id">
+            <div class="info-wrapper-name">{{ recommendedFollowing.name }}</div>
+          </router-link>
+          <router-link class="link" v-bind:to="'/users/' + recommendedFollowing.id">
+            <div class="info-wrapper-account">@{{ recommendedFollowing.account }}</div>
+          </router-link>
         </div>
       </div>
       <div class="follow-btn-wrapper">
@@ -121,6 +125,7 @@ export default {
 </script>
 
 <style>
+
 .followingsBar-wrapper {
   position: fixed;
   display: flex;
@@ -198,7 +203,8 @@ export default {
 
 .follow-btn-wrapper .btn {
   position: absolute;
-  top: 0px;
+  top: 50%;
+  transform: translateY(-50%);
   right: 15px;
   height: 35px;
   width: 60px;

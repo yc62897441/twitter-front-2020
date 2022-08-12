@@ -22,9 +22,11 @@
             <p>@{{ reply.Tweet.User.account }}</p>
           </router-link>
         </div>
-        <div class="reply-description">
-          {{ reply.comment }}
-        </div>
+        <router-link class="link" v-bind:to="'/tweets/' + reply.Tweet.id">
+          <div class="reply-description">
+            {{ reply.comment }}
+          </div>
+        </router-link>
       </div>
     </div>
   </div>

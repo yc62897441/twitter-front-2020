@@ -4,13 +4,19 @@
       <div v-for="userFollowing in userFollowingsInData" v-bind:key="userFollowing.followingUser.id"
         class="followship-user-wrapper">
         <div class="followship-user-avatar-wrapper">
-          <img v-bind:src="userFollowing.followingUser.avatar" alt="">
+          <router-link class="link" v-bind:to="'/users/' + userFollowing.followingUser.id">
+            <img v-bind:src="userFollowing.followingUser.avatar" alt="">
+          </router-link>
         </div>
         <div class="followship-user-main-wrapper">
           <div class="followship-user-main-wrapper-top">
             <div class="followship-user-main-wrapper-top-left">
-              <div class="followship-user-name">{{ userFollowing.followingUser.name }}</div>
-              <div class="followship-user-account">@{{ userFollowing.followingUser.account }}</div>
+              <router-link class="link" v-bind:to="'/users/' + userFollowing.followingUser.id">
+                <div class="followship-user-name">{{ userFollowing.followingUser.name }}</div>
+              </router-link>
+              <router-link class="link" v-bind:to="'/users/' + userFollowing.followingUser.id">
+                <div class="followship-user-account">@{{ userFollowing.followingUser.account }}</div>
+              </router-link>
             </div>
             <div class="followship-user-main-wrapper-top-right followship-btn-wrapper"
               v-if="Number(userFollowing.followingUser.id) !== Number(currentUser.id)">
@@ -33,13 +39,19 @@
       <div v-for="userFollower in userFollowers" v-bind:key="userFollower.followerUser.id"
         class="followship-user-wrapper">
         <div class="followship-user-avatar-wrapper">
-          <img v-bind:src="userFollower.followerUser.avatar" alt="">
+          <router-link class="link" v-bind:to="'/users/' + userFollower.followerUser.id">
+            <img v-bind:src="userFollower.followerUser.avatar" alt="">
+          </router-link>
         </div>
         <div class="followship-user-main-wrapper">
           <div class="followship-user-main-wrapper-top">
             <div class="followship-user-main-wrapper-top-left">
-              <div class="followship-user-name">{{ userFollower.followerUser.name }}</div>
-              <div class="followship-user-account">@{{ userFollower.followerUser.account }}</div>
+              <router-link class="link" v-bind:to="'/users/' + userFollower.followerUser.id">
+                <div class="followship-user-name">{{ userFollower.followerUser.name }}</div>
+              </router-link>
+              <router-link class="link" v-bind:to="'/users/' + userFollower.followerUser.id">
+                <div class="followship-user-account">@{{ userFollower.followerUser.account }}</div>
+              </router-link>
             </div>
             <div class="followship-user-main-wrapper-top-right followship-btn-wrapper"
               v-if="Number(userFollower.followerUser.id) !== Number(currentUser.id)">

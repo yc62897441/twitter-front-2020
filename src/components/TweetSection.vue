@@ -2,11 +2,17 @@
   <div id="tweet-wrapper">
     <div class="tweet-user-info-layer">
       <div>
-        <img v-bind:src="tweet.User.avatar" alt="">
+        <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+          <img v-bind:src="tweet.User.avatar" alt="">
+        </router-link>
       </div>
       <div class="user-info-wrapper">
-        <div class="user-info-name">{{ tweet.User.name }}</div>
-        <div class="user-info-account">@{{ tweet.User.account }}</div>
+        <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+          <div class="user-info-name">{{ tweet.User.name }}</div>
+        </router-link>
+        <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+          <div class="user-info-account">@{{ tweet.User.account }}</div>
+        </router-link>
       </div>
     </div>
 

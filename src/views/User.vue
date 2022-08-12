@@ -7,9 +7,7 @@
     <div class="middle-container">
       <div class="middle-container-wrapper">
         <div class="middle-container-arrow-wrapper">
-          <router-link to="/tweets">
-            <img src="../assets/arrow-left.png" alt="">
-          </router-link>
+          <img src="../assets/arrow-left.png" type="button" v-on:click="hasHistory" alt="">
         </div>
         <div class="middle-container-page-title-wrapper">
           <h1>{{ user.name }}</h1>
@@ -165,6 +163,9 @@ export default {
         }
       })
       this.user.name = payload.name
+    },
+    hasHistory() {
+      this.$router.go(-1)
     },
   },
   computed: {

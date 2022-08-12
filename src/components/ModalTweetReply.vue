@@ -9,26 +9,39 @@
         <div class="modal-body">
           <div class="modal-tweet-wrapper">
             <div class="modal-tweet-wrapper-left">
-              <img v-bind:src="tweet.User.avatar" alt="">
+              <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+                <img v-bind:src="tweet.User.avatar" alt="" type="button" data-bs-dismiss="modal" aria-label="Close">
+              </router-link>
               <span></span>
             </div>
             <div class="modal-tweet-wrapper-right">
               <div class="modal-tweet-info">
-                <div class="modal-tweet-info-name"> {{ tweet.User.name }}</div>
-                <div class="modal-tweet-info-account"> @{{ tweet.User.account }} </div>
+                <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+                  <div class="modal-tweet-info-name" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    {{ tweet.User.name }}</div>
+                </router-link>
+                <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+                  <div class="modal-tweet-info-account" type="button" data-bs-dismiss="modal" aria-label="Close">
+                    @{{ tweet.User.account }} </div>
+                </router-link>
                 <div class="modal-tweet-info-data">・{{ tweet.createdAt | fromNow }}</div>
               </div>
               <div class="modal-tweet-description">
                 {{ tweet.description }}
               </div>
               <div class="modal-reply-to">
-                回覆給<p>@{{ tweet.User.account }}</p>
+                回覆給
+                <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
+                  <p type="button" data-bs-dismiss="modal" aria-label="Close">@{{ tweet.User.account }}</p>
+                </router-link>
               </div>
             </div>
           </div>
           <div class="modal-new-tweet-wrapper">
             <div class="modal-new-tweet-wrapper-left">
-              <img v-bind:src="currentUser.avatar" alt="">
+              <router-link class="link" v-bind:to="'/users/' + currentUser.id">
+                <img v-bind:src="currentUser.avatar" alt="" type="button" data-bs-dismiss="modal" aria-label="Close">
+              </router-link>
             </div>
             <form class="modal-new-tweet-wrapper-right">
               <textarea cols="30" rows="5" placeholder="推你的回覆" v-model="newTweetReply" name="newTweetReply"
@@ -163,7 +176,7 @@ export default {
 
 .modal-reply-to {
   display: flex;
-  margin-top: 4px;
+  margin-top: 20px;
   font-weight: 500;
   font-size: 15px;
   line-height: 22px;

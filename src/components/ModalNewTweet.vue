@@ -9,7 +9,9 @@
         <div class="modal-body">
           <div class="modal-new-tweet-wrapper">
             <div class="modal-new-tweet-wrapper-left">
-              <img v-bind:src="currentUser.avatar" alt="">
+              <router-link class="link" v-bind:to="'/users/' + currentUser.id">
+                <img v-bind:src="currentUser.avatar" alt="" type="button" data-bs-dismiss="modal" aria-label="Close">
+              </router-link>
             </div>
             <form class="modal-new-tweet-wrapper-right">
               <textarea cols="30" rows="5" placeholder="有什麼新鮮事？" v-model="newTweetDescription"
