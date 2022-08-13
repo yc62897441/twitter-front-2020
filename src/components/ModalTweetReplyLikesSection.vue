@@ -44,8 +44,8 @@
               </router-link>
             </div>
             <form class="modal-tweet-reply-wrapper-right">
-              <textarea cols="30" rows="5" placeholder="推你的回覆" v-model="newTweetReply" name="newTweetReply"
-                required></textarea>
+              <textarea cols="30" rows="5" maxlength="140" placeholder="推你的回覆" v-model="newTweetReply"
+                name="newTweetReply" required></textarea>
             </form>
           </div>
         </div>

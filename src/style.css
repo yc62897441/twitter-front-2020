@@ -75,3 +75,25 @@ html {
   margin: 0px;
   padding: 0px;
 }
+
+.textContent-span-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.textContent-span {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 15px;
+  margin: 7px 5px 0px;
+  color: #657786;
+}
+
+.textContent-span-warning {
+  color: #FC5A5A;
+}
+
+.textContent-span-hidden {
+  opacity: 0;
+}

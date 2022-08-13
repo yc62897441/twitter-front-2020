@@ -5,7 +5,8 @@
       <div class="modal-content">
         <div class="user-info-modal-header">
           <div class="user-info-modal-header-left-wrapper">
-            <img src="../assets/icon-close.png" alt="" type="button" data-bs-dismiss="modal" aria-label="Close" v-on:click="cancelEdit">
+            <img src="../assets/icon-close.png" alt="" type="button" data-bs-dismiss="modal" aria-label="Close"
+              v-on:click="cancelEdit">
             <div>編輯個人檔案</div>
           </div>
           <div class="user-info-modal-header-right-wrapper">
@@ -32,11 +33,12 @@
               </label>
             </div>
             <div class="form-row mb-3 user-info-form-row">
-              <input v-model="userNewInfo.name" style="background-color:#F5F8FA;" type="text" class="form-control"
-                placeholder="名稱" required>
+              <input v-model="userNewInfo.name" style="background-color:#F5F8FA;" type="text" maxlength="20"
+                class="form-control" placeholder="名稱" required>
             </div>
             <div class="form-row mb-3 user-info-form-row">
-              <textarea cols="30" rows="5" placeholder="自我介紹" v-model="userNewInfo.introduction"></textarea>
+              <textarea cols="30" rows="5" maxlength="140" placeholder="自我介紹"
+                v-model="userNewInfo.introduction"></textarea>
             </div>
           </form>
         </div>

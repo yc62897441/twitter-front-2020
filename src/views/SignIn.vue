@@ -8,13 +8,13 @@
       <form @submit.prevent.stop="handleSubmit" class="sign-form">
         <div class="form-row sign-form-row mb-3">
           <!-- <label for="signInInputEmail" class="form-label">Email address</label> -->
-          <input v-model="email" style="background-color:#F5F8FA;" type="email" class="form-control"
+          <input v-model="email" style="background-color:#F5F8FA;" type="email" maxlength="140" class="form-control"
             id="signInInputEmail" aria-describedby="emailHelp" placeholder="帳號" name="email" required autofocus>
         </div>
         <div class="form-row sign-form-row mb-3">
           <!-- <label for="signInInputPassword" class="form-label">Password</label> -->
-          <input v-model="password" style="background-color:#F5F8FA;" type="password" class="form-control"
-            id="signInInputPassword" placeholder="密碼" name="password" required>
+          <input v-model="password" style="background-color:#F5F8FA;" type="password" maxlength="20"
+            class="form-control" id="signInInputPassword" placeholder="密碼" name="password" required>
         </div>
         <button type="submit" class="btn sign-btn" v-bind:disabled="isProcessing">登入</button>
         <div class="sign-form-footer">

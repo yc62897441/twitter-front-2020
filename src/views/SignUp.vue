@@ -7,24 +7,24 @@
       <div class="sign-title">建立你的帳號</div>
       <form @submit.prevent.stop="handleSubmit" class="sign-form">
         <div class="form-row sign-form-row mb-3">
-          <input v-model="account" style="background-color:#F5F8FA;" type="text" class="form-control"
+          <input v-model="account" style="background-color:#F5F8FA;" type="text" maxlength="20" class="form-control"
             id="signUpInputAccount" aria-describedby="accountHelp" placeholder="帳號" name="account" required autofocus>
         </div>
         <div class="form-row sign-form-row mb-3">
-          <input v-model="name" style="background-color:#F5F8FA;" type="text" class="form-control" id="signUpInputName"
-            aria-describedby="nameHelp" placeholder="名稱" name="name" required>
+          <input v-model="name" style="background-color:#F5F8FA;" type="text" maxlength="20" class="form-control"
+            id="signUpInputName" aria-describedby="nameHelp" placeholder="名稱" name="name" required>
         </div>
         <div class="form-row sign-form-row mb-3">
-          <input v-model="email" style="background-color:#F5F8FA;" type="email" class="form-control"
+          <input v-model="email" style="background-color:#F5F8FA;" type="email" maxlength="140" class="form-control"
             id="signUpInputEmail" aria-describedby="emailHelp" placeholder="email" name="email" required>
         </div>
         <div class="form-row sign-form-row mb-3">
-          <input v-model="password" style="background-color:#F5F8FA;" type="password" class="form-control"
-            id="signUpInputPassword" placeholder="密碼" name="password" required>
+          <input v-model="password" style="background-color:#F5F8FA;" type="password" maxlength="20"
+            class="form-control" id="signUpInputPassword" placeholder="密碼" name="password" required>
         </div>
         <div class="form-row sign-form-row mb-3">
-          <input v-model="checkPassword" style="background-color:#F5F8FA;" type="password" class="form-control"
-            id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword" required>
+          <input v-model="checkPassword" style="background-color:#F5F8FA;" type="password" maxlength="20"
+            class="form-control" id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword" required>
         </div>
         <button type="submit" class="btn sign-btn" v-bind:disabled="isProcessing">註冊</button>
         <div class="sign-form-footer">
