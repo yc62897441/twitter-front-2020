@@ -44,14 +44,18 @@
               </router-link>
             </div>
             <form class="modal-tweet-reply-wrapper-right">
-              <textarea cols="30" rows="5" placeholder="推你的回覆" maxlength="140" v-model="newTweetReply"
-                name="newTweetReply" required></textarea>
+              <textarea v-bind:tweetId="tweet.id" cols="30" rows="5" placeholder="推你的回覆" maxlength="140"
+                v-model="newTweetReply" name="newTweetReply" v-on:keyup='words_deal' required></textarea>
             </form>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-orange btn-new-tweet" data-bs-dismiss="modal"
-            v-bind:disabled="isProcessing" @click.prevent.stop="handleSubmit(tweet.id)">回覆</button>
+          <div v-bind:id="'textContent-span-wrapper' + tweet.id" class="textContent-span-wrapper">
+            <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+            <span class="textContent-span textContent-span-hidden"></span>
+            <button type="button" class="btn btn-orange btn-new-tweet" data-bs-dismiss="modal"
+              v-bind:disabled="isProcessing" @click.prevent.stop="handleSubmit(tweet.id)">回覆</button>
+          </div>
         </div>
       </div>
     </div>
@@ -104,6 +108,29 @@ export default {
         this.isProcessing = false
         console.warn(error)
       }
+    },
+    words_deal(event) {
+      const maxlength = event.target.attributes.maxlength.value
+      const textlength = event.target.value.length
+      const textContentSpanWrapper = document.querySelector(`#textContent-span-wrapper${Number(event.target.attributes.tweetid.value)}`)
+
+      // 可輸入的字數剩餘 20 字以內時
+      if (maxlength - textlength <= 20) {
+        // 顯示"目前字數/字數上限" 如 120/140
+        textContentSpanWrapper.children[1].classList.remove('textContent-span-hidden')
+        textContentSpanWrapper.children[1].textContent = `${textlength}/${maxlength}`
+
+        // 目前字數>=字數上限時，顯示"字數已達上限"的提示
+        if (textlength >= maxlength) {
+          textContentSpanWrapper.children[0].classList.remove('textContent-span-hidden')
+        } else {
+          textContentSpanWrapper.children[0].classList.add('textContent-span-hidden')
+        }
+      } else {
+        textContentSpanWrapper.children[0].classList.add('textContent-span-hidden')
+        textContentSpanWrapper.children[1].classList.add('textContent-span-hidden')
+      }
+      return
     }
   },
   mixins: [fromNowFilter]
@@ -111,7 +138,6 @@ export default {
 </script>
 
 <style>
-
 .modal-header img {
   width: 24px;
   height: 24px;
