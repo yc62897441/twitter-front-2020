@@ -14,12 +14,16 @@
       </div>
       <div class="admin-user-interaction-wrapper">
         <div>
+          <img src="../assets/icon-dove.png" alt="">
+          <p>{{ user.tweetsNum }}</p>
+        </div>
+        <div>
           <img src="../assets/icon-reply.png" alt="">
-          <p>{{ user.repliesLength }}</p>
+          <p>{{ user.repliesNum }}</p>
         </div>
         <div>
           <img src="../assets/icon-like.png" alt="">
-          <p>{{ user.likesLength }}</p>
+          <p>{{ user.likesNum }}</p>
         </div>
       </div>
       <div class="admin-user-followship-wrapper">
