@@ -9,25 +9,45 @@
         <form @submit.prevent.stop="handleSubmit" class="setting-form">
           <div class="form-row setting-form-row">
             <input v-model="user.account" style="background-color:#F5F8FA;" type="text" maxlength="20"
-              class="form-control" id="signUpInputAccount" aria-describedby="accountHelp" placeholder="帳號"
-              name="account" required autofocus>
+              class="form-control" id="signUpInputAccount" aria-describedby="accountHelp" name="account"
+              v-on:keyup='words_deal' required autofocus>
+            <div class="textContent-span-wrapper">
+              <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+              <span class="textContent-span textContent-span-hidden"></span>
+            </div>
           </div>
           <div class="form-row setting-form-row">
             <input v-model="user.name" style="background-color:#F5F8FA;" type="text" maxlength="20" class="form-control"
-              id="signUpInputName" aria-describedby="nameHelp" placeholder="名稱" name="name" required>
+              id="signUpInputName" aria-describedby="nameHelp" name="name" v-on:keyup='words_deal' required>
+            <div class="textContent-span-wrapper">
+              <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+              <span class="textContent-span textContent-span-hidden"></span>
+            </div>
           </div>
           <div class="form-row setting-form-row">
-            <input v-model="user.email" style="background-color:#F5F8FA;" type="email" maxlength="140"
-              class="form-control" id="signUpInputEmail" aria-describedby="emailHelp" placeholder="email" name="email"
-              required>
+            <input v-model="user.email" style="background-color:#F5F8FA;" type="email" maxlength="50"
+              class="form-control" id="signUpInputEmail" aria-describedby="emailHelp" name="email"
+              v-on:keyup='words_deal' required>
+            <div class="textContent-span-wrapper">
+              <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+              <span class="textContent-span textContent-span-hidden"></span>
+            </div>
           </div>
           <div class="form-row setting-form-row">
             <input v-model="user.password" style="background-color:#F5F8FA;" type="password" maxlength="20"
-              class="form-control" id="signUpInputPassword" placeholder="密碼" name="password">
+              class="form-control" id="signUpInputPassword" name="password" v-on:keyup='words_deal'>
+            <div class="textContent-span-wrapper">
+              <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+              <span class="textContent-span textContent-span-hidden"></span>
+            </div>
           </div>
           <div class="form-row setting-form-row">
             <input v-model="user.checkPassword" style="background-color:#F5F8FA;" type="password" maxlength="20"
-              class="form-control" id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword">
+              class="form-control" id="signUpInputCheckPassword" name="checkPassword" v-on:keyup='words_deal'>
+            <div class="textContent-span-wrapper">
+              <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+              <span class="textContent-span textContent-span-hidden"></span>
+            </div>
           </div>
           <button type="submit" class="btn setting-form-btn btn-orange" v-bind:disabled="isProcessing">儲存</button>
         </form>
@@ -131,6 +151,28 @@ export default {
           title: title
         })
       }
+    },
+    words_deal(event) {
+      const maxlength = event.target.attributes.maxlength.value
+      const textlength = event.target.value.length
+
+      // 可輸入的字數剩餘 20 字以內時
+      if (maxlength - textlength <= 20) {
+        // 顯示"目前字數/字數上限" 如 120/140
+        event.target.parentElement.children[1].children[1].classList.remove('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].textContent = `${textlength}/${maxlength}`
+
+        // 目前字數>=字數上限時，顯示"字數已達上限"的提示
+        if (textlength >= maxlength) {
+          event.target.parentElement.children[1].children[0].classList.remove('textContent-span-hidden')
+        } else {
+          event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        }
+      } else {
+        event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].classList.add('textContent-span-hidden')
+      }
+      return
     }
   },
   computed: {
@@ -160,9 +202,41 @@ export default {
   width: 100%;
 }
 
+.setting-form-row:nth-child(n)::before {
+  position: absolute;
+  bottom: 64px;
+  left: 12px;
+  width: 100%;
+  height: 2px;
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 10px;
+  color: #657786;
+}
+
+.setting-form-row:nth-child(1)::before {
+  content: '帳號';
+}
+
+.setting-form-row:nth-child(2)::before {
+  content: '名稱';
+}
+
+.setting-form-row:nth-child(3)::before {
+  content: 'Email';
+}
+
+.setting-form-row:nth-child(4)::before {
+  content: '密碼';
+}
+
+.setting-form-row:nth-child(5)::before {
+  content: '密碼確認';
+}
+
 .setting-form-row::after {
   position: absolute;
-  bottom: 0px;
+  bottom: 22px;
   left: 0px;
   width: 100%;
   height: 2px;
@@ -173,7 +247,9 @@ export default {
 
 .setting-form-row input {
   height: 52px;
-  margin: 32px 0px 0px;
+  padding-top: 12px;
+  padding-bottom: 0px;
+  margin: 5px 0px 0px;
   border-radius: 4px 4px 0px 0px;
   /* background-color: inline-style-setting; */
 }
