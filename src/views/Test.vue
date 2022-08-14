@@ -76,11 +76,7 @@ export default {
 
 <style>
 
-form {
-  border: 1px solid saddlebrown;
-}
-
-form textarea {
+/* form textarea {
   width: 100%;
   margin: 0px;
   padding: 0px;
@@ -111,7 +107,6 @@ form textarea:focus-visible {
   font-weight: 500;
   font-size: 15px;
   line-height: 15px;
-  /* text-align: right; */
   color: #657786;
 }
 
@@ -121,23 +116,6 @@ form textarea:focus-visible {
 
 .textContent-span-hidden {
   opacity: 0;
-}
-
-/* #TextArea1::placeholder {
-  position: absolute;
-  top: 500px;
-  width: 200px;
-  height: 50px;
-  background-color: aqua;
-  border: 5px solid saddlebrown;
-}
-
-.aa::after {
-  display: block;
-  content: 's';
-  width: 20px;
-  height: 5px;
-  background-color: rgb(212, 0, 255);
-  border: 1px solid saddlebrown;
 } */
+
 </style>
