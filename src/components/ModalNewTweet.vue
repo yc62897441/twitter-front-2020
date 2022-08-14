@@ -68,6 +68,7 @@ export default {
         }
         this.$emit('after-post-new-tweet', {
           ...formData,
+          tweetId: data.tweetId,
         })
         this.newTweetDescription = ''
         this.isProcessing = false

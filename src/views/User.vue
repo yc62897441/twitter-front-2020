@@ -124,7 +124,7 @@ export default {
       }
     },
     afterPostNewTweet(payload) {
-      this.tweets.push({
+      this.tweets.unshift({
         Likes: [],
         Replies: [],
         User: {
@@ -139,7 +139,7 @@ export default {
         UserId: this.currentUser.id,
         createdAt: Date.now(),
         description: payload.description,
-        id: uuidv4(),
+        id: payload.tweetId,
         likesLength: 0,
         repliesLength: 0,
         updatedAt: Date.now(),

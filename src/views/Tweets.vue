@@ -62,11 +62,13 @@ export default {
           UserId: UserId,
           description: description,
         }
-        const { data } = await tweetsAPI.postTweet({ formData })
+        const response = await tweetsAPI.postTweet({ formData })
+        console.log('response', response)
+        const data = response.data
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
-        this.tweets.push({
+        this.tweets.unshift({
           Likes: [],
           Replies: [],
           User: {
@@ -81,7 +83,7 @@ export default {
           UserId: this.currentUser.id,
           createdAt: Date.now(),
           description: description,
-          id: uuidv4(),
+          id: data.tweetId,
           likesLength: 0,
           repliesLength: 0,
           updatedAt: Date.now(),
@@ -97,7 +99,8 @@ export default {
       }
     },
     afterPostNewTweet(payload) {
-      this.tweets.push({
+      console.log('payload', payload)
+      this.tweets.unshift({
         Likes: [],
         Replies: [],
         User: {
@@ -112,7 +115,7 @@ export default {
         UserId: this.currentUser.id,
         createdAt: Date.now(),
         description: payload.description,
-        id: uuidv4(),
+        id: payload.tweetId,
         likesLength: 0,
         repliesLength: 0,
         updatedAt: Date.now(),

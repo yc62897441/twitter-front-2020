@@ -71,7 +71,7 @@ export default {
       }
     },
     afterPostTweetReply(payload) {
-      this.replies.push({
+      this.replies.unshift({
         TweetId: payload.TweetId,
         UserId: payload.UserId,
         comment: payload.comment,
