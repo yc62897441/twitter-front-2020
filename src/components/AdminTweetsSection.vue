@@ -17,7 +17,13 @@
         </div>
         <div class="admin-tweet-wrapper-right-bottom">
           <div class="admin-tweet-description">
-            {{ tweet.description }}
+            <template v-if="tweet.description.length <= 50">
+              {{ tweet.description }}
+            </template>
+            <template v-else>
+              {{ tweet.description.slice(0, 50) }} <p type="button" v-on:click="showMore(tweet.description, $event)">
+                顯示更多...</p>
+            </template>
           </div>
         </div>
       </div>
@@ -43,7 +49,7 @@ export default {
   methods: {
     async deleteTweet(tweetId) {
       try {
-        const response = await authorizationAPI.deleteTweet({tweetId})
+        const response = await authorizationAPI.deleteTweet({ tweetId })
         let temTweets = []
         this.tweets.forEach(tweet => {
           if (tweet.id !== tweetId) {
@@ -54,6 +60,9 @@ export default {
       } catch (error) {
         console.warn(error)
       }
+    },
+    showMore(tweetDescription, event) {
+      event.target.parentElement.innerHTML = `${tweetDescription}`
     },
   },
   watch: {
@@ -131,6 +140,12 @@ export default {
   font-size: 15px;
   line-height: 22px;
   color: #1C1C1C;
-  word-break: break-all
+  word-break: break-all;
+}
+
+.admin-tweet-description p {
+  display: inline;
+  font-weight: 900;
+  margin: 0px;
 }
 </style>
