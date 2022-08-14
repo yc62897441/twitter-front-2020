@@ -7,8 +7,12 @@
     </div>
     <form @submit.prevent.stop="handleSubmit" class="new-tweet-wrapper-right">
       <textarea cols="30" rows="5" maxlength="140" placeholder="有什麼新鮮事？" v-model="newTweetDescription"
-        name="newTweetDescription" required></textarea>
-      <button type="submit" class="btn btn-orange btn-new-tweet" v-bind:disabled="isProcessing">推文</button>
+        name="newTweetDescription" v-on:keyup='words_deal' required></textarea>
+      <div class="textContent-span-wrapper">
+        <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+        <span class="textContent-span textContent-span-hidden"></span>
+        <button type="submit" class="btn btn-orange btn-new-tweet" v-bind:disabled="isProcessing">推文</button>
+      </div>
     </form>
   </div>
 </template>
@@ -46,6 +50,28 @@ export default {
         description: this.newTweetDescription,
       })
       this.newTweetDescription = ''
+    },
+    words_deal(event) {
+      const maxlength = event.target.attributes.maxlength.value
+      const textlength = event.target.value.length
+
+      // 可輸入的字數剩餘 20 字以內時
+      if (maxlength - textlength <= 20) {
+        // 顯示"目前字數/字數上限" 如 120/140
+        event.target.parentElement.children[1].children[1].classList.remove('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].textContent = `${textlength}/${maxlength}`
+
+        // 目前字數>=字數上限時，顯示"字數已達上限"的提示
+        if (textlength >= maxlength) {
+          event.target.parentElement.children[1].children[0].classList.remove('textContent-span-hidden')
+        } else {
+          event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        }
+      } else {
+        event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].classList.add('textContent-span-hidden')
+      }
+      return
     }
   }
 }
