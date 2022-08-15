@@ -27,4 +27,10 @@ export default {
   getUsers() {
     return apiHelper.get('/admin/users')
   },
+  recountUserTweetsRepliesLikesNum() {
+    return apiHelper.get('/admin/recountUserTweetsRepliesLikesNum')
+  },
+  recountUserFollowersNum() {
+    return apiHelper.get('/admin/recountUserFollowersNum')
+  },
 }
