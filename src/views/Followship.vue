@@ -5,8 +5,15 @@
     </div>
 
     <div class="middle-container">
-      <h1>{{ user.name }}</h1>
-      <h3>{{ user.repliesLength }}則推文</h3>
+      <div class="middle-container-wrapper">
+        <div class="middle-container-arrow-wrapper">
+          <img src="../assets/arrow-left.png" type="button" v-on:click="hasHistory" alt="">
+        </div>
+        <div class="middle-container-page-title-wrapper">
+          <h1>{{ user.name }}</h1>
+          <h3>{{ user.repliesLength }}則推文</h3>
+        </div>
+      </div>
       <FollowshipNavPills v-on:after-change-followship-nav-pills="afterChangeFollowshipNavPills" />
       <FollowshipSection v-bind:currentUser="currentUser" v-bind:user="user" v-bind:userFollowings="userFollowings"
         v-bind:userFollowers="userFollowers" v-bind:show="show" />
@@ -79,6 +86,9 @@ export default {
       } else if (payload.value === 'followship-nav-pills-followers') {
         this.show = 'userFollowers'
       }
+    },
+    hasHistory() {
+      this.$router.go(-1)
     },
   },
   computed: {
