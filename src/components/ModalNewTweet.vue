@@ -71,6 +71,7 @@ export default {
           tweetId: data.tweetId,
         })
         this.newTweetDescription = ''
+        // 送出後，清除字數上限提示
         event.target.parentElement.children[0].classList.add('textContent-span-hidden')
         event.target.parentElement.children[1].classList.add('textContent-span-hidden')
         this.isProcessing = false

@@ -50,6 +50,7 @@ export default {
         description: this.newTweetDescription,
       })
       this.newTweetDescription = ''
+      // 送出後，清除字數上限提示
       event.target.children[1].children[0].classList.add('textContent-span-hidden')
       event.target.children[1].children[1].classList.add('textContent-span-hidden')
     },

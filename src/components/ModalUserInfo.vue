@@ -10,8 +10,8 @@
             <div>編輯個人檔案</div>
           </div>
           <div class="user-info-modal-header-right-wrapper">
-            <button type="button" class="btn btn-user-info-modal" 
-              @click.prevent.stop="handleSubmit" v-bind:disabled="isProcessing">儲存</button>
+            <button type="button" class="btn btn-user-info-modal" @click.prevent.stop="handleSubmit"
+              v-bind:disabled="isProcessing">儲存</button>
           </div>
         </div>
         <div class="user-info-modal-body">
@@ -34,11 +34,19 @@
             </div>
             <div class="form-row mb-3 user-info-form-row">
               <input v-model="userNewInfo.name" style="background-color:#F5F8FA;" type="text" maxlength="20"
-                class="form-control" placeholder="名稱" required>
+                class="form-control" placeholder="名稱" v-on:keyup='words_deal' required>
+              <div class="textContent-span-wrapper">
+                <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+                <span class="textContent-span textContent-span-hidden"></span>
+              </div>
             </div>
             <div class="form-row mb-3 user-info-form-row">
-              <textarea cols="30" rows="5" maxlength="140" placeholder="自我介紹"
-                v-model="userNewInfo.introduction"></textarea>
+              <textarea cols="30" rows="5" maxlength="140" placeholder="自我介紹" v-model="userNewInfo.introduction"
+                v-on:keyup='words_deal'></textarea>
+              <div class="textContent-span-wrapper">
+                <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+                <span class="textContent-span textContent-span-hidden"></span>
+              </div>
             </div>
           </form>
         </div>
@@ -157,6 +165,14 @@ export default {
         this.$store.dispatch('afterPutUserInfo', {
           ...emitData,
         })
+
+        // 送出後，清除字數上限提示
+        const textContentSpanWrappers = document.querySelectorAll('.textContent-span-wrapper')
+        textContentSpanWrappers.forEach(textContentSpanWrapper => {
+          textContentSpanWrapper.children[0].classList.add('textContent-span-hidden')
+          textContentSpanWrapper.children[1].classList.add('textContent-span-hidden')
+        })
+
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -182,7 +198,7 @@ export default {
         this.banner = new File([event.target.files[0]], 'banner')
       }
     },
-    removeBanner() { 
+    removeBanner() {
       const defaultBannerURL = 'https://i.imgur.com/wjSOQDI.png'
       this.banner = defaultBannerURL
       this.userNewInfo.banner = defaultBannerURL
@@ -191,6 +207,28 @@ export default {
       this.userNewInfo.name = this.userOriginalInfo.name
       this.userNewInfo.introduction = this.userOriginalInfo.introduction
       this.userNewInfo.banner = this.userOriginalInfo.banner
+    },
+    words_deal(event) {
+      const maxlength = event.target.attributes.maxlength.value
+      const textlength = event.target.value.length
+
+      // 可輸入的字數剩餘 20 字以內時
+      if (maxlength - textlength <= 20) {
+        // 顯示"目前字數/字數上限" 如 120/140
+        event.target.parentElement.children[1].children[1].classList.remove('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].textContent = `${textlength}/${maxlength}`
+
+        // 目前字數>=字數上限時，顯示"字數已達上限"的提示
+        if (textlength >= maxlength) {
+          event.target.parentElement.children[1].children[0].classList.remove('textContent-span-hidden')
+        } else {
+          event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        }
+      } else {
+        event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].classList.add('textContent-span-hidden')
+      }
+      return
     }
   },
   computed: {
