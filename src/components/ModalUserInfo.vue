@@ -153,7 +153,7 @@ export default {
             }
           })
         }
-        if (typeof this.banner === 'string') {
+        if (typeof this.banner === 'string' && this.banner.length > 0) {
           emitData.banner = this.banner
         }
 
@@ -173,6 +173,8 @@ export default {
           textContentSpanWrapper.children[1].classList.add('textContent-span-hidden')
         })
 
+        this.avatar = ''
+        this.banner = ''
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -207,6 +209,7 @@ export default {
       this.userNewInfo.name = this.userOriginalInfo.name
       this.userNewInfo.introduction = this.userOriginalInfo.introduction
       this.userNewInfo.banner = this.userOriginalInfo.banner
+      this.userNewInfo.avatar = this.userOriginalInfo.avatar
     },
     words_deal(event) {
       const maxlength = event.target.attributes.maxlength.value
