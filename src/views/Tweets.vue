@@ -107,7 +107,6 @@ export default {
       }
     },
     afterPostNewTweet(payload) {
-      console.log('payload', payload)
       this.tweets.unshift({
         Likes: [],
         Replies: [],

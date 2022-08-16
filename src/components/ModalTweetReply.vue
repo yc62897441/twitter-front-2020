@@ -54,7 +54,7 @@
             <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
             <span class="textContent-span textContent-span-hidden"></span>
             <button type="button" class="btn btn-orange btn-new-tweet" data-bs-dismiss="modal"
-              v-bind:disabled="isProcessing" @click.prevent.stop="handleSubmit(tweet.id)">回覆</button>
+              v-bind:disabled="isProcessing" @click.prevent.stop="handleSubmit(tweet.id, $event)">回覆</button>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default {
     }
   },
   methods: {
-    async handleSubmit(tweetId) {
+    async handleSubmit(tweetId, event) {
       try {
         if (this.newTweetReply.trim() === '') {
           Toast.fire({
@@ -103,6 +103,8 @@ export default {
           ...data,
         })
         this.newTweetReply = ''
+        event.target.parentElement.children[0].classList.add('textContent-span-hidden')
+        event.target.parentElement.children[1].classList.add('textContent-span-hidden')
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false

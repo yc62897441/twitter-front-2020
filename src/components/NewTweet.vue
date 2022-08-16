@@ -37,7 +37,7 @@ export default {
     }
   },
   methods: {
-    handleSubmit() {
+    handleSubmit(event) {
       if (!this.newTweetDescription.trim()) {
         Toast.fire({
           icon: 'warning',
@@ -50,6 +50,8 @@ export default {
         description: this.newTweetDescription,
       })
       this.newTweetDescription = ''
+      event.target.children[1].children[0].classList.add('textContent-span-hidden')
+      event.target.children[1].children[1].classList.add('textContent-span-hidden')
     },
     words_deal(event) {
       const maxlength = event.target.attributes.maxlength.value
