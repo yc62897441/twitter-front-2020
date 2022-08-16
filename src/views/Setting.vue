@@ -121,7 +121,7 @@ export default {
           password: this.user.password,
           checkPassword: this.user.checkPassword
         }
-        const response = await usersAPI.putUser({ userId, formData })
+        const response = await usersAPI.putSetting({ userId, formData })
         // 根據後端回傳，此時的 data 是更新後的 user 物件
         const data = response.data
 

@@ -105,7 +105,7 @@ export default {
         }
 
         // 傳送資料到後端
-        const response = await usersAPI.putUserInfo({ formData })
+        const response = await usersAPI.putUser({ formData })
 
         // 錯誤，跳到錯誤處理
         if (response.data.status !== 'success') {
