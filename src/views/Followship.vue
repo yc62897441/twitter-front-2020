@@ -44,7 +44,6 @@ export default {
   },
   data() {
     return {
-      currentUserId: 1,
       user: {},
       userFollowings: [],
       userFollowers: [],
