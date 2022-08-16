@@ -10,7 +10,7 @@
             <div>編輯個人檔案</div>
           </div>
           <div class="user-info-modal-header-right-wrapper">
-            <button type="button" class="btn btn-user-info-modal" data-bs-dismiss="modal" aria-label="Close"
+            <button type="button" class="btn btn-user-info-modal" 
               @click.prevent.stop="handleSubmit" v-bind:disabled="isProcessing">儲存</button>
           </div>
         </div>
@@ -107,6 +107,12 @@ export default {
 
         const userId = this.currentUser.id
 
+        Toast.fire({
+          icon: 'warning',
+          title: '正在更新中，請稍後',
+          timer: false
+        })
+
         // 傳送資料到後端
         const response = await usersAPI.putUser({ userId, formData })
 
@@ -114,6 +120,11 @@ export default {
         if (response.data.status !== 'success') {
           throw new Error()
         }
+
+        Toast.fire({
+          icon: 'success',
+          title: '更新成功'
+        })
 
         // 定義要回傳到父層，更新 UserBoard.vue 的資訊
         const emitData = {

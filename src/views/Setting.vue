@@ -120,14 +120,29 @@ export default {
           password: this.user.password,
           checkPassword: this.user.checkPassword
         }
+        Toast.fire({
+          icon: 'warning',
+          title: '正在更新中，請稍後',
+          timer: false
+        })
         const response = await usersAPI.putSetting({ formData })
         // 根據後端回傳，此時的 data 是更新後的 user 物件
         const data = response.data
+
+        // 如果 password、checkPassword input 的內容長度到上限，再送出之後input會清空，一併移除掉"字數已達上限!"的警告
+        const formControls = document.querySelectorAll('.form-control')
+        for (let i = 3; i < formControls.length; i++ ) {
+          formControls[i].parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        }
 
         // 伺服器回傳錯誤
         if (response.status !== 200) {
           throw new Error()
         }
+        Toast.fire({
+          icon: 'success',
+          title: '更新成功'
+        })
 
         this.user = {
           ...data,
