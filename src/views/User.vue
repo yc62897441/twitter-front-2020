@@ -153,13 +153,16 @@ export default {
       // 更新畫面上的 tweets、replies、likes、user name
       this.tweets.forEach(tweet => {
         tweet.User.name = payload.name
+        tweet.User.avatar = payload.avatar
       })
       this.replies.forEach(reply => {
         reply.User.name = payload.name
+        reply.User.avatar = payload.avatar
       })
       this.likes.forEach(like => {
         if (like.Tweet.User.id === this.currentUser.id) {
           like.Tweet.User.name = payload.name
+          like.Tweet.User.avatar = payload.avatar
         }
       })
       this.user.name = payload.name
