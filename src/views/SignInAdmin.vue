@@ -73,7 +73,7 @@ export default {
       } catch (error) {
         this.isProcessing = false
         this.password = ''
-        let title = '請確認您輸入了正確的帳號密碼'
+        let title = '伺服器維護中，請稍後再試'
         if (error.response.data.message) {
           title = error.response.data.message
         }

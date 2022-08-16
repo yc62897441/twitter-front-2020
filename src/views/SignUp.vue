@@ -75,7 +75,8 @@ export default {
 
         Toast.fire({
           icon: 'warning',
-          title: '正在處理註冊流程，請稍後'
+          title: '正在處理註冊流程，請稍後',
+          timer: false
         })
         this.isProcessing = true
 
@@ -104,7 +105,7 @@ export default {
         this.isProcessing = false
         this.password = ''
         this.checkPassword = ''
-        let title = '註冊失敗，請稍後再試'
+        let title = '伺服器維護中，請稍後再試'
         if (error.response.data.message) {
           title = error.response.data.message
         } else if (error.response.data.errorMessages.length > 0) {

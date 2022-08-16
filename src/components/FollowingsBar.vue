@@ -30,6 +30,7 @@
 <script>
 import followshipAPI from '../api/followships'
 import eventBus from "../utils/eventBus"
+import { Toast } from '../utils/helpers'
 
 export default {
   props: {
@@ -47,8 +48,11 @@ export default {
   methods: {
     async fetchRecommendedFollowings() {
       try {
-        const currentUserId = this.currentUser.id
-        const { data } = await followshipAPI.getRecommendedFollowings({ userId: currentUserId })
+        const response = await followshipAPI.getRecommendedFollowings()
+        if (response.status !== 200) {
+          throw new Error()
+        }
+        const data = response.data
         this.recommendedFollowings = data
       } catch (error) {
         console.warn(error)

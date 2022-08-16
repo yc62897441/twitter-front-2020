@@ -16,6 +16,7 @@ import NavBarAdmin from '../components/NavBarAdmin.vue'
 import AdminTweetsSection from '../components/AdminTweetsSection.vue'
 import authorizationAPI from '../api/authorization'
 import { mapState } from 'vuex'
+import { Toast } from '../utils/helpers'
 
 export default {
   components: {
@@ -32,12 +33,17 @@ export default {
     async fetchAdminTweets() {
       try {
         const response = await authorizationAPI.getTweets()
-        if (response.statusText !== 'OK') {
+        if (response.status !== 200) {
           throw new Error()
         }
         this.tweets = response.data
       } catch (error) {
         console.warn(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取 Tweets',
+          timer: 2000,
+        })
       }
     },
   },

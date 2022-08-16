@@ -86,12 +86,21 @@ export default {
     async fetchUser() {
       try {
         const userId = this.currentUser.id
-        const { data } = await usersAPI.getUser({ userId })
+        const response = await usersAPI.getUser({ userId })
+        if (response.status !== 200) {
+          throw new Error()
+        }
+        const data = response.data
         this.user = {
           ...data,
         }
       } catch (error) {
         console.warn(error)
+        Toast.fire({
+          icon: 'error',
+          title: '暫時無法讀取使用者資料，請稍後再試',
+          timer: 2000,
+        })
       }
     },
     async handleSubmit() {

@@ -67,12 +67,24 @@ export default {
     async fetchUser(userId) {
       try {
         const response = await usersAPI.getUser({ userId })
+        if (response.status !== 200) {
+          throw new Error()
+        }
         const data = response.data
         this.user = {
           ...data,
         }
       } catch (error) {
         console.warn(error)
+        Toast.fire({
+          icon: 'error',
+          title: '找不到該位 User',
+          timer: 2000,
+        })
+        this.$router.push({ name: 'not-found' })
+        setTimeout(() => {
+          this.$router.go(-2)
+        }, 1000)
       }
     },
     async fetchUserTweets(userId) {

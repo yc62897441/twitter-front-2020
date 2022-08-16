@@ -48,10 +48,18 @@ export default {
     async fetchTweets() {
       try {
         const response = await tweetsAPI.getTweets()
+        if (response.status !== 200) {
+          throw new Error()
+        }
         const data = response.data
         this.tweets = data
       } catch (error) {
         console.warn(error)
+        Toast.fire({
+          icon: 'error',
+          title: '暫時無法讀取 Tweets，請稍後再試',
+          timer: 2000,
+        })
       }
     },
     async afterCreateTweet(payload) {

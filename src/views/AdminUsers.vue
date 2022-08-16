@@ -22,6 +22,7 @@ import NavBarAdmin from '../components/NavBarAdmin.vue'
 import AdminUsersSection from '../components/AdminUsersSection.vue'
 import authorizationAPI from '../api/authorization'
 import { mapState } from 'vuex'
+import { Toast } from '../utils/helpers'
 
 export default {
   components: {
@@ -39,12 +40,17 @@ export default {
     async fetchAdminUsers() {
       try {
         const response = await authorizationAPI.getUsers()
-        if (response.statusText !== 'OK') {
+        if (response.status !== 200) {
           throw new Error()
         }
         this.users = response.data
       } catch (error) {
         console.warn(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取 Users',
+          timer: 2000,
+        })
       }
     },
     async recountUserTweetsRepliesLikesNum() {

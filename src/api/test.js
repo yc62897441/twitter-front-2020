@@ -8,4 +8,7 @@ export default {
       }
     })
   },
+  getNotFound: () => {
+    return apiHelper.get('/not-found')
+  }
 }

@@ -35,6 +35,7 @@ import ModalNewTweet from '../components/ModalNewTweet.vue'
 import tweetsAPI from '../api/tweets'
 import { mapState } from 'vuex'
 import { v4 as uuidv4 } from 'uuid'
+import { Toast } from '../utils/helpers'
 
 export default {
   components: {
@@ -56,10 +57,22 @@ export default {
       try {
         const id = tweetId
         const response = await tweetsAPI.getTweet({ id })
+        if (response.status !== 200) {
+          throw new Error()
+        }
         const data = response.data
         this.tweet = data
       } catch (error) {
-        console.warn(error)
+         console.warn(error)
+        Toast.fire({
+          icon: 'error',
+          title: '找不到該則 Tweet',
+          timer: 2000,
+        })
+        this.$router.push({ name: 'not-found' })
+        setTimeout(() => {
+          this.$router.go(-2)
+        }, 1000)
       }
     },
     async getTweetReplies(tweetId) {
