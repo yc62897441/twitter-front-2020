@@ -168,6 +168,11 @@ export default {
         // 如果後端有提供錯誤訊息，以後端為主
         if (error.response.data.message) {
           title = error.response.data.message
+        } else if (error.response.data.errorMessages.length > 0) {
+          title = ''
+          error.response.data.errorMessages.forEach(errorMessage => {
+            title += `${errorMessage}\n`
+          })
         }
         Toast.fire({
           icon: 'error',

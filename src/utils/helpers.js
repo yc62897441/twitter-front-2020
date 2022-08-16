@@ -28,6 +28,6 @@ export const Toast = Swal.mixin({
   toast: true,
   position: 'top',
   showConfirmButton: false,
-  timer: 3000,
+  timer: 5000,
   color: '#000000',
 })
