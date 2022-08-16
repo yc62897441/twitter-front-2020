@@ -10,22 +10,15 @@ export default {
       headers: { Authorization: `Bearer ${getToken()}` }
     })
   },
-  putUser: ({ formData }) => {
-    return apiHelper.put('/users/userInfo', formData, {
+  putUser: ({ userId, formData }) => {
+    return apiHelper.put(`users/${userId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
   },
-  // putUserInfo: ({ formData }) => {
-  //   return apiHelper.put('/users/userInfo', formData, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data'
-  //     }
-  //   })
-  // },
-  putSetting: ({ userId, formData }) => {
-    return apiHelper.put(`users/${userId}`, formData)
+  putSetting: ({ formData }) => {
+    return apiHelper.put('users/setting', formData)
   },
   getUserTweets: ({ userId }) => {
     return apiHelper.get(`users/${userId}/tweets`)

@@ -54,6 +54,7 @@
 <script>
 import usersAPI from '../api/users'
 import { Toast } from '../utils/helpers'
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -104,8 +105,10 @@ export default {
           formData.append('introduction', this.userNewInfo.introduction)
         }
 
+        const userId = this.currentUser.id
+
         // 傳送資料到後端
-        const response = await usersAPI.putUser({ formData })
+        const response = await usersAPI.putUser({ userId, formData })
 
         // 錯誤，跳到錯誤處理
         if (response.data.status !== 'success') {
@@ -178,6 +181,9 @@ export default {
       this.userNewInfo.introduction = this.userOriginalInfo.introduction
       this.userNewInfo.banner = this.userOriginalInfo.banner
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   // 自動監控某些屬性，可以帶入兩個值 initialRestaurant(newValue, oldValue)
   // 如果屬性的內容有變更時，就可以去做一些事

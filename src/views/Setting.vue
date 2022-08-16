@@ -113,7 +113,6 @@ export default {
           return
         }
         this.isProcessing = true
-        const userId = this.currentUser.id
         const formData = {
           name: this.user.name,
           email: this.user.email,
@@ -121,7 +120,7 @@ export default {
           password: this.user.password,
           checkPassword: this.user.checkPassword
         }
-        const response = await usersAPI.putSetting({ userId, formData })
+        const response = await usersAPI.putSetting({ formData })
         // 根據後端回傳，此時的 data 是更新後的 user 物件
         const data = response.data
 
