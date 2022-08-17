@@ -206,16 +206,30 @@ export default {
       this.$router.go(-1)
     },
     afterPostFollowship(payload) {
-      this.user.Followings.push(Number(payload.followingId))
+      if (payload.situation === 'atCurrentUserPage') {
+        this.user.Followings.push(Number(payload.followingId))
+      } else if (payload.situation === 'atOtherUserPage') {
+        this.user.Followers.push(Number(payload.followerId))
+      } 
     },
     afterDeleteFollowship(payload) {
-      const tempUserFollowings = []
-      this.user.Followings.forEach(following => {
-        if (following !== payload.followingId) {
-          tempUserFollowings.push(following)
-        }
-      })
-      this.user.Followings = tempUserFollowings
+      if (payload.situation === 'atCurrentUserPage') {
+        const tempUserFollowings = []
+        this.user.Followings.forEach(following => {
+          if (following !== payload.followingId) {
+            tempUserFollowings.push(following)
+          }
+        })
+        this.user.Followings = tempUserFollowings
+      } else if (payload.situation === 'atOtherUserPage') {
+        const tempUserFollowers = []
+        this.user.Followers.forEach(follower => {
+          if (follower !== payload.followerId) {
+            tempUserFollowers.push(follower)
+          }
+        })
+        this.user.Followers = tempUserFollowers
+      } 
     },
   },
   computed: {

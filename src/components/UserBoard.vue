@@ -39,7 +39,10 @@
           </div>
         </router-link>
         <router-link class="link" v-bind:to="'/users/' + user.id + '/followship'">
-          <div class="user-info-followship-followers">{{ followersLength }}位<p>跟隨者</p>
+          <!-- <div class="user-info-followship-followers">{{ followersLength }}位<p>跟隨者</p>
+          </div> -->
+          <div class="user-info-followship-followers">{{ propsUser.Followers ? propsUser.Followers.length : 0 }}位<p>
+              跟隨者</p>
           </div>
         </router-link>
       </div>

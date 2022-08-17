@@ -91,7 +91,15 @@ export default {
         // 如果在 currentUser 的 User.vue 畫面，在 post Followship 後，要在 UserBoard 新增"跟隨中"的數目
         if (Number(this.$route.params.id) === this.currentUser.id && this.$route.name === 'user') {
           this.$emit('after-post-followship', {
+            situation: 'atCurrentUserPage',
             followingId: followingId
+          })
+        }
+        // 如果在其他 User 的 User.vue 畫面，在 post Followship 後，要在 UserBoard 新增"跟隨者"的數目
+        if (Number(this.$route.params.id) === followingId && this.$route.name === 'user') {
+          this.$emit('after-post-followship', {
+            situation: 'atOtherUserPage',
+            followerId: currentUserId
           })
         }
 
@@ -118,7 +126,15 @@ export default {
         // 如果在 currentUser 的 User.vue 畫面，在 delete Followship 後，要在 UserBoard 減少"跟隨中"的數目
         if (Number(this.$route.params.id) === this.currentUser.id && this.$route.name === 'user') {
           this.$emit('after-delete-followship', {
+            situation: 'atCurrentUserPage',
             followingId: followingId
+          })
+        }
+        // 如果在其他 User 的 User.vue 畫面，在 delete Followship 後，要在 UserBoard 減少"跟隨者"的數目
+        if (Number(this.$route.params.id) === followingId && this.$route.name === 'user') {
+          this.$emit('after-delete-followship', {
+            situation: 'atOtherUserPage',
+            followerId: currentUserId
           })
         }
 
