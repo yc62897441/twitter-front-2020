@@ -32,7 +32,10 @@
         <!-- <router-link class="link" v-bind:to="'/users/' + user.id + '/followship'"> -->
         <router-link class="link"
           v-bind:to="{ name: 'userFollowship', params: { id: user.id }, query: { show: 'followings' } }">
-          <div class="user-info-followship-followings">{{ followingsLength }}個<p>跟隨中</p>
+          <!-- <div class="user-info-followship-followings">{{ followingsLength }}個<p>跟隨中</p>
+          </div> -->
+          <div class="user-info-followship-followings">{{ propsUser.Followings ? propsUser.Followings.length : 0 }}個
+            <p>跟隨中</p>
           </div>
         </router-link>
         <router-link class="link" v-bind:to="'/users/' + user.id + '/followship'">

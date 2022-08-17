@@ -88,6 +88,12 @@ export default {
           })
           this.dataToBrotherFollowshipSection('post', newUserFollowing)
         }
+        // 如果在 currentUser 的 User.vue 畫面，在 post Followship 後，要在 UserBoard 新增"跟隨中"的數目
+        if (Number(this.$route.params.id) === this.currentUser.id && this.$route.name === 'user') {
+          this.$emit('after-post-followship', {
+            followingId: followingId
+          })
+        }
 
         this.isProcessing = false
       } catch (error) {
@@ -109,6 +115,13 @@ export default {
             return followings
           }
         })
+        // 如果在 currentUser 的 User.vue 畫面，在 delete Followship 後，要在 UserBoard 減少"跟隨中"的數目
+        if (Number(this.$route.params.id) === this.currentUser.id && this.$route.name === 'user') {
+          this.$emit('after-delete-followship', {
+            followingId: followingId
+          })
+        }
+
         this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
@@ -129,7 +142,6 @@ export default {
 </script>
 
 <style>
-
 .followingsBar-wrapper {
   position: fixed;
   display: flex;

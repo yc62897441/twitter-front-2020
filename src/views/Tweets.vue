@@ -71,7 +71,6 @@ export default {
           description: description,
         }
         const response = await tweetsAPI.postTweet({ formData })
-        console.log('response', response)
         const data = response.data
         if (data.status !== 'success') {
           throw new Error(data.message)

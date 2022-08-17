@@ -25,7 +25,8 @@
     </div>
 
     <div class="right-container">
-      <FollowingsBar class="FollowingsBar" v-bind:currentUser="currentUser" />
+      <FollowingsBar class="FollowingsBar" v-bind:currentUser="currentUser"
+        v-on:after-post-followship="afterPostFollowship" v-on:after-delete-followship="afterDeleteFollowship" />
     </div>
 
   </div>
@@ -203,6 +204,18 @@ export default {
     },
     hasHistory() {
       this.$router.go(-1)
+    },
+    afterPostFollowship(payload) {
+      this.user.Followings.push(Number(payload.followingId))
+    },
+    afterDeleteFollowship(payload) {
+      const tempUserFollowings = []
+      this.user.Followings.forEach(following => {
+        if (following !== payload.followingId) {
+          tempUserFollowings.push(following)
+        }
+      })
+      this.user.Followings = tempUserFollowings
     },
   },
   computed: {
