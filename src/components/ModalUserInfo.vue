@@ -92,6 +92,13 @@ export default {
           this.userNewInfo.name = this.propsUser.name
           return
         }
+        // 避免使用者移除 input、textarea 的 maxlength="20"or"140" 屬性
+        if (this.userNewInfo.name.length > 20) {
+          this.userNewInfo.name = this.userNewInfo.name.slice(0, 20)
+        }
+        if (this.userNewInfo.introduction.length > 140) {
+          this.userNewInfo.introduction = this.userNewInfo.introduction.slice(0, 140)
+        }
 
         // 建立 formData()
         let formData = new FormData()

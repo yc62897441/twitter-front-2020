@@ -73,6 +73,23 @@ export default {
           return
         }
 
+        // 避免使用者移除 input 的 maxlength="20"or"50" 屬性
+        if (this.name.length > 20) {
+          this.name = this.name.slice(0, 20)
+        }
+        if (this.email.length > 50) {
+          this.email = this.email.slice(0, 50)
+        }
+        if (this.account.length > 20) {
+          this.account = this.account.slice(0, 20)
+        }
+        if (this.password.length > 20) {
+          this.password = this.password.slice(0, 20)
+        }
+        if (this.checkPassword.length > 20) {
+          this.checkPassword = this.checkPassword.slice(0, 20)
+        }
+
         Toast.fire({
           icon: 'warning',
           title: '正在處理註冊流程，請稍後',

@@ -121,6 +121,26 @@ export default {
           })
           return
         }
+        // 避免使用者移除 input 的 maxlength="20"or"50" 屬性
+        if (this.user.name.length > 20) {
+          this.user.name = this.user.name.slice(0, 20)
+        }
+        if (this.user.email.length > 50) {
+          this.user.email = this.user.email.slice(0, 50)
+        }
+        if (this.user.account.length > 20) {
+          this.user.account = this.user.account.slice(0, 20)
+        }
+        if (this.user.password) {
+          if (this.user.password.length > 20) {
+            this.user.password = this.user.password.slice(0, 20)
+          }
+        }
+        if (this.user.checkPassword) {
+          if (this.user.checkPassword.length > 20) {
+            this.user.checkPassword = this.user.checkPassword.slice(0, 20)
+          }
+        }
         this.isProcessing = true
         const formData = {
           name: this.user.name,

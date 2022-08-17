@@ -57,6 +57,10 @@ export default {
           })
           return
         }
+        // 避免使用者移除 textarea 的 maxlength="140" 屬性
+        if (this.newTweetDescription.length > 140) {
+          this.newTweetDescription = this.newTweetDescription.slice(0, 140)
+        }
         this.isProcessing = true
         const formData = {
           userId: this.currentUser.id,

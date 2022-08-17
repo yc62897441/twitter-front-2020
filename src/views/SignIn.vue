@@ -50,6 +50,13 @@ export default {
           })
           return
         }
+        // 避免使用者移除 input 的 maxlength="20" 屬性
+        if (this.email.length > 20) {
+          this.email = this.email.slice(0, 20)
+        }
+        if (this.password.length > 20) {
+          this.password = this.password.slice(0, 20)
+        }
         this.isProcessing = true
 
         const response = await authorizationAPI.signIn({
