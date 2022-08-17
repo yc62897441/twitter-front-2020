@@ -86,7 +86,22 @@ export default {
               }
             }
           })
-          this.dataToBrotherFollowshipSection('post', newUserFollowing)
+          this.dataToBrotherFollowshipSection('post', 'atCurrentUserPage', newUserFollowing)
+        }
+        // 如果在其他 User 的 Followship 畫面，使用者 post/delete Followship 後，要在 FollowshipSection 的 userFollowers(跟隨者) 畫面上增加 userFollowers 的筆數。
+        if (Number(this.$route.params.id) === followingId && this.$route.name === 'userFollowship') {
+          let newUserFollower = {
+            followerId: currentUserId,
+            followerUser: {
+              account: this.currentUser.account,
+              avatar: this.currentUser.avatar,
+              id: this.currentUser.id,
+              introduction: this.currentUser.introduction,
+              name: this.currentUser.name,
+            },
+            followingId: followingId,
+          }
+         this.dataToBrotherFollowshipSection('post', 'atOtherUserPage', newUserFollower)
         }
         // 如果在 currentUser 的 User.vue 畫面，在 post Followship 後，要在 UserBoard 新增"跟隨中"的數目
         if (Number(this.$route.params.id) === this.currentUser.id && this.$route.name === 'user') {
@@ -123,6 +138,15 @@ export default {
             return followings
           }
         })
+
+        // 如果在其他 User 的 Followship 畫面，使用者 post/delete Followship 後，要在 FollowshipSection 的 userFollowers(跟隨者) 畫面上減少 userFollowers 的筆數。
+        if (Number(this.$route.params.id) === followingId && this.$route.name === 'userFollowship') {
+          let deleteUserFollower = {
+            followerId: currentUserId,
+            followingId: followingId,
+          }
+          this.dataToBrotherFollowshipSection('delete', 'atOtherUserPage', deleteUserFollower)
+        }
         // 如果在 currentUser 的 User.vue 畫面，在 delete Followship 後，要在 UserBoard 減少"跟隨中"的數目
         if (Number(this.$route.params.id) === this.currentUser.id && this.$route.name === 'user') {
           this.$emit('after-delete-followship', {
@@ -144,9 +168,10 @@ export default {
         console.warn(error)
       }
     },
-    dataToBrotherFollowshipSection(method, data) {
+    dataToBrotherFollowshipSection(method, situation, data) {
       eventBus.$emit("emit-data", {
         method: method,
+        situation: situation,
         data: data
       });
     }
