@@ -8,23 +8,48 @@
       <form @submit.prevent.stop="handleSubmit" class="sign-form">
         <div class="form-row sign-form-row mb-3">
           <input v-model="account" style="background-color:#F5F8FA;" type="text" maxlength="20" class="form-control"
-            id="signUpInputAccount" aria-describedby="accountHelp" placeholder="帳號" name="account" required autofocus>
+            id="signUpInputAccount" aria-describedby="accountHelp" placeholder="帳號" name="account"
+            v-on:keyup='words_deal' required autofocus>
+          <div class="textContent-span-wrapper">
+            <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+            <span class="textContent-span textContent-span-hidden"></span>
+          </div>
         </div>
         <div class="form-row sign-form-row mb-3">
           <input v-model="name" style="background-color:#F5F8FA;" type="text" maxlength="20" class="form-control"
-            id="signUpInputName" aria-describedby="nameHelp" placeholder="名稱" name="name" required>
+            id="signUpInputName" aria-describedby="nameHelp" placeholder="名稱" name="name" v-on:keyup='words_deal'
+            required>
+          <div class="textContent-span-wrapper">
+            <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+            <span class="textContent-span textContent-span-hidden"></span>
+          </div>
         </div>
         <div class="form-row sign-form-row mb-3">
-          <input v-model="email" style="background-color:#F5F8FA;" type="email" maxlength="140" class="form-control"
-            id="signUpInputEmail" aria-describedby="emailHelp" placeholder="email" name="email" required>
+          <input v-model="email" style="background-color:#F5F8FA;" type="email" maxlength="50" class="form-control"
+            id="signUpInputEmail" aria-describedby="emailHelp" placeholder="email" name="email" v-on:keyup='words_deal'
+            required>
+          <div class="textContent-span-wrapper">
+            <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+            <span class="textContent-span textContent-span-hidden"></span>
+          </div>
         </div>
         <div class="form-row sign-form-row mb-3">
           <input v-model="password" style="background-color:#F5F8FA;" type="password" maxlength="20"
-            class="form-control" id="signUpInputPassword" placeholder="密碼" name="password" required>
+            class="form-control" id="signUpInputPassword" placeholder="密碼" name="password" v-on:keyup='words_deal'
+            required>
+          <div class="textContent-span-wrapper">
+            <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+            <span class="textContent-span textContent-span-hidden"></span>
+          </div>
         </div>
         <div class="form-row sign-form-row mb-3">
           <input v-model="checkPassword" style="background-color:#F5F8FA;" type="password" maxlength="20"
-            class="form-control" id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword" required>
+            class="form-control" id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword"
+            v-on:keyup='words_deal' required>
+          <div class="textContent-span-wrapper">
+            <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
+            <span class="textContent-span textContent-span-hidden"></span>
+          </div>
         </div>
         <button type="submit" class="btn sign-btn" v-bind:disabled="isProcessing">註冊</button>
         <div class="sign-form-footer">
@@ -136,6 +161,28 @@ export default {
           title: title
         })
       }
+    },
+    words_deal(event) {
+      const maxlength = event.target.attributes.maxlength.value
+      const textlength = event.target.value.length
+
+      // 可輸入的字數剩餘 20 字以內時
+      if (maxlength - textlength <= 20) {
+        // 顯示"目前字數/字數上限" 如 120/140
+        event.target.parentElement.children[1].children[1].classList.remove('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].textContent = `${textlength}/${maxlength}`
+
+        // 目前字數>=字數上限時，顯示"字數已達上限"的提示
+        if (textlength >= maxlength) {
+          event.target.parentElement.children[1].children[0].classList.remove('textContent-span-hidden')
+        } else {
+          event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        }
+      } else {
+        event.target.parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+        event.target.parentElement.children[1].children[1].classList.add('textContent-span-hidden')
+      }
+      return
     }
   }
 }
