@@ -76,15 +76,28 @@ export default {
     async likeTweet(tweetId) {
       try {
         this.isProcessing = true
-        const currentUserId = this.currentUser.id
+        let likesLength = 0
+        // 向後端 post likeTweet
         const { data } = await tweetsAPI.likeTweet({ tweetId })
         if (data.status === 'success') {
+          // tweet 的愛心icon 亮起
+          this.currentUser.userLikesId.push(tweetId)
+           // tweet 的喜歡次數 + 1
           this.likes.forEach(like => {
             if (like.Tweet.id === tweetId) {
               like.Tweet.likesLength += 1
+              likesLength = like.Tweet.likesLength
             }
           })
-          this.currentUser.userLikesId.push(tweetId)
+        }
+        // 在自己的 User.vue，在 post like 後，要在自己的 TweetsSection 亮起該則 tweet 的愛心icon；在別人的 User.vue 則不用
+        if (this.$route.name === 'user' && Number(this.$route.params.id) === this.currentUser.id) {
+          // 將被喜歡的 tweet，以及 tweet 的喜歡次數(likesLength)，傳給父層再處理
+          this.$emit('after-like-tweet', {
+            likeTweetId: tweetId,
+            likesLength: likesLength,
+            from: 'LikesSection'
+          })
         }
         this.isProcessing = false
       } catch (error) {
@@ -95,18 +108,31 @@ export default {
     async unlikeTweet(tweetId) {
       try {
         this.isProcessing = true
-        const currentUserId = this.currentUser.id
+        let likesLength = 0
+        // 向後端 post unlikeTweet
         const { data } = await tweetsAPI.unlikeTweet({ tweetId })
         if (data.status === 'success') {
-          this.likes.forEach(like => {
-            if (like.Tweet.id === tweetId) {
-              like.Tweet.likesLength -= 1
-            }
-          })
+          // tweet 的愛心icon 熄滅
           this.currentUser.userLikesId = this.currentUser.userLikesId.map(userLikeId => {
             if (userLikeId !== tweetId) {
               return userLikeId
             }
+          })
+          // tweet 的喜歡次數 - 1
+          this.likes.forEach(like => {
+            if (like.Tweet.id === tweetId) {
+              like.Tweet.likesLength -= 1
+              likesLength = like.Tweet.likesLength
+            }
+          })
+        }
+        // 在自己的 User.vue，在 delete like 後，要在自己的 TweetsSection 熄滅該則 tweet 的愛心icon；在別人的 User.vue 則不用
+        if (this.$route.name === 'user' && Number(this.$route.params.id) === this.currentUser.id) {
+          // 將被 unlike 的 tweet id，以及 tweet 的喜歡次數(likesLength)，傳給父層再處理
+          this.$emit('after-unlike-tweet', {
+            unlikeTweetId: tweetId,
+            likesLength: likesLength,
+            from: 'LikesSection'
           })
         }
         this.isProcessing = false
@@ -143,7 +169,6 @@ export default {
 </script>
 
 <style>
-
 .like-wrapper {
   display: flex;
   padding: 15px;

@@ -18,10 +18,12 @@
         v-on:after-post-followship="afterPostFollowship" v-on:after-delete-followship="afterDeleteFollowship" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets"
-        v-on:after-post-tweet-reply="afterPostTweetReply" />
+        v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
+        v-on:after-unlike-tweet="afterUnlikeTweet" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
       <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes"
-        v-on:after-post-tweet-reply="afterPostTweetReply" />
+        v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
+        v-on:after-unlike-tweet="afterUnlikeTweet" />
       <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
@@ -232,6 +234,61 @@ export default {
         this.user.Followers = tempUserFollowers
       }
     },
+    afterLikeTweet(payload) {
+      // 從 TweetsSection emit
+      if (payload.from === 'TweetsSection') {
+        const likesLength = payload.likesLength
+        let isNewLikedTweetAlreadyInLikes = false
+        // 確認被喜歡的 tweet，是否已經在 this.likes 中了
+        this.likes.forEach(like => {
+          if (like.Tweet.id === payload.newLikedTweet.id) {
+            isNewLikedTweetAlreadyInLikes = true
+            // 如果已經在 this.likes 中，把最新的 tweet 的喜歡次數(likesLength) 覆寫過去
+            like.Tweet.likesLength = likesLength
+          }
+        })
+        // 如果還不在 this.likes 中，unshift 到 this.likes 中
+        if (!isNewLikedTweetAlreadyInLikes) {
+          this.likes.unshift({
+            Tweet: {
+              ...payload.newLikedTweet,
+            }
+          })
+        }
+      }
+      // 從 LikesSection emit
+      if (payload.from === 'LikesSection') {
+        const likesLength = payload.likesLengt
+        const likeTweetId = payload.likeTweetId
+        // 如果被喜歡的 tweet，是使用者 this.tweets 裡面的 tweet，則把最新的 tweet 的喜歡次數(likesLength) 覆寫過去
+        this.tweets.forEach(tweet => {
+          if (tweet.id === likeTweetId) {
+            tweet.likesLength = likesLength
+          }
+        })
+      }
+    },
+    afterUnlikeTweet(payload){
+      const unlikeTweetId = payload.unlikeTweetId
+      const likesLength = payload.likesLength
+      const tempLikes = []
+      // 從 TweetsSection emit
+      if (payload.from === 'TweetsSection') {
+        // 被 unlike 的 tweet，如果在 this.likes 中，則把該個 like 刪除 
+        this.likes.forEach(like => {
+          if (like.Tweet.id !== unlikeTweetId) {
+            tempLikes.push(like)
+          }
+        })
+        this.likes = tempLikes
+      }
+      // 如果被 unlike 的 tweet，是使用者 this.tweets 裡面的 tweet，則把最新的 tweet 的喜歡次數(likesLength) 覆寫過去
+      this.tweets.forEach(tweet => {
+        if (tweet.id === unlikeTweetId) {
+          tweet.likesLength = likesLength
+        } 
+      })
+    }
   },
   computed: {
     ...mapState(['currentUser'])
