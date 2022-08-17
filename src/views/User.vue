@@ -14,7 +14,8 @@
           <h3>{{ user.repliesLength }}則推文</h3>
         </div>
       </div>
-      <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" v-on:after-put-userInfo="afterPutUserInfo" />
+      <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" v-on:after-put-userInfo="afterPutUserInfo"
+        v-on:after-post-followship="afterPostFollowship" v-on:after-delete-followship="afterDeleteFollowship" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets"
         v-on:after-post-tweet-reply="afterPostTweetReply" />
@@ -210,7 +211,7 @@ export default {
         this.user.Followings.push(Number(payload.followingId))
       } else if (payload.situation === 'atOtherUserPage') {
         this.user.Followers.push(Number(payload.followerId))
-      } 
+      }
     },
     afterDeleteFollowship(payload) {
       if (payload.situation === 'atCurrentUserPage') {
@@ -229,7 +230,7 @@ export default {
           }
         })
         this.user.Followers = tempUserFollowers
-      } 
+      }
     },
   },
   computed: {
