@@ -122,6 +122,12 @@ export default {
           like.Tweet.repliesLength += 1
         }
       })
+      // 在自己的 User.vue，在 post reply 後，要在自己的 RepliesSection unshift 該則新回覆；在別人的 User.vue 則不用
+      if (this.$router.history.current.name === 'user' && Number(this.$router.history.current.params.id) === this.currentUser.id) {
+        this.$emit('after-post-tweet-reply', {
+          ...payload,
+        })
+      }
     },
   },
   computed: {

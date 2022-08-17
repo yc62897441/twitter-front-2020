@@ -106,6 +106,9 @@ export default {
         const { data } = await tweetsAPI.postTweetReply({ formData, tweetId })
         this.$emit('after-post-tweet-reply', {
           ...data,
+          Tweet: {
+            ...this.tweet,
+          }
         })
         this.newTweetReply = ''
         // 送出後，清除字數上限提示

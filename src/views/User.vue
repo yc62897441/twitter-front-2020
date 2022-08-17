@@ -16,9 +16,11 @@
       </div>
       <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" v-on:after-put-userInfo="afterPutUserInfo" />
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
-      <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets" />
+      <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets"
+        v-on:after-post-tweet-reply="afterPostTweetReply" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
-      <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes" />
+      <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes"
+        v-on:after-post-tweet-reply="afterPostTweetReply" />
       <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
@@ -159,6 +161,26 @@ export default {
       Toast.fire({
         icon: 'success',
         title: '推文發送成功'
+      })
+    },
+    afterPostTweetReply(payload) {
+      this.replies.unshift({
+        User: {
+          id: this.currentUser.id,
+          avatar: this.currentUser.avatar,
+          account: this.currentUser.account,
+          name: this.currentUser.name
+        },
+        Tweet: {
+          ...payload.Tweet,
+        },
+        id: payload.id,
+        comment: payload.comment,
+        createdAt: payload.createdAt
+      })
+      Toast.fire({
+        icon: 'success',
+        title: '回覆發送成功'
       })
     },
     afterPutUserInfo(payload) {
