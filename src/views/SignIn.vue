@@ -60,13 +60,28 @@ export default {
           })
           return
         }
-        // 避免使用者移除 input 的 maxlength="20" 屬性
+
+        // 檢查 email、password 輸入內容長度，避免使用者移除 input 的 maxlength="20"or"50" 屬性
+        const maxlengthErrorMessages = []
         if (this.email.length > 50) {
-          this.email = this.email.slice(0, 50)
+          maxlengthErrorMessages.push('Email')
         }
         if (this.password.length > 20) {
-          this.password = this.password.slice(0, 20)
+          maxlengthErrorMessages.push('Password')
         }
+        if (maxlengthErrorMessages.length > 0) {
+          let title = ''
+          maxlengthErrorMessages.forEach(message => {
+            title += `${message} `
+          })
+          title += '輸入內容長度超出限制'
+          Toast.fire({
+            icon: 'warning',
+            title: title
+          })
+          return
+        }
+
         this.isProcessing = true
 
         const response = await authorizationAPI.signIn({

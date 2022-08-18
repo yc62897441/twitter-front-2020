@@ -98,21 +98,31 @@ export default {
           return
         }
 
-        // 避免使用者移除 input 的 maxlength="20"or"50" 屬性
+        // 檢查 account、email、name、password 輸入內容長度，避免使用者移除 input 的 maxlength="20"or"50" 屬性
+        const maxlengthErrorMessages = []
         if (this.name.length > 20) {
-          this.name = this.name.slice(0, 20)
+          maxlengthErrorMessages.push('Name')
         }
         if (this.email.length > 50) {
-          this.email = this.email.slice(0, 50)
+          maxlengthErrorMessages.push('Email')
         }
         if (this.account.length > 20) {
-          this.account = this.account.slice(0, 20)
+          maxlengthErrorMessages.push('Account')
         }
         if (this.password.length > 20) {
-          this.password = this.password.slice(0, 20)
+          maxlengthErrorMessages.push('Password')
         }
-        if (this.checkPassword.length > 20) {
-          this.checkPassword = this.checkPassword.slice(0, 20)
+        if (maxlengthErrorMessages.length > 0) {
+          let title = ''
+          maxlengthErrorMessages.forEach(message => {
+            title += `${message} `
+          })
+          title += '輸入內容長度超出限制'
+          Toast.fire({
+            icon: 'warning',
+            title: title
+          })
+          return
         }
 
         Toast.fire({
