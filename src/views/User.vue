@@ -258,7 +258,7 @@ export default {
       }
       // 從 LikesSection emit
       if (payload.from === 'LikesSection') {
-        const likesLength = payload.likesLengt
+        const likesLength = payload.likesLength
         const likeTweetId = payload.likeTweetId
         // 如果被喜歡的 tweet，是使用者 this.tweets 裡面的 tweet，則把最新的 tweet 的喜歡次數(likesLength) 覆寫過去
         this.tweets.forEach(tweet => {
