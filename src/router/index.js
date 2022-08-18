@@ -105,6 +105,14 @@ router.beforeEach(async (to, from, next) => {
     })
     next('/signin')
     return
+  } else if (!pathsWithAdmin.includes(to.name) && currentUser.role === 'admin') {
+    // 如果是Admin管理者，且進入一般使用者的頁面，則轉址到 /admin/main
+    Toast.fire({
+      icon: 'error',
+      title: 'Admin 管理者無法存取一般使用者頁面'
+    })
+    next('/admin/main')
+    return
   }
 
   // 對於不需要驗證 token 的頁面
