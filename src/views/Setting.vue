@@ -10,7 +10,9 @@
           <div class="form-row setting-form-row">
             <input v-model="user.account" style="background-color:#F5F8FA;" type="text" maxlength="20"
               class="form-control" id="signUpInputAccount" aria-describedby="accountHelp" name="account"
-              v-on:keyup='words_deal' required autofocus>
+              v-on:keyup='words_deal' required autofocus onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')">
             <div class="textContent-span-wrapper">
               <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
               <span class="textContent-span textContent-span-hidden"></span>
@@ -27,7 +29,9 @@
           <div class="form-row setting-form-row">
             <input v-model="user.email" style="background-color:#F5F8FA;" type="email" maxlength="50"
               class="form-control" id="signUpInputEmail" aria-describedby="emailHelp" name="email"
-              v-on:keyup='words_deal' required>
+              v-on:keyup='words_deal' required onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')">
             <div class="textContent-span-wrapper">
               <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
               <span class="textContent-span textContent-span-hidden"></span>
@@ -35,7 +39,10 @@
           </div>
           <div class="form-row setting-form-row">
             <input v-model="user.password" style="background-color:#F5F8FA;" type="password" maxlength="20"
-              class="form-control" id="signUpInputPassword" name="password" v-on:keyup='words_deal'>
+              class="form-control" id="signUpInputPassword" name="password" v-on:keyup='words_deal'
+              onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')">
             <div class="textContent-span-wrapper">
               <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
               <span class="textContent-span textContent-span-hidden"></span>
@@ -43,7 +50,10 @@
           </div>
           <div class="form-row setting-form-row">
             <input v-model="user.checkPassword" style="background-color:#F5F8FA;" type="password" maxlength="20"
-              class="form-control" id="signUpInputCheckPassword" name="checkPassword" v-on:keyup='words_deal'>
+              class="form-control" id="signUpInputCheckPassword" name="checkPassword" v-on:keyup='words_deal'
+              onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+              oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')">
             <div class="textContent-span-wrapper">
               <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
               <span class="textContent-span textContent-span-hidden"></span>
@@ -80,6 +90,10 @@ export default {
       },
       isProcessing: false,
       isSettingPage: true,
+      allowedSymbols: '@.*-',
+      allowedNumbers: '0123456789',
+      allowedUpperChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      allowedLowerChars: 'abcdefghijklmnopqrstuvwxyz',
     }
   },
   methods: {
@@ -121,6 +135,7 @@ export default {
           })
           return
         }
+
         // 避免使用者移除 input 的 maxlength="20"or"50" 屬性
         if (this.user.name.length > 20) {
           this.user.name = this.user.name.slice(0, 20)
@@ -141,6 +156,36 @@ export default {
             this.user.checkPassword = this.user.checkPassword.slice(0, 20)
           }
         }
+
+        // 檢查 account、email、password 只允許半形大小寫英文、數字與 @*-. 符號
+        const checkErrorMessages = []
+        const allowChars = this.allowedSymbols + this.allowedNumbers + this.allowedUpperChars + this.allowedLowerChars
+        function checkChars(checkObject, checkObjectName, allowChars) {
+          for (let i = 0; i < checkObject.length; i++) {
+            if (!allowChars.includes(checkObject[i])) {
+              checkErrorMessages.push(`${checkObjectName}`)
+              return
+            }
+          }
+        }
+        checkChars(this.user.account, 'Account', allowChars)
+        checkChars(this.user.email, 'Email', allowChars)
+        if (this.user.password) {
+          checkChars(this.user.password, 'Password', allowChars)
+        }
+        if (checkErrorMessages.length > 0) {
+          let title = ''
+          checkErrorMessages.forEach(message => {
+            title += `${message} `
+          })
+          title += '只允許半形大小寫英文、數字與 @*-. 符號'
+          Toast.fire({
+            icon: 'warning',
+            title: title
+          })
+          return
+        }
+
         this.isProcessing = true
         const formData = {
           name: this.user.name,
@@ -160,7 +205,7 @@ export default {
 
         // 如果 password、checkPassword input 的內容長度到上限，再送出之後input會清空，一併移除掉"字數已達上限!"的警告
         const formControls = document.querySelectorAll('.form-control')
-        for (let i = 3; i < formControls.length; i++ ) {
+        for (let i = 3; i < formControls.length; i++) {
           formControls[i].parentElement.children[1].children[0].classList.add('textContent-span-hidden')
         }
 
