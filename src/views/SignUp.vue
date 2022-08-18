@@ -9,7 +9,9 @@
         <div class="form-row sign-form-row mb-3">
           <input v-model="account" style="background-color:#F5F8FA;" type="text" maxlength="20" class="form-control"
             id="signUpInputAccount" aria-describedby="accountHelp" placeholder="帳號" name="account"
-            v-on:keyup='words_deal' required autofocus>
+            v-on:keyup='words_deal' onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')" required autofocus>
           <div class="textContent-span-wrapper">
             <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
             <span class="textContent-span textContent-span-hidden"></span>
@@ -27,7 +29,9 @@
         <div class="form-row sign-form-row mb-3">
           <input v-model="email" style="background-color:#F5F8FA;" type="email" maxlength="50" class="form-control"
             id="signUpInputEmail" aria-describedby="emailHelp" placeholder="email" name="email" v-on:keyup='words_deal'
-            required>
+            onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')" required>
           <div class="textContent-span-wrapper">
             <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
             <span class="textContent-span textContent-span-hidden"></span>
@@ -36,7 +40,9 @@
         <div class="form-row sign-form-row mb-3">
           <input v-model="password" style="background-color:#F5F8FA;" type="password" maxlength="20"
             class="form-control" id="signUpInputPassword" placeholder="密碼" name="password" v-on:keyup='words_deal'
-            required>
+            onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')" required>
           <div class="textContent-span-wrapper">
             <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
             <span class="textContent-span textContent-span-hidden"></span>
@@ -45,7 +51,9 @@
         <div class="form-row sign-form-row mb-3">
           <input v-model="checkPassword" style="background-color:#F5F8FA;" type="password" maxlength="20"
             class="form-control" id="signUpInputCheckPassword" placeholder="密碼確認" name="checkPassword"
-            v-on:keyup='words_deal' required>
+            v-on:keyup='words_deal' onkeyup="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            onpaste="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')"
+            oncontextmenu="value=value.replace(/[^\a-\z\A-\Z0-9\@\.\-\*]/g,'')" required>
           <div class="textContent-span-wrapper">
             <span class="textContent-span textContent-span-warning textContent-span-hidden">字數已達上限!</span>
             <span class="textContent-span textContent-span-hidden"></span>
@@ -72,7 +80,11 @@ export default {
       email: '',
       password: '',
       checkPassword: '',
-      isProcessing: false
+      isProcessing: false,
+      allowedSymbols: '@.*-',
+      allowedNumbers: '0123456789',
+      allowedUpperChars: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      allowedLowerChars: 'abcdefghijklmnopqrstuvwxyz',
     }
   },
   methods: {
@@ -118,6 +130,33 @@ export default {
             title += `${message} `
           })
           title += '輸入內容長度超出限制'
+          Toast.fire({
+            icon: 'warning',
+            title: title
+          })
+          return
+        }
+
+        // 檢查 account、email、password 只允許半形大小寫英文、數字與 @*-. 符號
+        const checkErrorMessages = []
+        const allowChars = this.allowedSymbols + this.allowedNumbers + this.allowedUpperChars + this.allowedLowerChars
+        function checkChars(checkObject, checkObjectName, allowChars) {
+          for (let i = 0; i < checkObject.length; i++) {
+            if (!allowChars.includes(checkObject[i])) {
+              checkErrorMessages.push(`${checkObjectName}`)
+              return
+            }
+          }
+        }
+        checkChars(this.account, 'Account', allowChars)
+        checkChars(this.email, 'Email', allowChars)
+        checkChars(this.password, 'Password', allowChars)
+        if (checkErrorMessages.length > 0) {
+          let title = ''
+          checkErrorMessages.forEach(message => {
+            title += `${message} `
+          })
+          title += '只允許半形大小寫英文、數字與 @*-. 符號'
           Toast.fire({
             icon: 'warning',
             title: title
