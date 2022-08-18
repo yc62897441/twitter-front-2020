@@ -95,9 +95,6 @@ router.beforeEach(async (to, from, next) => {
     currentUser = store.state.currentUser
   }
 
-  // 對於不需要驗證 token 的頁面
-  const pathsWithoutAuthentication = ['signin', 'signup', 'signinAdmin']
-
   // Admin管理者專屬的頁面
   const pathsWithAdmin = ['adminMain', 'adminUsers']
   // 如果不是Admin管理者，且進入Admin管理者專屬的頁面，則轉址到登入頁
@@ -109,6 +106,9 @@ router.beforeEach(async (to, from, next) => {
     next('/signin')
     return
   }
+
+  // 對於不需要驗證 token 的頁面
+  const pathsWithoutAuthentication = ['signin', 'signup', 'signinAdmin']
 
   // 如果 isAuthenticated 為 false，且進入需要驗證的頁面，則轉址到登入頁
   if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
