@@ -71,6 +71,7 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
+        // 切換 FollowingBar 上的 "跟隨/正在跟隨" 按鈕 
         this.currentUser.Followings.push(followingId)
 
         // 更新前端畫面
@@ -133,6 +134,7 @@ export default {
           throw new Error(data.message)
         }
         // 更新前端畫面
+        // 切換 FollowingBar 上的 "跟隨/正在跟隨" 按鈕 
         this.currentUser.Followings = this.currentUser.Followings.map(followings => {
           if (followings !== followingId) {
             return followings

@@ -312,6 +312,7 @@ export default {
               tempUserFollowers.push(item)
             }
           })
+          this.userFollowers = tempUserFollowers
           this.userFollowersInData = tempUserFollowers
         }
       })
