@@ -11,7 +11,7 @@
         </div>
         <div class="middle-container-page-title-wrapper">
           <h1>{{ user.name }}</h1>
-          <h3>{{ user.repliesLength }}則推文</h3>
+          <h3>{{ user.tweetsNum }}則推文</h3>
         </div>
       </div>
       <UserBoard v-bind:propsUser="user" v-bind:currentUser="currentUser" v-on:after-put-userInfo="afterPutUserInfo"
