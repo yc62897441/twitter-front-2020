@@ -136,25 +136,33 @@ export default {
           return
         }
 
-        // 避免使用者移除 input 的 maxlength="20"or"50" 屬性
+        // 檢查 account、email、name、password 輸入內容長度，避免使用者移除 input 的 maxlength="20"or"50" 屬性
+        const maxlengthErrorMessages = []
         if (this.user.name.length > 20) {
-          this.user.name = this.user.name.slice(0, 20)
+          maxlengthErrorMessages.push('Name')
         }
         if (this.user.email.length > 50) {
-          this.user.email = this.user.email.slice(0, 50)
+          maxlengthErrorMessages.push('Email')
         }
         if (this.user.account.length > 20) {
-          this.user.account = this.user.account.slice(0, 20)
+          maxlengthErrorMessages.push('Account')
         }
         if (this.user.password) {
           if (this.user.password.length > 20) {
-            this.user.password = this.user.password.slice(0, 20)
+            maxlengthErrorMessages.push('Password')
           }
         }
-        if (this.user.checkPassword) {
-          if (this.user.checkPassword.length > 20) {
-            this.user.checkPassword = this.user.checkPassword.slice(0, 20)
-          }
+        if (maxlengthErrorMessages.length > 0) {
+          let title = ''
+          maxlengthErrorMessages.forEach(message => {
+            title += `${message} `
+          })
+          title += '輸入內容長度超出限制'
+          Toast.fire({
+            icon: 'warning',
+            title: title
+          })
+          return
         }
 
         // 檢查 account、email、password 只允許半形大小寫英文、數字與 @*-. 符號
