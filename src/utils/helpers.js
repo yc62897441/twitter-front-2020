@@ -3,7 +3,8 @@ import Swal from 'sweetalert2'
 
 let baseURL = ''
 if (process.env.NODE_ENV === 'production') {
-  baseURL = 'https://project-name.herokuapp.com/api/'
+  // baseURL = 'https://project-name.herokuapp.com/api/'
+  baseURL = 'https://ac-s3-simple-twitter.herokuapp.com/api/'
 } else {
   baseURL = 'http://localhost:3000/api'
 }
