@@ -9,7 +9,8 @@
       <body>
 
         <button v-on:click="aaa">press</button>
-
+        <h1>test git merge</h1>
+        <h1>test git merge(not merge)</h1>
       </body>
 
     </div>
