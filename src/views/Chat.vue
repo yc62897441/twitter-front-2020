@@ -14,13 +14,22 @@
         <div class="chat-board-content">
 
           <div class="chat-board-content-single-wrapper" v-for="message in messages">
-            <div class="chat-board-avatar-wrapper">
-              <img src="../assets/avatar-photo.png" alt="">
-            </div>
-            <div class="chat-board-content-info-wrapper">
-              <div class="chat-board-content-info-text"> {{ message.msg }}</div>
-              <div class="chat-board-content-info-date"> {{ message.time }}</div>
-            </div>
+            <template v-if="message.type === 'message'">
+              <div class="chat-board-avatar-wrapper">
+                <router-link class="link" v-bind:to="'/users/' + message.user.id">
+                  <img v-bind:src="message.user.avatar" alt="">
+                </router-link>
+              </div>
+              <div class="chat-board-content-info-wrapper">
+                <div class="chat-board-content-info-text"> {{ message.msg }}</div>
+                <div class="chat-board-content-info-date"> {{ message.time }}</div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="notice-wrapper">
+                <div class="notice-info-text">{{ message.msg }}</div>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -59,40 +68,44 @@ export default {
   sockets: {
     connect() {
       this.$message({
-        message: '连接成功！！！',
+        message: '連線成功！！！',
         type: 'success'
-      });
-
+      })
     },
     disconnect() {
       this.$message({
-        message: '连接断开！！！',
+        message: '連線解除！！！',
         type: 'error'
       })
     },
     broadcast_msg(data) {
-      this.messages.push({
-        msg: data.msg.split(':')[1],
-        time: data.time
-      })
-
-      // const content = document.querySelector('.chat-board-content')
-      // let div = document.createElement('div')
-      // div.innerText = `${data.msg} ---${data.time}`
-      // if (data.type === ENTER) {
-      //   div.style.color = 'green'
-      // } else if (data.type === LEAVE) {
-      //   div.style.color = 'red'
-      // } else {
-      //   div.style.color = 'blue'
-      // }
-      // content.appendChild(div)
-
+      if (data.type === 'message') {
+        this.messages.push({
+          type: data.type,
+          msg: data.inputText,
+          time: data.time,
+          user: {
+            ...data.user
+          }
+        })
+      } else {
+        this.messages.push({
+          type: data.type,
+          msg: data.inputText
+        })
+      }
     }
   },
   methods: {
     sendMsg() {
-      this.$socket.emit('send_msg', this.input)
+      this.$socket.emit('send_msg', {
+        inputText: this.input,
+        user: {
+          id: this.currentUser.id,
+          name: this.currentUser.name,
+          avatar: this.currentUser.avatar
+        }
+      })
       this.input = ''
     }
   },
@@ -158,6 +171,24 @@ export default {
   font-size: 13px;
   line-height: 19px;
   color: #657786;
+}
+
+.notice-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.notice-info-text {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 20px;
+  color: #657786;
+  background: #E6ECF0;
 }
 
 .chat-input-wrapper {
