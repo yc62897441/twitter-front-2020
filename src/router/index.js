@@ -58,6 +58,11 @@ const routes = [
     component: () => import('../views/Setting.vue')
   },
   {
+    path: '/chat',
+    name: 'chat',
+    component: () => import('../views/Chat.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound,
