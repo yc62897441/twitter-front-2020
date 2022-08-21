@@ -14,7 +14,7 @@
         <div class="chat-board-content">
 
           <div class="chat-board-content-single-wrapper" v-for="message in messages">
-            <template v-if="message.type === 'message'">
+            <template v-if="message.type === 'message' && message.user.id !== currentUser.id">
               <div class="chat-board-avatar-wrapper">
                 <router-link class="link" v-bind:to="'/users/' + message.user.id">
                   <img v-bind:src="message.user.avatar" alt="">
@@ -22,6 +22,12 @@
               </div>
               <div class="chat-board-content-info-wrapper">
                 <div class="chat-board-content-info-text"> {{ message.msg }}</div>
+                <div class="chat-board-content-info-date"> {{ message.time }}</div>
+              </div>
+            </template>
+            <template v-else-if="message.type === 'message' && message.user.id === currentUser.id">
+              <div class="chat-board-content-info-wrapper chat-board-content-info-wrapper-reverse">
+                <div class="chat-board-content-info-text chat-board-content-info-text-reverse"> {{ message.msg }}</div>
                 <div class="chat-board-content-info-date"> {{ message.time }}</div>
               </div>
             </template>
@@ -143,6 +149,12 @@ export default {
   margin: 2.5px 0px;
 }
 
+.chat-board-avatar-wrapper {
+  display: flex;
+  align-items: end;
+  padding-bottom: 19px;
+}
+
 .chat-board-avatar-wrapper img {
   width: 36px;
   height: 36px;
@@ -154,16 +166,27 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: start;
   margin-left: 5px;
+}
+
+.chat-board-content-info-wrapper-reverse {
+  align-items: end;
+  margin-right: 5px;
 }
 
 .chat-board-content-info-text {
   max-width: 75%;
-  padding: 5px;
-  padding-left: 10px;
-  border-radius: 15px;
+  padding: 5px 10px;
+  border-radius: 15px 15px 15px 0px;
   background: #E6ECF0;
   word-break: break-all;
+}
+
+.chat-board-content-info-text-reverse {
+  border-radius: 15px 15px 0px 15px;
+  background-color: var(--orange);
+  color: var(--white);
 }
 
 .chat-board-content-info-date {
