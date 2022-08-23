@@ -5,7 +5,38 @@
     </div>
 
     <div class="middle-container">
-      <div>上線使用者</div>
+      <h1>上線使用者</h1>
+      <div class="users-wrapper">
+
+        <div class="users-scroll-wrapper">
+
+          <div class="users">
+
+            <div class="user-wrapper">
+              <div class="user-wrapper-user-avatar-wrapper">
+                <img src="../assets/avatar-photo.png" alt="">
+              </div>
+              <div class="user-wrapper-user-name">name</div>
+              <div class="user-wrapper-user-account">@account</div>
+            </div>
+            <div class="user-wrapper">
+              <div class="user-wrapper-user-avatar-wrapper">
+                <img src="../assets/avatar-photo.png" alt="">
+              </div>
+              <div class="user-wrapper-user-name">name</div>
+              <div class="user-wrapper-user-account">@account</div>
+            </div>
+            <div class="user-wrapper">
+              <div class="user-wrapper-user-avatar-wrapper">
+                <img src="../assets/avatar-photo.png" alt="">
+              </div>
+              <div class="user-wrapper-user-name">name</div>
+              <div class="user-wrapper-user-account">@account</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="right-container">
@@ -175,6 +206,64 @@ export default {
 ​
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+/* === */
+/* === */
+/* === */
+/* middle-container */
+
+.users-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.users-scroll-wrapper {
+  overflow: auto;
+}
+
+.users {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.user-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+  border-top: 1px solid #E6ECF0;
+}
+
+.user-wrapper-user-avatar-wrapper img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.user-wrapper-user-name {
+  margin-left: 10px;
+  margin-right: 5px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 22px;
+  color: #1C1C1C;
+}
+
+.tuser-wrapper-user-account {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #657786;
+}
+
+/* === */
+/* === */
+/* === */
+/* right-container */
+
 .chat-board-wrapper {
   position: fixed;
   display: flex;
