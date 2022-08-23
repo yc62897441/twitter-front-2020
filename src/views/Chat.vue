@@ -122,14 +122,32 @@ export default {
           msg: data.inputText
         })
       }
+    },
+    historical_messages(data) {
+      data.forEach(message => {
+        this.messages.push({
+          type: 'message',
+          msg: message.text,
+          time: message.createdAt,
+          user: {
+            ...message.User
+          }
+        })
+      })
     }
   },
   methods: {
     enter_chat() {
       this.$socket.emit('enter_chat', {
         user: {
+          id: this.currentUser.id,
           name: this.currentUser.name,
         }
+      })
+    },
+    historical_messages() {
+      this.$socket.emit('historical_messages', {
+        ccc: 123
       })
     },
     sendMsg() {
@@ -149,6 +167,7 @@ export default {
   },
   mounted() {
     this.enter_chat()
+    this.historical_messages()
   }
 }
 </script>
