@@ -55,6 +55,28 @@
 import Navbar from '../components/Navbar.vue'
 import { mapState } from 'vuex'
 
+import Vue from 'vue'
+import App from '../App.vue'
+import router from '../router'
+import store from '../store'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import VueSocketIO from 'vue-socket.io'
+import SocketIO from 'socket.io-client'
+
+Vue.config.productionTip = false
+
+Vue.use(ElementUI)
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: SocketIO('ws://localhost:3030'),
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_'
+  }
+}))
+
 const ENTER = 0
 const LEAVE = 1
 
@@ -103,6 +125,13 @@ export default {
     }
   },
   methods: {
+    enter_chat() {
+      this.$socket.emit('enter_chat', {
+        user: {
+          name: this.currentUser.name,
+        }
+      })
+    },
     sendMsg() {
       this.$socket.emit('send_msg', {
         inputText: this.input,
@@ -118,6 +147,9 @@ export default {
   computed: {
     ...mapState(['currentUser'])
   },
+  mounted() {
+    this.enter_chat()
+  }
 }
 </script>
 ​

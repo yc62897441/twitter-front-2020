@@ -9,11 +9,16 @@ import SocketIO from 'socket.io-client'
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI)
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketIO('ws://localhost:3000')
-}))
+// Vue.use(ElementUI)
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: SocketIO('ws://localhost:3000/api/chat/public'),
+//   vuex: {
+//     store,
+//     actionPrefix: 'SOCKET_',
+//     mutationPrefix: 'SOCKET_'
+//   }
+// }))
 
 new Vue({
   router,
