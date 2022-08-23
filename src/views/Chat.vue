@@ -11,29 +11,15 @@
         <div class="users-scroll-wrapper">
 
           <div class="users">
-
-            <div class="user-wrapper">
+            <div class="user-wrapper" v-for="user in users">
               <div class="user-wrapper-user-avatar-wrapper">
-                <img src="../assets/avatar-photo.png" alt="">
+                <router-link class="link" v-bind:to="'/users/' + user.id">
+                  <img v-bind:src="user.avatar" alt="">
+                </router-link>
               </div>
-              <div class="user-wrapper-user-name">name</div>
-              <div class="user-wrapper-user-account">@account</div>
+              <div class="user-wrapper-user-name">{{ user.name }}</div>
+              <div class="user-wrapper-user-account">@{{ user.account }}</div>
             </div>
-            <div class="user-wrapper">
-              <div class="user-wrapper-user-avatar-wrapper">
-                <img src="../assets/avatar-photo.png" alt="">
-              </div>
-              <div class="user-wrapper-user-name">name</div>
-              <div class="user-wrapper-user-account">@account</div>
-            </div>
-            <div class="user-wrapper">
-              <div class="user-wrapper-user-avatar-wrapper">
-                <img src="../assets/avatar-photo.png" alt="">
-              </div>
-              <div class="user-wrapper-user-name">name</div>
-              <div class="user-wrapper-user-account">@account</div>
-            </div>
-
           </div>
         </div>
       </div>
@@ -119,6 +105,7 @@ export default {
   name: 'Chat',
   data() {
     return {
+      users: [],
       input: '',
       content: '',
       message: '',
@@ -137,6 +124,9 @@ export default {
         message: '連線解除！！！',
         type: 'error'
       })
+    },
+    add_user(data) {
+      this.users = data
     },
     broadcast_msg(data) {
       if (data.type === 'message') {
@@ -174,6 +164,8 @@ export default {
         user: {
           id: this.currentUser.id,
           name: this.currentUser.name,
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar
         }
       })
     },
@@ -206,7 +198,6 @@ export default {
 ​
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 /* === */
 /* === */
 /* === */
