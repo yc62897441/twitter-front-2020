@@ -9,33 +9,35 @@
     </div>
 
     <div class="right-container">
-
       <div class="chat-board-wrapper">
-        <div class="chat-board-content">
 
-          <div class="chat-board-content-single-wrapper" v-for="message in messages">
-            <template v-if="message.type === 'message' && message.user.id !== currentUser.id">
-              <div class="chat-board-avatar-wrapper">
-                <router-link class="link" v-bind:to="'/users/' + message.user.id">
-                  <img v-bind:src="message.user.avatar" alt="">
-                </router-link>
-              </div>
-              <div class="chat-board-content-info-wrapper">
-                <div class="chat-board-content-info-text"> {{ message.msg }}</div>
-                <div class="chat-board-content-info-date"> {{ message.time }}</div>
-              </div>
-            </template>
-            <template v-else-if="message.type === 'message' && message.user.id === currentUser.id">
-              <div class="chat-board-content-info-wrapper chat-board-content-info-wrapper-reverse">
-                <div class="chat-board-content-info-text chat-board-content-info-text-reverse"> {{ message.msg }}</div>
-                <div class="chat-board-content-info-date"> {{ message.time }}</div>
-              </div>
-            </template>
-            <template v-else>
-              <div class="notice-wrapper">
-                <div class="notice-info-text">{{ message.msg }}</div>
-              </div>
-            </template>
+        <div class="chat-board-scroll-wrapper">
+          <div class="chat-board-content">
+            <div class="chat-board-content-single-wrapper" v-for="message in messages">
+              <template v-if="message.type === 'message' && message.user.id !== currentUser.id">
+                <div class="chat-board-avatar-wrapper">
+                  <router-link class="link" v-bind:to="'/users/' + message.user.id">
+                    <img v-bind:src="message.user.avatar" alt="">
+                  </router-link>
+                </div>
+                <div class="chat-board-content-info-wrapper">
+                  <div class="chat-board-content-info-text"> {{ message.msg }}</div>
+                  <div class="chat-board-content-info-date"> {{ message.time }}</div>
+                </div>
+              </template>
+              <template v-else-if="message.type === 'message' && message.user.id === currentUser.id">
+                <div class="chat-board-content-info-wrapper chat-board-content-info-wrapper-reverse">
+                  <div class="chat-board-content-info-text chat-board-content-info-text-reverse"> {{ message.msg }}
+                  </div>
+                  <div class="chat-board-content-info-date"> {{ message.time }}</div>
+                </div>
+              </template>
+              <template v-else>
+                <div class="notice-wrapper">
+                  <div class="notice-info-text">{{ message.msg }}</div>
+                </div>
+              </template>
+            </div>
           </div>
         </div>
 
@@ -44,10 +46,9 @@
             v-model="input"></textarea>
           <button class="chat-input-button" @click="sendMsg">Send</button>
         </div>
+
       </div>
-
     </div>
-
   </div>
 </template>
 
@@ -179,16 +180,22 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  justify-content: end;
   width: 500px;
   height: 100vh;
+  min-height: 0px;
   padding: 17px 0px;
+}
+
+.chat-board-scroll-wrapper {
+  overflow: auto;
 }
 
 .chat-board-content {
   display: flex;
   flex-direction: column;
   justify-content: end;
-  height: 100%;
+  /* height: 100%; */
   padding: 0px 15px;
   text-align: left;
 }
@@ -229,13 +236,13 @@ export default {
 .chat-board-content-info-text {
   max-width: 75%;
   padding: 5px 10px;
-  border-radius: 15px 15px 15px 0px;
+  border-radius: 15px 10px 10px 0px;
   background: #E6ECF0;
   word-break: break-all;
 }
 
 .chat-board-content-info-text-reverse {
-  border-radius: 15px 15px 0px 15px;
+  border-radius: 10px 15px 0px 10px;
   background-color: var(--orange);
   color: var(--white);
 }
