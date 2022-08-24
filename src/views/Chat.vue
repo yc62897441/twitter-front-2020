@@ -127,7 +127,7 @@ export default {
         type: 'error'
       })
     },
-    add_user(data) {
+    update_users(data) {
       this.users = data
     },
     broadcast_msg(data) {
@@ -205,6 +205,15 @@ export default {
   mounted() {
     this.enter_chat()
     this.historical_messages()
+  },
+  beforeDestroy() {
+    this.$socket.emit('remove_user', {
+      user: {
+        id: this.currentUser.id,
+        name: this.currentUser.name,
+        avatar: this.currentUser.avatar
+      }
+    })
   }
 }
 </script>
