@@ -56,6 +56,7 @@
               </template>
             </div>
           </div>
+          <div><a id="msg_end" name="1" href="#1">&nbsp</a></div>
         </div>
 
         <div class="chat-input-wrapper">
@@ -109,7 +110,8 @@ export default {
       input: '',
       content: '',
       message: '',
-      messages: []
+      messages: [],
+      firstLoadHistoricalMessages: true
     }
   },
   sockets: {
@@ -156,6 +158,10 @@ export default {
           }
         })
       })
+      // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
+      if (this.firstLoadHistoricalMessages) {
+        this.endScrollbar()
+      }
     }
   },
   methods: {
@@ -171,7 +177,7 @@ export default {
     },
     historical_messages() {
       this.$socket.emit('historical_messages', {
-        ccc: 123
+        noUse: 'noUse'
       })
     },
     sendMsg() {
@@ -184,6 +190,10 @@ export default {
         }
       })
       this.input = ''
+    },
+    endScrollbar() {
+      const msg_end = document.querySelector('#msg_end')
+      msg_end.click()
     }
   },
   computed: {
