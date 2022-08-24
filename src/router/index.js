@@ -63,6 +63,11 @@ const routes = [
     component: () => import('../views/Chat.vue')
   },
   {
+    path: '/chat_private',
+    name: 'chat_private',
+    component: () => import('../views/ChatPrivate.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound,

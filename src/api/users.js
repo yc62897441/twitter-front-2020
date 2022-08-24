@@ -35,4 +35,7 @@ export default {
   getUserFollowers: ({ userId }) => {
     return apiHelper.get(`users/${userId}/followers`)
   },
+  getConnectedUsers: ({ userId }) => {
+    return apiHelper.get(`users/${userId}/getConnectedUsers`)
+  }
 }
