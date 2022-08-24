@@ -56,7 +56,7 @@
               </template>
             </div>
           </div>
-          <div><a id="msg_end" name="1" href="#1">&nbsp</a></div>
+          <div id="msg_end" style="height:0px; overflow:hidden"></div>
         </div>
 
         <div class="chat-input-wrapper">
@@ -158,9 +158,12 @@ export default {
           }
         })
       })
+
       // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
       if (this.firstLoadHistoricalMessages) {
-        this.endScrollbar()
+        setTimeout(() => {
+          this.endScrollbar()
+        }, 1)
       }
     }
   },
@@ -193,8 +196,8 @@ export default {
     },
     endScrollbar() {
       const msg_end = document.querySelector('#msg_end')
-      msg_end.click()
-    }
+      msg_end.scrollIntoView()
+    },
   },
   computed: {
     ...mapState(['currentUser'])
