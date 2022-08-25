@@ -6,20 +6,14 @@
 
     <div class="middle-container">
       <h1>訊息</h1>
-      <input type="text" placeholder="user1" v-model="user1">
-      <input type="text" placeholder="user2" v-model="user2">
-      <input type="text" placeholder="text" v-model="text">
-      <button v-on:click="sendPrivateMsg">sendPrivateMsg</button>
       <div class="users-wrapper">
 
         <div class="users-scroll-wrapper">
 
           <div class="users">
-            <div class="user-wrapper" v-for="user in users">
+            <div class="user-wrapper user-wrapper-private" v-for="user in users" v-on:click="openPrivateChat(user.id)">
               <div class="user-wrapper-user-avatar-wrapper">
-                <router-link class="link" v-bind:to="'/users/' + user.id">
-                  <img v-bind:src="user.avatar" alt="">
-                </router-link>
+                <img v-bind:src="user.avatar" alt="">
               </div>
               <div class="user-wrapper-user-name">{{ user.name }}</div>
               <div class="user-wrapper-user-account">@{{ user.account }}</div>
@@ -66,7 +60,7 @@
         <div class="chat-input-wrapper">
           <textarea class="chat-input-text" style="background-color:#F5F8FA;" cols="30" rows="2"
             v-model="input"></textarea>
-          <button class="chat-input-button" @click="sendMsg">Send</button>
+          <button class="chat-input-button" @click="sendPrivateMsg">Send</button>
         </div>
 
       </div>
@@ -117,9 +111,7 @@ export default {
       message: '',
       messages: [],
       firstLoadHistoricalMessages: true,
-      user1: '',
-      user2: '',
-      text: ''
+      targetUser: {}
     }
   },
   sockets: {
@@ -138,10 +130,7 @@ export default {
     get_socket_id(socketId) {
       this.currentUser.socketId = socketId
     },
-    // update_users(data) {
-    //   this.users = data
-    // },
-    broadcast_msg(data) {
+    broadcast_msg_private(data) {
       if (data.type === 'message') {
         this.messages.push({
           type: data.type,
@@ -182,7 +171,7 @@ export default {
     async fetchConnectedUsers() {
       try {
         let userId = this.currentUser.id
-        const response = await usersAPI.getConnectedUsers({userId})
+        const response = await usersAPI.getConnectedUsers({ userId })
         if (response.status !== 200) {
           throw new Error()
         }
@@ -196,8 +185,8 @@ export default {
         })
       }
     },
-    enter_chat() {
-      this.$socket.emit('enter_chat', {
+    enter_chat_private() {
+      this.$socket.emit('enter_chat_private', {
         user: {
           id: this.currentUser.id,
           name: this.currentUser.name,
@@ -206,9 +195,21 @@ export default {
         }
       })
     },
-    historical_messages() {
-      this.$socket.emit('historical_messages', {
-        noUse: 'noUse'
+    openPrivateChat(id) {
+      this.messages = []
+      let currentUserId = this.currentUser.id
+      let targetUserId = id
+      this.users.forEach(user => {
+        if(user.id === id) {
+          this.targetUser = {
+            ...user,
+          }
+        }
+      })
+      this.$socket.emit('historical_messages_private', {
+        type: 'get_historical_messages_private',
+        currentUserId: currentUserId,
+        targetUserId: targetUserId
       })
     },
     sendMsg() {
@@ -224,11 +225,11 @@ export default {
     },
     sendPrivateMsg() {
       this.$socket.emit('send_private_msg', {
-        inputText: 'send_private_msg',
-        user1: this.currentUser.socketId,
-        user2: this.user2,
-        text: this.text
+        inputText: this.input,
+        user1: this.currentUser,
+        user2: this.targetUser,
       })
+      this.input = ''
     },
     endScrollbar() {
       const msg_end = document.querySelector('#msg_end')
@@ -239,18 +240,8 @@ export default {
     ...mapState(['currentUser'])
   },
   mounted() {
-    this.enter_chat()
-    this.historical_messages()
+    this.enter_chat_private()
     this.fetchConnectedUsers()
-  },
-  beforeDestroy() {
-    this.$socket.emit('remove_user', {
-      user: {
-        id: this.currentUser.id,
-        name: this.currentUser.name,
-        avatar: this.currentUser.avatar
-      }
-    })
   }
 }
 </script>
@@ -284,6 +275,10 @@ export default {
   width: 100%;
   padding: 15px;
   border-top: 1px solid #E6ECF0;
+}
+
+.user-wrapper-private {
+  cursor: pointer;
 }
 
 .user-wrapper-user-avatar-wrapper img {
