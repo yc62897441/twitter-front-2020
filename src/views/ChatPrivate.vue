@@ -200,7 +200,7 @@ export default {
       let currentUserId = this.currentUser.id
       let targetUserId = id
       this.users.forEach(user => {
-        if(user.id === id) {
+        if (user.id === id) {
           this.targetUser = {
             ...user,
           }
@@ -242,7 +242,36 @@ export default {
   mounted() {
     this.enter_chat_private()
     this.fetchConnectedUsers()
-  }
+  },
+  async beforeUpdate() {
+    // 從 UserBoard.vue 點擊 icon-messege 連過來本頁面，會帶有 query 則執行下面程式，若否則略過
+    if (this.$route.query.userId) {
+      // 檢查 query.userId 是否已經從在目前使用者的 ConnectedUsers 中
+      const targetUserId = Number(this.$route.query.userId)
+      const existedConnectedUsersId = []
+      this.users.forEach(user => {
+        existedConnectedUsersId.push(user.id)
+      })
+      
+      if (existedConnectedUsersId.includes(targetUserId)) {
+        // 如果 query.userId 已經從在目前使用者的 ConnectedUsers 中
+        // 開啟聊天並讀取歷史訊息(openPrivateChat)
+        this.openPrivateChat(targetUserId)
+      } else {
+        // 如果 query.userId 尚不存在目前使用者的 ConnectedUsers 中
+        // 建立新的 Room，並把 targetUser 新增到畫面上的使用者列表中，並開啟聊天(openPrivateChat)
+        const formData = { targetUserId: targetUserId }
+        const response = await usersAPI.createChatRoom({ formData })
+        this.users.push({
+          ...response.data.targetUser,
+        })
+        this.openPrivateChat(data.targetUser.id)
+      }
+
+      // 刪除URL參數，保持網址列乾淨，也避免重新整理時有 query 會再多跑到這裡面一次
+      this.$router.push({ query: {} })
+    }
+  },
 }
 </script>
 ​
