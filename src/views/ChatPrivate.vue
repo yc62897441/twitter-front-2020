@@ -111,7 +111,12 @@ export default {
       message: '',
       messages: [],
       firstLoadHistoricalMessages: true,
-      targetUser: {}
+      targetUser: {
+        id: 0,
+        name: 0,
+        account: 0,
+        avatar: 0
+      }
     }
   },
   sockets: {
@@ -131,7 +136,9 @@ export default {
       this.currentUser.socketId = socketId
     },
     broadcast_msg_private(data) {
-      if (data.type === 'message') {
+      // 當傳來的訊息的寄送者，是目前在正聊天的對象(targetUser)，或是使用者本人時(currentUser)，才新增到畫面上的messages
+      // 避免目前正在跟 A 聊天，而 B 傳來的訊息會顯示到自己與 A 的私聊訊息串中
+      if (data.senderId === this.targetUser.id || data.senderId === this.currentUser.id) {
         this.messages.push({
           type: data.type,
           msg: data.inputText,
@@ -139,11 +146,6 @@ export default {
           user: {
             ...data.user
           }
-        })
-      } else {
-        this.messages.push({
-          type: data.type,
-          msg: data.inputText
         })
       }
     },
@@ -252,7 +254,7 @@ export default {
       this.users.forEach(user => {
         existedConnectedUsersId.push(user.id)
       })
-      
+
       if (existedConnectedUsersId.includes(targetUserId)) {
         // 如果 query.userId 已經從在目前使用者的 ConnectedUsers 中
         // 開啟聊天並讀取歷史訊息(openPrivateChat)
