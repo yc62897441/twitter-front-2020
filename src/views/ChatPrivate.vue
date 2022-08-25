@@ -7,9 +7,7 @@
     <div class="middle-container">
       <h1>訊息</h1>
       <div class="users-wrapper">
-
         <div class="users-scroll-wrapper">
-
           <div class="users">
             <div class="user-wrapper user-wrapper-private" v-for="user in users" v-on:click="openPrivateChat(user.id)">
               <div class="user-wrapper-user-avatar-wrapper">
@@ -25,7 +23,6 @@
 
     <div class="right-container">
       <div class="chat-board-wrapper">
-
         <div class="chat-board-scroll-wrapper">
           <div class="chat-board-content">
             <div class="chat-board-content-single-wrapper" v-for="message in messages">
@@ -62,7 +59,6 @@
             v-model="input"></textarea>
           <button class="chat-input-button" @click="sendPrivateMsg">Send</button>
         </div>
-
       </div>
     </div>
   </div>
@@ -74,8 +70,6 @@ import { mapState } from 'vuex'
 import usersAPI from '../api/users'
 
 import Vue from 'vue'
-import App from '../App.vue'
-import router from '../router'
 import store from '../store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -95,9 +89,6 @@ Vue.use(new VueSocketIO({
   }
 }))
 
-const ENTER = 0
-const LEAVE = 1
-
 export default {
   components: {
     Navbar
@@ -107,8 +98,6 @@ export default {
     return {
       users: [],
       input: '',
-      content: '',
-      message: '',
       messages: [],
       firstLoadHistoricalMessages: true,
       targetUser: {
@@ -164,6 +153,7 @@ export default {
       // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
       if (this.firstLoadHistoricalMessages) {
         setTimeout(() => {
+          this.firstLoadHistoricalMessages = false
           this.endScrollbar()
         }, 1)
       }
@@ -213,17 +203,6 @@ export default {
         currentUserId: currentUserId,
         targetUserId: targetUserId
       })
-    },
-    sendMsg() {
-      this.$socket.emit('send_msg', {
-        inputText: this.input,
-        user: {
-          id: this.currentUser.id,
-          name: this.currentUser.name,
-          avatar: this.currentUser.avatar
-        }
-      })
-      this.input = ''
     },
     sendPrivateMsg() {
       this.$socket.emit('send_private_msg', {

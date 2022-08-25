@@ -75,8 +75,6 @@ import Navbar from '../components/Navbar.vue'
 import { mapState } from 'vuex'
 
 import Vue from 'vue'
-import App from '../App.vue'
-import router from '../router'
 import store from '../store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -96,9 +94,6 @@ Vue.use(new VueSocketIO({
   }
 }))
 
-const ENTER = 0
-const LEAVE = 1
-
 export default {
   components: {
     Navbar
@@ -108,8 +103,6 @@ export default {
     return {
       users: [],
       input: '',
-      content: '',
-      message: '',
       messages: [],
       firstLoadHistoricalMessages: true
     }
@@ -162,6 +155,7 @@ export default {
       // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
       if (this.firstLoadHistoricalMessages) {
         setTimeout(() => {
+          this.firstLoadHistoricalMessages = false
           this.endScrollbar()
         }, 1)
       }
