@@ -21,6 +21,7 @@
       <router-link to="/chat_private" class="icon-wrapper">
         <img src="../assets/icon-messege-nocolor.png" alt="">
         <span>私人聊天室</span>
+        <div class="red-spot red-spot-hidden"></div>
       </router-link>
       <router-link v-bind:to="'/users/' + currentUser.id" class="icon-wrapper">
         <img src="../assets/user.png" alt="">
@@ -73,7 +74,6 @@ export default {
 </script>
 
 <style>
-
 .navbar-wrapper {
   position: fixed;
   display: flex;
@@ -133,5 +133,19 @@ export default {
   background-color: var(--orange);
   color: var(--white);
   border: 1px solid var(--orange);
+}
+
+/* 有新聊天訊息或通知，顯示的紅點 */
+.red-spot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: firebrick;
+  border-radius: 50%;
+  transform: translate(200%, -80%);
+}
+
+.red-spot-hidden {
+  visibility: hidden;
 }
 </style>
