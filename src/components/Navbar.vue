@@ -48,6 +48,7 @@
 
 <script>
 import { Toast } from '../utils/helpers'
+import eventBus from "../utils/eventBus"
 
 export default {
   props: {
@@ -69,6 +70,15 @@ export default {
         title: '成功登出'
       })
     },
+    getFromBrotherTest() {
+      eventBus.$on("showRedSpot", (param) => {
+        const redSpot = document.querySelector('.red-spot')
+        redSpot.classList.remove('red-spot-hidden')
+      })
+    }
+  },
+  created() {
+    this.getFromBrotherTest()
   }
 }
 </script>

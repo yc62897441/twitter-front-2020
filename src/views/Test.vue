@@ -9,13 +9,17 @@
       <div class="users-wrapper">
         <div class="users-scroll-wrapper">
           <div class="users">
-            <div class="user-wrapper user-wrapper-private" v-for="user in users"
+            <div class="user-wrapper user-wrapper-private" v-for="user in users" v-bind:key="user.id"
               v-on:click="test_openPrivateChat(user.id)">
               <div class="user-wrapper-user-avatar-wrapper">
                 <img v-bind:src="user.avatar" alt="">
               </div>
               <div class="user-wrapper-user-name">{{ user.name }}</div>
               <div class="user-wrapper-user-account">@{{ user.account }}</div>
+              <div v-if="user.currentUserUnread" class="user-wrapper-unread-count"
+                v-bind:id="'user-wrapper-unread-count' + user.id"> {{ user.currentUserUnreadNum }} </div>
+              <div v-else class="user-wrapper-unread-count user-wrapper-unread-count-hidden"
+                v-bind:id="'user-wrapper-unread-count' + user.id">0</div>
             </div>
           </div>
         </div>
@@ -68,7 +72,8 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import { mapState } from 'vuex'
-import usersAPI from '../api/users'
+import roomsAPI from '../api/rooms'
+import eventBus from "../utils/eventBus"
 
 import Vue from 'vue'
 import store from '../store'
@@ -125,18 +130,41 @@ export default {
     get_socket_id(socketId) {
       this.currentUser.socketId = socketId
     },
-    broadcast_msg_private(data) {
-      // 當傳來的訊息的寄送者，是目前在正聊天的對象(targetUser)，或是使用者本人時(currentUser)，才新增到畫面上的messages
-      // 避免目前正在跟 A 聊天，而 B 傳來的訊息會顯示到自己與 A 的私聊訊息串中
-      if (data.senderId === this.targetUser.id || data.senderId === this.currentUser.id) {
-        this.messages.push({
-          type: data.type,
-          msg: data.inputText,
-          time: data.time,
-          user: {
-            ...data.user
+    async broadcast_msg_private(data) {
+      try {
+        // 當傳來的訊息的寄送者，是目前正在聊天的對象(targetUser)，或是使用者本人時(currentUser)，才新增到畫面上的messages
+        // 避免目前正在跟 A 聊天，而 B 傳來的訊息會顯示到自己與 A 的私聊訊息串中
+        if (data.senderId === this.targetUser.id || data.senderId === this.currentUser.id) {
+          this.messages.push({
+            type: data.type,
+            msg: data.inputText,
+            time: data.time,
+            user: {
+              ...data.user
+            }
+          })
+        } else {
+          // 當傳來的訊息的寄送者，不是使用者本人時(currentUser)，且也不是正在聊天的對象(targetUser)時
+          // 寄送者的 user-wrapper 顯示紅點點(未讀訊息的狀態 + 數量)
+          const userWrapperUnreadCount = document.querySelector(`#user-wrapper-unread-count${data.senderId}`)
+          userWrapperUnreadCount.classList.remove('user-wrapper-unread-count-hidden')
+          if (Number(userWrapperUnreadCount.textContent) < 99) {
+            userWrapperUnreadCount.textContent = Number(userWrapperUnreadCount.textContent) + 1
           }
-        })
+          // 傳送後端，記錄未讀訊息的狀態 + 數量
+          const formData = {
+            unread: true,
+            senderOrTargetUserId: data.senderId,
+            userUnreadNum: Number(userWrapperUnreadCount.textContent)
+          }
+          const response = await roomsAPI.updateUserUnreadNum({ formData })
+          if (response.status !== 200) {
+            throw new Error()
+          }
+        }
+        this.dataToBrotherNavbar()
+      } catch (error) {
+        console.warn(error)
       }
     },
     historical_messages(data) {
@@ -154,7 +182,7 @@ export default {
       // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
       if (this.firstLoadHistoricalMessages) {
         setTimeout(() => {
-          this.firstLoadHistoricalMessages = false
+          // this.firstLoadHistoricalMessages = false
           this.endScrollbar()
         }, 1)
       }
@@ -163,8 +191,7 @@ export default {
   methods: {
     async fetchConnectedUsers() {
       try {
-        let userId = this.currentUser.id
-        const response = await usersAPI.getConnectedUsers({ userId })
+        const response = await roomsAPI.getConnectedUsers()
         if (response.status !== 200) {
           throw new Error()
         }
@@ -188,22 +215,39 @@ export default {
         }
       })
     },
-    test_openPrivateChat(id) {
-      this.messages = []
-      let currentUserId = this.currentUser.id
-      let targetUserId = id
-      this.users.forEach(user => {
-        if (user.id === id) {
-          this.targetUser = {
-            ...user,
-          }
+    async test_openPrivateChat(id) {
+      try {
+        // 隱藏未讀訊息的狀態 + 數量歸零
+        const userWrapperUnreadCount = document.querySelector(`#user-wrapper-unread-count${id}`)
+        userWrapperUnreadCount.classList.add('user-wrapper-unread-count-hidden')
+        userWrapperUnreadCount.textContent = 0
+        // 傳送後端，記錄未讀訊息的狀態 + 數量
+        const formData = {
+          unread: false,
+          senderOrTargetUserId: id,
+          userUnreadNum: 0
         }
-      })
-      this.$socket.emit('test_historical_messages_private', {
-        type: 'get_historical_messages_private',
-        currentUserId: currentUserId,
-        targetUserId: targetUserId
-      })
+        roomsAPI.updateUserUnreadNum({ formData })
+        // const response = await roomsAPI.updateUserUnreadNum({ formData })
+
+        this.messages = []
+        let currentUserId = this.currentUser.id
+        let targetUserId = id
+        this.users.forEach(user => {
+          if (user.id === id) {
+            this.targetUser = {
+              ...user,
+            }
+          }
+        })
+        this.$socket.emit('test_historical_messages_private', {
+          type: 'get_historical_messages_private',
+          currentUserId: currentUserId,
+          targetUserId: targetUserId
+        })
+      } catch (error) {
+        console.warn(error)
+      }
     },
     test_sendPrivateMsg() {
       this.$socket.emit('test_send_private_msg', {
@@ -217,6 +261,9 @@ export default {
       const msg_end = document.querySelector('#msg_end')
       msg_end.scrollIntoView()
     },
+    dataToBrotherNavbar() {
+      eventBus.$emit("showRedSpot", 'showRedSpot');
+    }
   },
   computed: {
     ...mapState(['currentUser'])
@@ -243,7 +290,7 @@ export default {
         // 如果 query.userId 尚不存在目前使用者的 ConnectedUsers 中
         // 建立新的 Room，並把 targetUser 新增到畫面上的使用者列表中，並開啟聊天(openPrivateChat)
         const formData = { targetUserId: targetUserId }
-        const response = await usersAPI.createChatRoom({ formData })
+        const response = await roomsAPI.createChatRoom({ formData })
         this.users.push({
           ...response.data.targetUser,
         })
@@ -452,5 +499,24 @@ export default {
   background-color: var(--white);
   color: #606266;
   border: 1px solid #606266;
+}
+
+/* 有新聊天訊息或通知，顯示的紅點 */
+.user-wrapper-unread-count {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  color: aliceblue;
+  font-size: 10px;
+  line-height: 20px;
+  font-weight: 700;
+  text-align: center;
+  background-color: firebrick;
+  border-radius: 50%;
+  transform: translate(180%, -90%);
+}
+
+.user-wrapper-unread-count-hidden {
+  visibility: hidden;
 }
 </style>

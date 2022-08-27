@@ -74,7 +74,7 @@ const routes = [
     // 動態載入寫法 component: () => import('../views/NotFound.vue')
   },
   {
-    path: '/test/:id',
+    path: '/test',
     name: 'test',
     component: () => import('../views/Test.vue')
   },

@@ -34,11 +34,5 @@ export default {
   },
   getUserFollowers: ({ userId }) => {
     return apiHelper.get(`users/${userId}/followers`)
-  },
-  getConnectedUsers: ({ userId }) => {
-    return apiHelper.get(`users/${userId}/getConnectedUsers`)
-  },
-  createChatRoom: ({ formData }) => {
-    return apiHelper.post(`users/createChatRoom`, formData)
   }
 }

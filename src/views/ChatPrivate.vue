@@ -67,7 +67,7 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import { mapState } from 'vuex'
-import usersAPI from '../api/users'
+import roomsAPI from '../api/rooms'
 
 import Vue from 'vue'
 import store from '../store'
@@ -162,8 +162,7 @@ export default {
   methods: {
     async fetchConnectedUsers() {
       try {
-        let userId = this.currentUser.id
-        const response = await usersAPI.getConnectedUsers({ userId })
+        const response = await roomsAPI.getConnectedUsers()
         if (response.status !== 200) {
           throw new Error()
         }
@@ -242,7 +241,7 @@ export default {
         // 如果 query.userId 尚不存在目前使用者的 ConnectedUsers 中
         // 建立新的 Room，並把 targetUser 新增到畫面上的使用者列表中，並開啟聊天(openPrivateChat)
         const formData = { targetUserId: targetUserId }
-        const response = await usersAPI.createChatRoom({ formData })
+        const response = await roomsAPI.createChatRoom({ formData })
         this.users.push({
           ...response.data.targetUser,
         })
