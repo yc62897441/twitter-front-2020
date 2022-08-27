@@ -14,7 +14,8 @@
     <button v-if="user.id === currentUser.id" class="btn btn-user-info" type="button" data-bs-toggle="modal"
       v-bind:data-bs-target="'#modalUserInfo'">編輯個人資料</button>
     <div v-else class="user-interaction-wrapper">
-      <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png" alt="">
+      <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png"
+        v-on:click="chat(user.id)" alt="">
       <img v-if="!currentUser.NotiObjs.includes(user.id)" class="user-interaction-wrapper-item" type="button"
         src="../assets/icon-noti.png" v-on:click="postNoti(user.id)" v-bind:disabled="isProcessing" alt="">
       <img v-else class="user-interaction-wrapper-item" type="button" src="../assets/icon-noti-on.png"
@@ -38,7 +39,7 @@
             <p>跟隨中</p>
           </div>
         </router-link>
-          <router-link class="link" v-bind:to="'/users/' + user.id + '/followship'">
+        <router-link class="link" v-bind:to="'/users/' + user.id + '/followship'">
           <!-- <div class="user-info-followship-followers">{{ followersLength }}位<p>跟隨者</p>
           </div> -->
           <div class="user-info-followship-followers">{{ propsUser.Followers ? propsUser.Followers.length : 0 }}位<p>
@@ -185,6 +186,9 @@ export default {
         console.warn(error)
       }
     },
+    chat(userId) {
+      this.$router.push({ path: '/chat_private', userId: userId, query: { userId: userId } })
+    }
   },
   watch: {
     propsUser(newValue) {

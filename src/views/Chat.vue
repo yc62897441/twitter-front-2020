@@ -5,18 +5,29 @@
     </div>
 
     <div class="middle-container">
+      <h1>上線使用者</h1>
+      <div class="users-wrapper">
 
-      <body>
+        <div class="users-scroll-wrapper">
 
-        <button v-on:click="aaa">press</button>
-        <h1>test git merge</h1>
-        <h1>test git merge(not merge)</h1>
-      </body>
-
+          <div class="users">
+            <div class="user-wrapper" v-for="user in users">
+              <div class="user-wrapper-user-avatar-wrapper">
+                <router-link class="link" v-bind:to="'/users/' + user.id">
+                  <img v-bind:src="user.avatar" alt="">
+                </router-link>
+              </div>
+              <div class="user-wrapper-user-name">{{ user.name }}</div>
+              <div class="user-wrapper-user-account">@{{ user.account }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="right-container">
       <div class="chat-board-wrapper">
+
         <div class="chat-board-scroll-wrapper">
           <div class="chat-board-content">
             <div class="chat-board-content-single-wrapper" v-for="message in messages">
@@ -51,8 +62,9 @@
         <div class="chat-input-wrapper">
           <textarea class="chat-input-text" style="background-color:#F5F8FA;" cols="30" rows="2"
             v-model="input"></textarea>
-          <button class="chat-input-button" @click="test_sendPrivateMsg">Send</button>
+          <button class="chat-input-button" @click="sendMsg">Send</button>
         </div>
+
       </div>
     </div>
   </div>
@@ -61,28 +73,26 @@
 <script>
 import Navbar from '../components/Navbar.vue'
 import { mapState } from 'vuex'
-import roomsAPI from '../api/rooms'
-import eventBus from "../utils/eventBus"
 
-// import Vue from 'vue'
-// import store from '../store'
-// import ElementUI from 'element-ui'
-// import 'element-ui/lib/theme-chalk/index.css'
-// import VueSocketIO from 'vue-socket.io'
-// import SocketIO from 'socket.io-client'
+import Vue from 'vue'
+import store from '../store'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import VueSocketIO from 'vue-socket.io'
+import SocketIO from 'socket.io-client'
 
-// Vue.config.productionTip = false
+Vue.config.productionTip = false
 
-// Vue.use(ElementUI)
-// Vue.use(new VueSocketIO({
-//   debug: true,
-//   connection: SocketIO('ws://localhost:3030'),
-//   vuex: {
-//     store,
-//     actionPrefix: 'SOCKET_',
-//     mutationPrefix: 'SOCKET_'
-//   }
-// }))
+Vue.use(ElementUI)
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: SocketIO('ws://localhost:3030'),
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_'
+  }
+}))
 
 export default {
   components: {
@@ -94,13 +104,7 @@ export default {
       users: [],
       input: '',
       messages: [],
-      firstLoadHistoricalMessages: true,
-      targetUser: {
-        id: 0,
-        name: 0,
-        account: 0,
-        avatar: 0
-      }
+      firstLoadHistoricalMessages: true
     }
   },
   sockets: {
@@ -116,44 +120,24 @@ export default {
         type: 'error'
       })
     },
-    get_socket_id(socketId) {
-      this.currentUser.socketId = socketId
+    update_users(data) {
+      this.users = data
     },
-    async broadcast_msg_private(data) {
-      try {
-        // 當傳來的訊息的寄送者，是目前正在聊天的對象(targetUser)，或是使用者本人時(currentUser)，才新增到畫面上的messages
-        // 避免目前正在跟 A 聊天，而 B 傳來的訊息會顯示到自己與 A 的私聊訊息串中
-        if (data.senderId === this.targetUser.id || data.senderId === this.currentUser.id) {
-          this.messages.push({
-            type: data.type,
-            msg: data.inputText,
-            time: data.time,
-            user: {
-              ...data.user
-            }
-          })
-        } else {
-          // 當傳來的訊息的寄送者，不是使用者本人時(currentUser)，且也不是正在聊天的對象(targetUser)時
-          // 寄送者的 user-wrapper 顯示紅點點(未讀訊息的狀態 + 數量)
-          const userWrapperUnreadCount = document.querySelector(`#user-wrapper-unread-count${data.senderId}`)
-          userWrapperUnreadCount.classList.remove('user-wrapper-unread-count-hidden')
-          if (Number(userWrapperUnreadCount.textContent) < 99) {
-            userWrapperUnreadCount.textContent = Number(userWrapperUnreadCount.textContent) + 1
+    broadcast_msg(data) {
+      if (data.type === 'message') {
+        this.messages.push({
+          type: data.type,
+          msg: data.inputText,
+          time: data.time,
+          user: {
+            ...data.user
           }
-          // 傳送後端，記錄未讀訊息的狀態 + 數量
-          const formData = {
-            unread: true,
-            senderOrTargetUserId: data.senderId,
-            userUnreadNum: Number(userWrapperUnreadCount.textContent)
-          }
-          const response = await roomsAPI.updateUserUnreadNum({ formData })
-          if (response.status !== 200) {
-            throw new Error()
-          }
-        }
-        this.dataToBrotherNavbar()
-      } catch (error) {
-        console.warn(error)
+        })
+      } else {
+        this.messages.push({
+          type: data.type,
+          msg: data.inputText
+        })
       }
     },
     historical_messages(data) {
@@ -171,31 +155,15 @@ export default {
       // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
       if (this.firstLoadHistoricalMessages) {
         setTimeout(() => {
-          // this.firstLoadHistoricalMessages = false
+          this.firstLoadHistoricalMessages = false
           this.endScrollbar()
         }, 1)
       }
     }
   },
   methods: {
-    async fetchConnectedUsers() {
-      try {
-        const response = await roomsAPI.getConnectedUsers()
-        if (response.status !== 200) {
-          throw new Error()
-        }
-        this.users = response.data
-      } catch (error) {
-        console.warn(error)
-        Toast.fire({
-          icon: 'error',
-          title: '暫時無法讀取 Tweets，請稍後再試',
-          timer: 2000,
-        })
-      }
-    },
-    enter_chat_private() {
-      this.$socket.emit('enter_chat_private', {
+    enter_chat() {
+      this.$socket.emit('enter_chat', {
         user: {
           id: this.currentUser.id,
           name: this.currentUser.name,
@@ -204,45 +172,19 @@ export default {
         }
       })
     },
-    async test_openPrivateChat(id) {
-      try {
-        // 隱藏未讀訊息的狀態 + 數量歸零
-        const userWrapperUnreadCount = document.querySelector(`#user-wrapper-unread-count${id}`)
-        userWrapperUnreadCount.classList.add('user-wrapper-unread-count-hidden')
-        userWrapperUnreadCount.textContent = 0
-        // 傳送後端，記錄未讀訊息的狀態 + 數量
-        const formData = {
-          unread: false,
-          senderOrTargetUserId: id,
-          userUnreadNum: 0
-        }
-        roomsAPI.updateUserUnreadNum({ formData })
-        // const response = await roomsAPI.updateUserUnreadNum({ formData })
-
-        this.messages = []
-        let currentUserId = this.currentUser.id
-        let targetUserId = id
-        this.users.forEach(user => {
-          if (user.id === id) {
-            this.targetUser = {
-              ...user,
-            }
-          }
-        })
-        this.$socket.emit('test_historical_messages_private', {
-          type: 'get_historical_messages_private',
-          currentUserId: currentUserId,
-          targetUserId: targetUserId
-        })
-      } catch (error) {
-        console.warn(error)
-      }
+    historical_messages() {
+      this.$socket.emit('historical_messages', {
+        noUse: 'noUse'
+      })
     },
-    test_sendPrivateMsg() {
-      this.$socket.emit('test_send_private_msg', {
+    sendMsg() {
+      this.$socket.emit('send_msg', {
         inputText: this.input,
-        user1: this.currentUser,
-        user2: this.targetUser,
+        user: {
+          id: this.currentUser.id,
+          name: this.currentUser.name,
+          avatar: this.currentUser.avatar
+        }
       })
       this.input = ''
     },
@@ -250,46 +192,23 @@ export default {
       const msg_end = document.querySelector('#msg_end')
       msg_end.scrollIntoView()
     },
-    dataToBrotherNavbar() {
-      eventBus.$emit("showRedSpot", 'showRedSpot');
-    }
   },
   computed: {
     ...mapState(['currentUser'])
   },
   mounted() {
-    this.enter_chat_private()
-    this.fetchConnectedUsers()
+    this.enter_chat()
+    this.historical_messages()
   },
-  async beforeUpdate() {
-    // 從 UserBoard.vue 點擊 icon-messege 連過來本頁面，會帶有 query 則執行下面程式，若否則略過
-    if (this.$route.query.userId) {
-      // 檢查 query.userId 是否已經從在目前使用者的 ConnectedUsers 中
-      const targetUserId = Number(this.$route.query.userId)
-      const existedConnectedUsersId = []
-      this.users.forEach(user => {
-        existedConnectedUsersId.push(user.id)
-      })
-
-      if (existedConnectedUsersId.includes(targetUserId)) {
-        // 如果 query.userId 已經從在目前使用者的 ConnectedUsers 中
-        // 開啟聊天並讀取歷史訊息(openPrivateChat)
-        this.test_openPrivateChat(targetUserId)
-      } else {
-        // 如果 query.userId 尚不存在目前使用者的 ConnectedUsers 中
-        // 建立新的 Room，並把 targetUser 新增到畫面上的使用者列表中，並開啟聊天(openPrivateChat)
-        const formData = { targetUserId: targetUserId }
-        const response = await roomsAPI.createChatRoom({ formData })
-        this.users.push({
-          ...response.data.targetUser,
-        })
-        this.test_openPrivateChat(data.targetUser.id)
+  beforeDestroy() {
+    this.$socket.emit('remove_user', {
+      user: {
+        id: this.currentUser.id,
+        name: this.currentUser.name,
+        avatar: this.currentUser.avatar
       }
-
-      // 刪除URL參數，保持網址列乾淨，也避免重新整理時有 query 會再多跑到這裡面一次
-      this.$router.push({ query: {} })
-    }
-  },
+    })
+  }
 }
 </script>
 ​
@@ -322,10 +241,6 @@ export default {
   width: 100%;
   padding: 15px;
   border-top: 1px solid #E6ECF0;
-}
-
-.user-wrapper-private {
-  cursor: pointer;
 }
 
 .user-wrapper-user-avatar-wrapper img {
@@ -488,24 +403,5 @@ export default {
   background-color: var(--white);
   color: #606266;
   border: 1px solid #606266;
-}
-
-/* 有新聊天訊息或通知，顯示的紅點 */
-.user-wrapper-unread-count {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  color: aliceblue;
-  font-size: 10px;
-  line-height: 20px;
-  font-weight: 700;
-  text-align: center;
-  background-color: firebrick;
-  border-radius: 50%;
-  transform: translate(180%, -90%);
-}
-
-.user-wrapper-unread-count-hidden {
-  visibility: hidden;
 }
 </style>

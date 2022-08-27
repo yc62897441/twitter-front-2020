@@ -5,14 +5,25 @@
     </div>
 
     <div class="middle-container">
-
-      <body>
-
-        <button v-on:click="aaa">press</button>
-        <h1>test git merge</h1>
-        <h1>test git merge(not merge)</h1>
-      </body>
-
+      <h1>訊息</h1>
+      <div class="users-wrapper">
+        <div class="users-scroll-wrapper">
+          <div class="users">
+            <div class="user-wrapper user-wrapper-private" v-for="user in users" v-bind:key="user.id"
+              v-on:click="openPrivateChat(user.id)">
+              <div class="user-wrapper-user-avatar-wrapper">
+                <img v-bind:src="user.avatar" alt="">
+              </div>
+              <div class="user-wrapper-user-name">{{ user.name }}</div>
+              <div class="user-wrapper-user-account">@{{ user.account }}</div>
+              <div v-if="user.currentUserUnread" class="user-wrapper-unread-count"
+                v-bind:id="'user-wrapper-unread-count' + user.id"> {{ user.currentUserUnreadNum }} </div>
+              <div v-else class="user-wrapper-unread-count user-wrapper-unread-count-hidden"
+                v-bind:id="'user-wrapper-unread-count' + user.id">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="right-container">
@@ -51,7 +62,7 @@
         <div class="chat-input-wrapper">
           <textarea class="chat-input-text" style="background-color:#F5F8FA;" cols="30" rows="2"
             v-model="input"></textarea>
-          <button class="chat-input-button" @click="test_sendPrivateMsg">Send</button>
+          <button class="chat-input-button" @click="sendPrivateMsg">Send</button>
         </div>
       </div>
     </div>
@@ -63,26 +74,6 @@ import Navbar from '../components/Navbar.vue'
 import { mapState } from 'vuex'
 import roomsAPI from '../api/rooms'
 import eventBus from "../utils/eventBus"
-
-// import Vue from 'vue'
-// import store from '../store'
-// import ElementUI from 'element-ui'
-// import 'element-ui/lib/theme-chalk/index.css'
-// import VueSocketIO from 'vue-socket.io'
-// import SocketIO from 'socket.io-client'
-
-// Vue.config.productionTip = false
-
-// Vue.use(ElementUI)
-// Vue.use(new VueSocketIO({
-//   debug: true,
-//   connection: SocketIO('ws://localhost:3030'),
-//   vuex: {
-//     store,
-//     actionPrefix: 'SOCKET_',
-//     mutationPrefix: 'SOCKET_'
-//   }
-// }))
 
 export default {
   components: {
@@ -204,7 +195,7 @@ export default {
         }
       })
     },
-    async test_openPrivateChat(id) {
+    async openPrivateChat(id) {
       try {
         // 隱藏未讀訊息的狀態 + 數量歸零
         const userWrapperUnreadCount = document.querySelector(`#user-wrapper-unread-count${id}`)
@@ -229,7 +220,7 @@ export default {
             }
           }
         })
-        this.$socket.emit('test_historical_messages_private', {
+        this.$socket.emit('historical_messages_private', {
           type: 'get_historical_messages_private',
           currentUserId: currentUserId,
           targetUserId: targetUserId
@@ -238,8 +229,8 @@ export default {
         console.warn(error)
       }
     },
-    test_sendPrivateMsg() {
-      this.$socket.emit('test_send_private_msg', {
+    sendPrivateMsg() {
+      this.$socket.emit('send_private_msg', {
         inputText: this.input,
         user1: this.currentUser,
         user2: this.targetUser,
@@ -274,7 +265,7 @@ export default {
       if (existedConnectedUsersId.includes(targetUserId)) {
         // 如果 query.userId 已經從在目前使用者的 ConnectedUsers 中
         // 開啟聊天並讀取歷史訊息(openPrivateChat)
-        this.test_openPrivateChat(targetUserId)
+        this.openPrivateChat(targetUserId)
       } else {
         // 如果 query.userId 尚不存在目前使用者的 ConnectedUsers 中
         // 建立新的 Room，並把 targetUser 新增到畫面上的使用者列表中，並開啟聊天(openPrivateChat)
@@ -283,7 +274,7 @@ export default {
         this.users.push({
           ...response.data.targetUser,
         })
-        this.test_openPrivateChat(data.targetUser.id)
+        this.openPrivateChat(data.targetUser.id)
       }
 
       // 刪除URL參數，保持網址列乾淨，也避免重新整理時有 query 會再多跑到這裡面一次
