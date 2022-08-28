@@ -12,7 +12,10 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(new VueSocketIO({
   debug: true,
+  // 本地端 使用
   connection: SocketIO('ws://localhost:3030'),
+  // heroku 使用
+  // connection: SocketIO('/', { transports: ['websocket'] }),
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
