@@ -8,6 +8,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    name: 'tweets',
+    component: () => import('../views/Tweets.vue')
+  },
+  {
     path: '/signin',
     name: 'signin',
     component: () => import('../views/SignIn.vue')
@@ -57,27 +62,27 @@ const routes = [
     name: 'setting',
     component: () => import('../views/Setting.vue')
   },
-  {
-    path: '/chat',
-    name: 'chat',
-    component: () => import('../views/Chat.vue')
-  },
-  {
-    path: '/chat_private',
-    name: 'chat_private',
-    component: () => import('../views/ChatPrivate.vue')
-  },
+  // {
+  //   path: '/chat',
+  //   name: 'chat',
+  //   component: () => import('../views/Chat.vue')
+  // },
+  // {
+  //   path: '/chat_private',
+  //   name: 'chat_private',
+  //   component: () => import('../views/ChatPrivate.vue')
+  // },
   {
     path: '*',
     name: 'not-found',
     component: NotFound,
     // 動態載入寫法 component: () => import('../views/NotFound.vue')
   },
-  {
-    path: '/test',
-    name: 'test',
-    component: () => import('../views/Test.vue')
-  },
+  // {
+  //   path: '/test',
+  //   name: 'test',
+  //   component: () => import('../views/Test.vue')
+  // },
 ]
 
 const router = new VueRouter({

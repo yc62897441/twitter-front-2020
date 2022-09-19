@@ -10,7 +10,7 @@
         <img src="../assets/home.png" alt="">
         <span>首頁</span>
       </router-link>
-      <router-link to="/notices" class="icon-wrapper">
+      <!-- <router-link to="/notices" class="icon-wrapper">
         <img src="../assets/icon-noti-nocolor.png" alt="">
         <span>通知</span>
       </router-link>
@@ -22,7 +22,7 @@
         <img src="../assets/icon-messege-nocolor.png" alt="">
         <span>私人聊天室</span>
         <div class="red-spot red-spot-hidden"></div>
-      </router-link>
+      </router-link> -->
       <router-link v-bind:to="'/users/' + currentUser.id" class="icon-wrapper">
         <img src="../assets/user.png" alt="">
         <span>個人資料</span>
