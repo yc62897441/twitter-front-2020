@@ -14,12 +14,12 @@
     <button v-if="user.id === currentUser.id" class="btn btn-user-info" type="button" data-bs-toggle="modal"
       v-bind:data-bs-target="'#modalUserInfo'">編輯個人資料</button>
     <div v-else class="user-interaction-wrapper">
-      <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png"
+      <!-- <img class="user-interaction-wrapper-item" type="button" src="../assets/icon-messege.png"
         v-on:click="chat(user.id)" alt="">
       <img v-if="!currentUser.NotiObjs.includes(user.id)" class="user-interaction-wrapper-item" type="button"
         src="../assets/icon-noti.png" v-on:click="postNoti(user.id)" v-bind:disabled="isProcessing" alt="">
       <img v-else class="user-interaction-wrapper-item" type="button" src="../assets/icon-noti-on.png"
-        v-on:click="deleteNoti(user.id)" v-bind:disabled="isProcessing" alt="">
+        v-on:click="deleteNoti(user.id)" v-bind:disabled="isProcessing" alt=""> -->
       <button v-if="!currentUser.Followings.includes(user.id)" class="user-interaction-wrapper-item btn btn-orange"
         type="button" v-on:click="postFollowship(user.id)" v-bind:disabled="isProcessing">跟隨</button>
       <button v-else class="user-interaction-wrapper-item btn btn-orange btn-isFollowed" type="button"
