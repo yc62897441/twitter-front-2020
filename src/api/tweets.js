@@ -1,8 +1,9 @@
 import { apiHelper } from '../utils/helpers'
 
 export default {
-  getTweets: () => {
-    return apiHelper.get('/tweets')
+  getTweets: ({ offset }) => {
+    const searchParams = new URLSearchParams({ offset })
+    return apiHelper.get(`/tweets?${searchParams.toString()}`)
   },
   getTweet: ({ id }) => {
     return apiHelper.get(`/tweets/${id}`)

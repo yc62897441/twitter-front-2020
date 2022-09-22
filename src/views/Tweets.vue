@@ -8,7 +8,7 @@
       <h1>首頁</h1>
       <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:currentUser="currentUser"
         v-bind:isProcessing="isProcessing" />
-      <TweetsSection v-bind:propsTweets="tweets" />
+      <TweetsSection v-bind:propsTweets="tweets" v-on:load-more="loadMore"/>
       <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
@@ -41,18 +41,24 @@ export default {
   data() {
     return {
       tweets: [],
-      isProcessing: false
+      isProcessing: false,
+      offset: 0
     }
   },
   methods: {
     async fetchTweets() {
       try {
-        const response = await tweetsAPI.getTweets()
+        const offset = this.offset
+        this.offset = this.offset + 10
+        const response = await tweetsAPI.getTweets({ offset })
         if (response.status !== 200) {
           throw new Error()
         }
         const data = response.data
-        this.tweets = data
+        data.forEach(tweet => {
+          this.tweets.push(tweet)
+        })
+        // this.tweets = this.tweets.push(...data)
       } catch (error) {
         console.warn(error)
         Toast.fire({
@@ -131,6 +137,9 @@ export default {
         title: '推文發送成功'
       })
     },
+    loadMore() {
+      this.fetchTweets()
+    }
   },
   computed: {
     ...mapState(['currentUser', 'isAuthenticated'])

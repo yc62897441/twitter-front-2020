@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy">
     <div v-for="tweet in tweets" :key="tweet.id" class="tweet-wrapper">
       <div class="tweet-wrapper-left">
         <router-link class="link" v-bind:to="'/users/' + tweet.User.id">
@@ -64,6 +64,7 @@ export default {
   data() {
     return {
       tweets: [],
+      busy: false
     }
   },
   methods: {
@@ -160,6 +161,14 @@ export default {
         console.warn(error)
       }
     },
+    loadMore() {
+      this.busy = true
+      // 設定至少 1.5 秒後才可以再 trigger 一次
+      this.$emit('load-more')
+      setTimeout(() => {
+        this.busy = false
+      }, 1500)
+    }
   },
   computed: {
     ...mapState(['currentUser'])
