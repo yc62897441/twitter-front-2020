@@ -19,7 +19,7 @@
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets"
         v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
-        v-on:after-unlike-tweet="afterUnlikeTweet" />
+        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
       <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes"
         v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
@@ -67,6 +67,7 @@ export default {
       tweets: [],
       replies: [],
       likes: [],
+      tweetsOffset: 0
     }
   },
   methods: {
@@ -95,9 +96,13 @@ export default {
     },
     async fetchUserTweets(userId) {
       try {
-        const response = await usersAPI.getUserTweets({ userId })
+        const tweetsOffset = this.tweetsOffset || 0
+        this.tweetsOffset = this.tweetsOffset + 3
+        const response = await usersAPI.getUserTweets({ userId, tweetsOffset })
         const data = response.data
-        this.tweets = data
+        data.forEach(tweet => {
+          this.tweets.push(tweet)
+        })
       } catch (error) {
         console.warn(error)
       }
@@ -268,7 +273,7 @@ export default {
         })
       }
     },
-    afterUnlikeTweet(payload){
+    afterUnlikeTweet(payload) {
       const unlikeTweetId = payload.unlikeTweetId
       const likesLength = payload.likesLength
       const tempLikes = []
@@ -286,8 +291,12 @@ export default {
       this.tweets.forEach(tweet => {
         if (tweet.id === unlikeTweetId) {
           tweet.likesLength = likesLength
-        } 
+        }
       })
+    },
+    loadMore() {
+      const userId = this.$route.params.id
+      this.fetchUserTweets(userId)
     }
   },
   computed: {

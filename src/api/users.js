@@ -20,8 +20,9 @@ export default {
   putSetting: ({ formData }) => {
     return apiHelper.put('users/setting', formData)
   },
-  getUserTweets: ({ userId }) => {
-    return apiHelper.get(`users/${userId}/tweets`)
+  getUserTweets: ({ userId, tweetsOffset }) => {
+    const searchParams = new URLSearchParams({ tweetsOffset })
+    return apiHelper.get(`users/${userId}/tweets?${searchParams.toString()}`)
   },
   getUserRepliedTweets: ({ userId }) => {
     return apiHelper.get(`users/${userId}/replied_tweets`)
