@@ -19,11 +19,12 @@
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets"
         v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
-        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" />
-      <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" />
+        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" v-bind:loadMoreTrigger="loadMoreTrigger" />
+      <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" v-on:load-more="loadMore"
+        v-bind:loadMoreTrigger="loadMoreTrigger" />
       <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes"
         v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
-        v-on:after-unlike-tweet="afterUnlikeTweet" />
+        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" v-bind:loadMoreTrigger="loadMoreTrigger" />
       <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
@@ -67,7 +68,10 @@ export default {
       tweets: [],
       replies: [],
       likes: [],
-      tweetsOffset: 0
+      tweetsOffset: 0,
+      repliesOffset: 0,
+      likesOffset: 0,
+      loadMoreTrigger: 'tweets'
     }
   },
   methods: {
@@ -97,7 +101,7 @@ export default {
     async fetchUserTweets(userId) {
       try {
         const tweetsOffset = this.tweetsOffset || 0
-        this.tweetsOffset = this.tweetsOffset + 3
+        this.tweetsOffset = this.tweetsOffset + 10
         const response = await usersAPI.getUserTweets({ userId, tweetsOffset })
         const data = response.data
         data.forEach(tweet => {
@@ -109,16 +113,24 @@ export default {
     },
     async fetchReplies(userId) {
       try {
-        const { data } = await usersAPI.getUserRepliedTweets({ userId })
-        this.replies = data
+        const repliesOffset = this.repliesOffset || 0
+        this.repliesOffset = this.repliesOffset + 10
+        const { data } = await usersAPI.getUserRepliedTweets({ userId, repliesOffset })
+        data.forEach(reply => {
+          this.replies.push(reply)
+        })
       } catch (error) {
         console.warn(error)
       }
     },
     async fetchLikes(userId) {
       try {
-        const { data } = await usersAPI.getUserLikes({ userId })
-        this.likes = data
+        const likesOffset = this.likesOffset || 0
+        this.likesOffset = this.likesOffset + 10
+        const { data } = await usersAPI.getUserLikes({ userId, likesOffset })
+        data.forEach(like => {
+          this.likes.push(like)
+        })
       } catch (error) {
         console.warn(error)
       }
@@ -133,16 +145,19 @@ export default {
           UserTweetsSection.classList.remove('User-Section-hidden')
           UserRepliesSection.classList.add('User-Section-hidden')
           UserLikesSection.classList.add('User-Section-hidden')
+          this.loadMoreTrigger = 'tweets'
           break
         case 'user-nav-pills-tweetsAndReplies':
           UserTweetsSection.classList.add('User-Section-hidden')
           UserRepliesSection.classList.remove('User-Section-hidden')
           UserLikesSection.classList.add('User-Section-hidden')
+          this.loadMoreTrigger = 'replies'
           break
         case 'user-nav-pills-likes':
           UserTweetsSection.classList.add('User-Section-hidden')
           UserRepliesSection.classList.add('User-Section-hidden')
           UserLikesSection.classList.remove('User-Section-hidden')
+          this.loadMoreTrigger = 'likes'
           break
       }
     },
@@ -294,9 +309,22 @@ export default {
         }
       })
     },
-    loadMore() {
+    loadMore(payload) {
       const userId = this.$route.params.id
-      this.fetchUserTweets(userId)
+      switch (payload.from) {
+        case 'tweetsSection':
+          console.log('payload', payload)
+          this.fetchUserTweets(userId)
+          break
+        case 'repliesSection':
+          console.log('payload', payload)
+          this.fetchReplies(userId)
+          break
+        case 'likesSection':
+          console.log('payload', payload)
+          this.fetchLikes(userId)
+          break
+      }
     }
   },
   computed: {

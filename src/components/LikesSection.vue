@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy">
     <div v-for="like in likes" v-bind:key="like.id" class="like-wrapper">
       <div class="like-wrapper-left">
         <router-link class="link" v-bind:to="'/users/' + like.Tweet.User.id">
@@ -65,6 +65,9 @@ export default {
     prosLikes: {
       type: Array,
     },
+    loadMoreTrigger: {
+      type: String
+    }
   },
   data() {
     return {
@@ -82,7 +85,7 @@ export default {
         if (data.status === 'success') {
           // tweet 的愛心icon 亮起
           this.currentUser.userLikesId.push(tweetId)
-           // tweet 的喜歡次數 + 1
+          // tweet 的喜歡次數 + 1
           this.likes.forEach(like => {
             if (like.Tweet.id === tweetId) {
               like.Tweet.likesLength += 1
@@ -155,6 +158,19 @@ export default {
         })
       }
     },
+    loadMore() {
+      if (this.loadMoreTrigger !== 'likes') {
+        return
+      }
+      this.busy = true
+      // 設定至少 1.5 秒後才可以再 trigger 一次
+      this.$emit('load-more', {
+        'from': 'likesSection'
+      })
+      setTimeout(() => {
+        this.busy = false
+      }, 1500)
+    }
   },
   computed: {
     ...mapState(['currentUser'])

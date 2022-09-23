@@ -60,6 +60,9 @@ export default {
       type: Array,
       required: true
     },
+    loadMoreTrigger: {
+      type: String
+    }
   },
   data() {
     return {
@@ -162,9 +165,14 @@ export default {
       }
     },
     loadMore() {
+      if (this.loadMoreTrigger !== 'tweets') {
+        return
+      }
       this.busy = true
       // 設定至少 1.5 秒後才可以再 trigger 一次
-      this.$emit('load-more')
+      this.$emit('load-more', {
+        'from': 'tweetsSection'
+      })
       setTimeout(() => {
         this.busy = false
       }, 1500)

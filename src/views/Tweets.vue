@@ -8,7 +8,7 @@
       <h1>首頁</h1>
       <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:currentUser="currentUser"
         v-bind:isProcessing="isProcessing" />
-      <TweetsSection v-bind:propsTweets="tweets" v-on:load-more="loadMore"/>
+      <TweetsSection v-bind:propsTweets="tweets" v-on:load-more="loadMore"  v-bind:loadMoreTrigger="loadMoreTrigger"/>
       <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
@@ -42,7 +42,8 @@ export default {
     return {
       tweets: [],
       isProcessing: false,
-      offset: 0
+      offset: 0,
+      loadMoreTrigger: 'tweets'
     }
   },
   methods: {
@@ -137,7 +138,7 @@ export default {
         title: '推文發送成功'
       })
     },
-    loadMore() {
+    loadMore(payload) {
       this.fetchTweets()
     }
   },
