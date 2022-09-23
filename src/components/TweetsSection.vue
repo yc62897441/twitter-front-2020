@@ -62,6 +62,9 @@ export default {
     },
     loadMoreTrigger: {
       type: String
+    },
+    loadToEnd: {
+      type: Boolean
     }
   },
   data() {
@@ -165,7 +168,7 @@ export default {
       }
     },
     loadMore() {
-      if (this.loadMoreTrigger !== 'tweets') {
+      if (this.loadMoreTrigger !== 'tweets' || this.loadToEnd === true) {
         return
       }
       this.busy = true

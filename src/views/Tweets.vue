@@ -8,7 +8,7 @@
       <h1>首頁</h1>
       <NewTweet v-on:after-create-tweet="afterCreateTweet" v-bind:currentUser="currentUser"
         v-bind:isProcessing="isProcessing" />
-      <TweetsSection v-bind:propsTweets="tweets" v-on:load-more="loadMore"  v-bind:loadMoreTrigger="loadMoreTrigger"/>
+      <TweetsSection v-bind:propsTweets="tweets" v-on:load-more="loadMore" v-bind:loadMoreTrigger="loadMoreTrigger" v-bind:loadToEnd="loadToEnd" />
       <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
@@ -43,7 +43,8 @@ export default {
       tweets: [],
       isProcessing: false,
       offset: 0,
-      loadMoreTrigger: 'tweets'
+      loadMoreTrigger: 'tweets',
+      loadToEnd: false
     }
   },
   methods: {
@@ -56,10 +57,13 @@ export default {
           throw new Error()
         }
         const data = response.data
+        if (data === 'loadToEnd') {
+          this.loadToEnd = true
+          return
+        }
         data.forEach(tweet => {
           this.tweets.push(tweet)
         })
-        // this.tweets = this.tweets.push(...data)
       } catch (error) {
         console.warn(error)
         Toast.fire({

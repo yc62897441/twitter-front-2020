@@ -42,12 +42,14 @@ export default {
     },
     loadMoreTrigger: {
       type: String
+    },
+    loadToEnd: {
+      type: Boolean
     }
   },
   methods: {
     loadMore() {
-      if (this.loadMoreTrigger !== 'replies') {
-        console.log('replies')
+      if (this.loadMoreTrigger !== 'replies' || this.loadToEnd === true) {
         return
       }
       this.busy = true

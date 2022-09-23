@@ -67,6 +67,9 @@ export default {
     },
     loadMoreTrigger: {
       type: String
+    },
+    loadToEnd: {
+      type: Boolean
     }
   },
   data() {
@@ -159,7 +162,7 @@ export default {
       }
     },
     loadMore() {
-      if (this.loadMoreTrigger !== 'likes') {
+      if (this.loadMoreTrigger !== 'likes' || this.loadToEnd === true) {
         return
       }
       this.busy = true

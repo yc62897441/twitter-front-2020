@@ -19,12 +19,12 @@
       <UserNavPills v-on:after-change-user-nav-pills="afterChangeUserNavPills" />
       <TweetsSection class="User-TweetsSection" v-bind:propsTweets="tweets"
         v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
-        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" v-bind:loadMoreTrigger="loadMoreTrigger" />
+        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" v-bind:loadMoreTrigger="loadMoreTrigger" v-bind:loadToEnd="loadToEndTweets" />
       <RepliesSection class="User-RepliesSection User-Section-hidden" v-bind:replies="replies" v-on:load-more="loadMore"
-        v-bind:loadMoreTrigger="loadMoreTrigger" />
+        v-bind:loadMoreTrigger="loadMoreTrigger" v-bind:loadToEnd="loadToEndReplies"/>
       <LikesSection class="User-LikesSection User-Section-hidden" v-bind:prosLikes="likes"
         v-on:after-post-tweet-reply="afterPostTweetReply" v-on:after-like-tweet="afterLikeTweet"
-        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" v-bind:loadMoreTrigger="loadMoreTrigger" />
+        v-on:after-unlike-tweet="afterUnlikeTweet" v-on:load-more="loadMore" v-bind:loadMoreTrigger="loadMoreTrigger" v-bind:loadToEnd="loadToEndLikes"/>
       <ModalNewTweet v-bind:currentUser="currentUser" v-on:after-post-new-tweet="afterPostNewTweet" />
     </div>
 
@@ -71,7 +71,10 @@ export default {
       tweetsOffset: 0,
       repliesOffset: 0,
       likesOffset: 0,
-      loadMoreTrigger: 'tweets'
+      loadMoreTrigger: 'tweets',
+      loadToEndTweets: false,
+      loadToEndReplies: false,
+      loadToEndLikes: false
     }
   },
   methods: {
@@ -104,6 +107,10 @@ export default {
         this.tweetsOffset = this.tweetsOffset + 10
         const response = await usersAPI.getUserTweets({ userId, tweetsOffset })
         const data = response.data
+        if (data === 'loadToEnd') {
+          this.loadToEndTweets = true
+          return
+        }
         data.forEach(tweet => {
           this.tweets.push(tweet)
         })
@@ -116,6 +123,10 @@ export default {
         const repliesOffset = this.repliesOffset || 0
         this.repliesOffset = this.repliesOffset + 10
         const { data } = await usersAPI.getUserRepliedTweets({ userId, repliesOffset })
+        if (data === 'loadToEnd') {
+          this.loadToEndReplies = true
+          return
+        }
         data.forEach(reply => {
           this.replies.push(reply)
         })
@@ -128,6 +139,10 @@ export default {
         const likesOffset = this.likesOffset || 0
         this.likesOffset = this.likesOffset + 10
         const { data } = await usersAPI.getUserLikes({ userId, likesOffset })
+        if (data === 'loadToEnd') {
+          this.loadToEndLikes = true
+          return
+        }
         data.forEach(like => {
           this.likes.push(like)
         })
@@ -313,15 +328,12 @@ export default {
       const userId = this.$route.params.id
       switch (payload.from) {
         case 'tweetsSection':
-          console.log('payload', payload)
           this.fetchUserTweets(userId)
           break
         case 'repliesSection':
-          console.log('payload', payload)
           this.fetchReplies(userId)
           break
         case 'likesSection':
-          console.log('payload', payload)
           this.fetchLikes(userId)
           break
       }
