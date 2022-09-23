@@ -17,18 +17,19 @@ Vue.use(ElementUI)
 // 向下滾動載入更多資料
 Vue.use(infiniteScroll)
 
-Vue.use(new VueSocketIO({
-  debug: true,
-  // 本地端 使用
-  connection: SocketIO('ws://localhost:3030'),
-  // heroku 使用
-  // connection: SocketIO('/', { transports: ['websocket'] }),
-  vuex: {
-    store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
-  }
-}))
+// 即時互動 socket.io 先註解起來
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   // 本地端 使用
+//   connection: SocketIO('ws://localhost:3030'),
+//   // heroku 使用
+//   // connection: SocketIO('/', { transports: ['websocket'] }),
+//   vuex: {
+//     store,
+//     actionPrefix: 'SOCKET_',
+//     mutationPrefix: 'SOCKET_'
+//   }
+// }))
 
 new Vue({
   router,
