@@ -84,15 +84,15 @@ import SocketIO from 'socket.io-client'
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketIO('ws://localhost:3030'),
-  vuex: {
-    store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
-  }
-}))
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: SocketIO('ws://localhost:3030'),
+//   vuex: {
+//     store,
+//     actionPrefix: 'SOCKET_',
+//     mutationPrefix: 'SOCKET_'
+//   }
+// }))
 
 export default {
   components: {
@@ -107,60 +107,60 @@ export default {
       firstLoadHistoricalMessages: true
     }
   },
-  sockets: {
-    connect() {
-      this.$message({
-        message: '連線成功！！！',
-        type: 'success'
-      })
-    },
-    disconnect() {
-      this.$message({
-        message: '連線解除！！！',
-        type: 'error'
-      })
-    },
-    update_users(data) {
-      this.users = data
-    },
-    broadcast_msg(data) {
-      if (data.type === 'message') {
-        this.messages.push({
-          type: data.type,
-          msg: data.inputText,
-          time: data.time,
-          user: {
-            ...data.user
-          }
-        })
-      } else {
-        this.messages.push({
-          type: data.type,
-          msg: data.inputText
-        })
-      }
-    },
-    historical_messages(data) {
-      data.forEach(message => {
-        this.messages.push({
-          type: 'message',
-          msg: message.text,
-          time: message.createdAt,
-          user: {
-            ...message.User
-          }
-        })
-      })
+  // sockets: {
+  //   connect() {
+  //     this.$message({
+  //       message: '連線成功！！！',
+  //       type: 'success'
+  //     })
+  //   },
+  //   disconnect() {
+  //     this.$message({
+  //       message: '連線解除！！！',
+  //       type: 'error'
+  //     })
+  //   },
+  //   update_users(data) {
+  //     this.users = data
+  //   },
+  //   broadcast_msg(data) {
+  //     if (data.type === 'message') {
+  //       this.messages.push({
+  //         type: data.type,
+  //         msg: data.inputText,
+  //         time: data.time,
+  //         user: {
+  //           ...data.user
+  //         }
+  //       })
+  //     } else {
+  //       this.messages.push({
+  //         type: data.type,
+  //         msg: data.inputText
+  //       })
+  //     }
+  //   },
+  //   historical_messages(data) {
+  //     data.forEach(message => {
+  //       this.messages.push({
+  //         type: 'message',
+  //         msg: message.text,
+  //         time: message.createdAt,
+  //         user: {
+  //           ...message.User
+  //         }
+  //       })
+  //     })
 
-      // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
-      if (this.firstLoadHistoricalMessages) {
-        setTimeout(() => {
-          this.firstLoadHistoricalMessages = false
-          this.endScrollbar()
-        }, 1)
-      }
-    }
-  },
+  //     // 進入Chat.vue，第一次載入歷史訊息後，聊天訊息scrollbar自動移到最底
+  //     if (this.firstLoadHistoricalMessages) {
+  //       setTimeout(() => {
+  //         this.firstLoadHistoricalMessages = false
+  //         this.endScrollbar()
+  //       }, 1)
+  //     }
+  //   }
+  // },
   methods: {
     enter_chat() {
       this.$socket.emit('enter_chat', {
