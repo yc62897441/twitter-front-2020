@@ -118,140 +118,145 @@ export default {
       }
     },
     async handleSubmit() {
-      try {
-        if (!this.user.name || !this.user.email || !this.user.account) {
-          Toast.fire({
-            icon: 'warning',
-            title: 'Name、Email、Account 不可為空白'
-          })
-          return
-        }
-        if (this.user.password !== this.user.checkPassword) {
-          this.user.password = ''
-          this.user.checkPassword = ''
-          Toast.fire({
-            icon: 'warning',
-            title: 'password, checkPassword 不一致'
-          })
-          return
-        }
+      Toast.fire({
+        icon: 'error',
+        title: '請勿更改「帳戶設定」，謝謝您',
+        timer: 2000,
+      })
+      // try {
+      //   if (!this.user.name || !this.user.email || !this.user.account) {
+      //     Toast.fire({
+      //       icon: 'warning',
+      //       title: 'Name、Email、Account 不可為空白'
+      //     })
+      //     return
+      //   }
+      //   if (this.user.password !== this.user.checkPassword) {
+      //     this.user.password = ''
+      //     this.user.checkPassword = ''
+      //     Toast.fire({
+      //       icon: 'warning',
+      //       title: 'password, checkPassword 不一致'
+      //     })
+      //     return
+      //   }
 
-        // 檢查 account、email、name、password 輸入內容長度，避免使用者移除 input 的 maxlength="20"or"50" 屬性
-        const maxlengthErrorMessages = []
-        if (this.user.name.length > 20) {
-          maxlengthErrorMessages.push('Name')
-        }
-        if (this.user.email.length > 50) {
-          maxlengthErrorMessages.push('Email')
-        }
-        if (this.user.account.length > 20) {
-          maxlengthErrorMessages.push('Account')
-        }
-        if (this.user.password) {
-          if (this.user.password.length > 20) {
-            maxlengthErrorMessages.push('Password')
-          }
-        }
-        if (maxlengthErrorMessages.length > 0) {
-          let title = ''
-          maxlengthErrorMessages.forEach(message => {
-            title += `${message} `
-          })
-          title += '輸入內容長度超出限制'
-          Toast.fire({
-            icon: 'warning',
-            title: title
-          })
-          return
-        }
+      //   // 檢查 account、email、name、password 輸入內容長度，避免使用者移除 input 的 maxlength="20"or"50" 屬性
+      //   const maxlengthErrorMessages = []
+      //   if (this.user.name.length > 20) {
+      //     maxlengthErrorMessages.push('Name')
+      //   }
+      //   if (this.user.email.length > 50) {
+      //     maxlengthErrorMessages.push('Email')
+      //   }
+      //   if (this.user.account.length > 20) {
+      //     maxlengthErrorMessages.push('Account')
+      //   }
+      //   if (this.user.password) {
+      //     if (this.user.password.length > 20) {
+      //       maxlengthErrorMessages.push('Password')
+      //     }
+      //   }
+      //   if (maxlengthErrorMessages.length > 0) {
+      //     let title = ''
+      //     maxlengthErrorMessages.forEach(message => {
+      //       title += `${message} `
+      //     })
+      //     title += '輸入內容長度超出限制'
+      //     Toast.fire({
+      //       icon: 'warning',
+      //       title: title
+      //     })
+      //     return
+      //   }
 
-        // 檢查 account、email、password 只允許半形大小寫英文、數字與 @*-. 符號
-        const checkErrorMessages = []
-        const allowChars = this.allowedSymbols + this.allowedNumbers + this.allowedUpperChars + this.allowedLowerChars
-        function checkChars(checkObject, checkObjectName, allowChars) {
-          for (let i = 0; i < checkObject.length; i++) {
-            if (!allowChars.includes(checkObject[i])) {
-              checkErrorMessages.push(`${checkObjectName}`)
-              return
-            }
-          }
-        }
-        checkChars(this.user.account, 'Account', allowChars)
-        checkChars(this.user.email, 'Email', allowChars)
-        if (this.user.password) {
-          checkChars(this.user.password, 'Password', allowChars)
-        }
-        if (checkErrorMessages.length > 0) {
-          let title = ''
-          checkErrorMessages.forEach(message => {
-            title += `${message} `
-          })
-          title += '只允許半形大小寫英文、數字與 @*-. 符號'
-          Toast.fire({
-            icon: 'warning',
-            title: title
-          })
-          return
-        }
+      //   // 檢查 account、email、password 只允許半形大小寫英文、數字與 @*-. 符號
+      //   const checkErrorMessages = []
+      //   const allowChars = this.allowedSymbols + this.allowedNumbers + this.allowedUpperChars + this.allowedLowerChars
+      //   function checkChars(checkObject, checkObjectName, allowChars) {
+      //     for (let i = 0; i < checkObject.length; i++) {
+      //       if (!allowChars.includes(checkObject[i])) {
+      //         checkErrorMessages.push(`${checkObjectName}`)
+      //         return
+      //       }
+      //     }
+      //   }
+      //   checkChars(this.user.account, 'Account', allowChars)
+      //   checkChars(this.user.email, 'Email', allowChars)
+      //   if (this.user.password) {
+      //     checkChars(this.user.password, 'Password', allowChars)
+      //   }
+      //   if (checkErrorMessages.length > 0) {
+      //     let title = ''
+      //     checkErrorMessages.forEach(message => {
+      //       title += `${message} `
+      //     })
+      //     title += '只允許半形大小寫英文、數字與 @*-. 符號'
+      //     Toast.fire({
+      //       icon: 'warning',
+      //       title: title
+      //     })
+      //     return
+      //   }
 
-        this.isProcessing = true
-        const formData = {
-          name: this.user.name,
-          email: this.user.email,
-          account: this.user.account,
-          password: this.user.password,
-          checkPassword: this.user.checkPassword
-        }
-        Toast.fire({
-          icon: 'warning',
-          title: '正在更新中，請稍後',
-          timer: false
-        })
-        const response = await usersAPI.putSetting({ formData })
-        // 根據後端回傳，此時的 data 是更新後的 user 物件
-        const data = response.data
+      //   this.isProcessing = true
+      //   const formData = {
+      //     name: this.user.name,
+      //     email: this.user.email,
+      //     account: this.user.account,
+      //     password: this.user.password,
+      //     checkPassword: this.user.checkPassword
+      //   }
+      //   Toast.fire({
+      //     icon: 'warning',
+      //     title: '正在更新中，請稍後',
+      //     timer: false
+      //   })
+      //   const response = await usersAPI.putSetting({ formData })
+      //   // 根據後端回傳，此時的 data 是更新後的 user 物件
+      //   const data = response.data
 
-        // 如果 password、checkPassword input 的內容長度到上限，再送出之後input會清空，一併移除掉"字數已達上限!"的警告
-        const formControls = document.querySelectorAll('.form-control')
-        for (let i = 3; i < formControls.length; i++) {
-          formControls[i].parentElement.children[1].children[0].classList.add('textContent-span-hidden')
-        }
+      //   // 如果 password、checkPassword input 的內容長度到上限，再送出之後input會清空，一併移除掉"字數已達上限!"的警告
+      //   const formControls = document.querySelectorAll('.form-control')
+      //   for (let i = 3; i < formControls.length; i++) {
+      //     formControls[i].parentElement.children[1].children[0].classList.add('textContent-span-hidden')
+      //   }
 
-        // 伺服器回傳錯誤
-        if (response.status !== 200) {
-          throw new Error()
-        }
-        Toast.fire({
-          icon: 'success',
-          title: '更新成功'
-        })
+      //   // 伺服器回傳錯誤
+      //   if (response.status !== 200) {
+      //     throw new Error()
+      //   }
+      //   Toast.fire({
+      //     icon: 'success',
+      //     title: '更新成功'
+      //   })
 
-        this.user = {
-          ...data,
-        }
-        this.$store.dispatch('afterPutUserInfo', {
-          ...data,
-        })
-        this.isProcessing = false
-        this.user.password = ''
-        this.user.checkPassword = ''
-      } catch (error) {
-        this.isProcessing = false
-        let title = '更新失敗，請稍後再試'
-        // 如果後端有提供錯誤訊息，以後端為主
-        if (error.response.data.message) {
-          title = error.response.data.message
-        } else if (error.response.data.errorMessages.length > 0) {
-          title = ''
-          error.response.data.errorMessages.forEach(errorMessage => {
-            title += `${errorMessage}\n`
-          })
-        }
-        Toast.fire({
-          icon: 'error',
-          title: title
-        })
-      }
+      //   this.user = {
+      //     ...data,
+      //   }
+      //   this.$store.dispatch('afterPutUserInfo', {
+      //     ...data,
+      //   })
+      //   this.isProcessing = false
+      //   this.user.password = ''
+      //   this.user.checkPassword = ''
+      // } catch (error) {
+      //   this.isProcessing = false
+      //   let title = '更新失敗，請稍後再試'
+      //   // 如果後端有提供錯誤訊息，以後端為主
+      //   if (error.response.data.message) {
+      //     title = error.response.data.message
+      //   } else if (error.response.data.errorMessages.length > 0) {
+      //     title = ''
+      //     error.response.data.errorMessages.forEach(errorMessage => {
+      //       title += `${errorMessage}\n`
+      //     })
+      //   }
+      //   Toast.fire({
+      //     icon: 'error',
+      //     title: title
+      //   })
+      // }
     },
     words_deal(event) {
       const maxlength = event.target.attributes.maxlength.value
@@ -281,6 +286,13 @@ export default {
   },
   created() {
     this.fetchUser()
+  },
+  mounted() {
+    Toast.fire({
+      icon: 'warning',
+      title: '更改「帳戶設定」功能，暫時關閉',
+      timer: 5000,
+    })
   }
 }
 </script>
